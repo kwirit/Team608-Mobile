@@ -32,6 +32,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -56,7 +57,6 @@ fun MainScreen(){
     Column {
         TopBar(showBoxesState)
         Column ( Modifier.weight(1f)){
-
         }
 
         BottomBar()
@@ -77,7 +77,18 @@ fun ShowListOfBoxes(showBoxesState: MutableState<Boolean>){
         onDismissRequest = {showBoxesState.value = false},
     ) {
         Column(Modifier.width(320.dp).height(600.dp).padding(20.dp).background(color = Color.White, shape = RoundedCornerShape(20.dp))) {
-            ListOfVar(list)
+            BaseCard(name = "Инициализация"){
+                ListOfVar(list)
+            }
+            BaseCard(name = "Присваивание"){
+                ListOfVar(list)
+            }
+            BaseCard(name = "Условие"){
+                ListOfVar(list)
+            }
+            BaseCard(name = "Вывод"){
+                ListOfVar(list)
+            }
         }
     }
 }
@@ -130,14 +141,15 @@ fun BottomBar(){
 }
 
 @Composable
-fun BaseCard(name: String,content:@Composable () -> Unit,){
+fun BaseCard(name: String,content:@Composable () -> Unit){
     Card(Modifier.fillMaxWidth().height(100.dp).padding(10.dp),
         colors = CardDefaults.cardColors(containerColor = Blue),
     ) {
-        Box(Modifier.fillMaxWidth(),contentAlignment = Alignment.TopCenter){
-            Row{
-                Text(text = name)
-                content
+        Box(Modifier.fillMaxWidth(),contentAlignment = Alignment.Center){
+            Column {Text(text = name, textAlign = TextAlign.Center)
+                Row(Modifier.padding(10.dp)){
+                    content()
+                }
             }
         }
     }
@@ -146,12 +158,15 @@ fun BaseCard(name: String,content:@Composable () -> Unit,){
 @Composable
 fun ListOfVar(variables: MutableList<Variable>){
     val expanded = remember { mutableStateOf(false) }
-    TextButton(onClick = {expanded.value = true}) { Text("ЖМИ")}
+    TextButton(onClick = {expanded.value = true}) { Text("Variable")}
     DropdownMenu(expanded = expanded.value,onDismissRequest = {expanded.value = false}) {
-        variables.forEach {
-            variable ->
-            DropdownMenuItem(onClick = {expanded.value = false}, text = {Text(text = "12312")})
-        }
+        DropdownMenuItem(onClick = {expanded.value = false}, text = {Text(text="abc")})
+        DropdownMenuItem(onClick = {expanded.value = false}, text = {Text(text="abc")})
+        DropdownMenuItem(onClick = {expanded.value = false}, text = {Text(text="abc")})
+        DropdownMenuItem(onClick = {expanded.value = false}, text = {Text(text="abc")})
+        DropdownMenuItem(onClick = {expanded.value = false}, text = {Text(text="abc")})
+        DropdownMenuItem(onClick = {expanded.value = false}, text = {Text(text="abc")})
+        DropdownMenuItem(onClick = {expanded.value = false}, text = {Text(text="abc")})
     }
 }
 
