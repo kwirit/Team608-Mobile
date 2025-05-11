@@ -32,6 +32,12 @@ var INVALID_CHARACTERS = Error(
     "The variable must contain english letters underscores and numbers.",
     "naming"
 )
+var EMPTY_NAME = Error(
+    104,
+    "Empty variable name",
+    "The variable name cannot be empty.",
+    "naming"
+)
 var INITIALIZATION_ERROR = Error(
     202,
     "Initialization error",
@@ -45,6 +51,7 @@ object ErrorStore {
         101 to INVALID_VARIABLE_START,
         102 to VARIABLE_HAS_SPACE,
         103 to INVALID_CHARACTERS,
+        104 to EMPTY_NAME,
         202 to INITIALIZATION_ERROR
     )
 
