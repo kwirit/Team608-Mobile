@@ -1,5 +1,7 @@
 package com.example.scratchinterpretermobile.model
 
-abstract class VarBlock {
+abstract class Varriable {
     abstract val Value: Any
+    
+    //
 }
