@@ -1,7 +1,6 @@
 package com.example.scratchinterpretermobile
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -25,8 +24,7 @@ import androidx.compose.ui.window.Dialog
 import com.example.scratchinterpretermobile.View.MainScreen
 import com.example.scratchinterpretermobile.ui.theme.ScratchInterpreterMobileTheme
 
-class MainActivity : ComponentActivity()
-{
+class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {

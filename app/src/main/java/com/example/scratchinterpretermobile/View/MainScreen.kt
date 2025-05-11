@@ -38,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import com.example.scratchinterpretermobile.Model.Variable
 import com.example.scratchinterpretermobile.ui.theme.Blue
 import com.example.scratchinterpretermobile.ui.theme.LightOrange
 import com.example.scratchinterpretermobile.ui.theme.Orange
