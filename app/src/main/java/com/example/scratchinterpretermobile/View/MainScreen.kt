@@ -48,7 +48,7 @@ import com.example.scratchinterpretermobile.ui.theme.Orange
 @Composable
 fun MainScreen(){
 
-    val showBoxesState = remember { mutableStateOf(true) }
+    val showBoxesState = remember { mutableStateOf(false) }
 
     if(showBoxesState.value == true){
         ShowListOfBoxes(showBoxesState)
@@ -77,18 +77,10 @@ fun ShowListOfBoxes(showBoxesState: MutableState<Boolean>){
         onDismissRequest = {showBoxesState.value = false},
     ) {
         Column(Modifier.width(320.dp).height(600.dp).padding(20.dp).background(color = Color.White, shape = RoundedCornerShape(20.dp))) {
-            BaseCard(name = "Инициализация"){
-                ListOfVar(list)
-            }
-            BaseCard(name = "Присваивание"){
-                ListOfVar(list)
-            }
-            BaseCard(name = "Условие"){
-                ListOfVar(list)
-            }
-            BaseCard(name = "Вывод"){
-                ListOfVar(list)
-            }
+            InitializationBox()
+            AssigningBox(variables = list)
+            IfBox()
+            ConsoleBox()
         }
     }
 }
@@ -128,14 +120,16 @@ fun BottomBar(){
             shape = RoundedCornerShape(16.dp),
             contentPadding = PaddingValues(0.dp)
         ) {
+            Icon(painter = painterResource(R.drawable.home), contentDescription = null, modifier = Modifier.size(50.dp))
         }
         Button(modifier = Modifier.padding(top = 18.dp, start = 60.dp).size(60.dp),onClick = {},
             colors = ButtonDefaults.buttonColors(
                 containerColor = LightOrange,
-                contentColor = Color.Green),
+                contentColor = Color.White),
             shape = RoundedCornerShape(16.dp),
             contentPadding = PaddingValues(0.dp)
         ) {
+            Icon(painter = painterResource(R.drawable.console), contentDescription = null, modifier = Modifier.size(50.dp))
         }
     }
 }
@@ -160,13 +154,10 @@ fun ListOfVar(variables: MutableList<Variable>){
     val expanded = remember { mutableStateOf(false) }
     TextButton(onClick = {expanded.value = true}) { Text("Variable")}
     DropdownMenu(expanded = expanded.value,onDismissRequest = {expanded.value = false}) {
-        DropdownMenuItem(onClick = {expanded.value = false}, text = {Text(text="abc")})
-        DropdownMenuItem(onClick = {expanded.value = false}, text = {Text(text="abc")})
-        DropdownMenuItem(onClick = {expanded.value = false}, text = {Text(text="abc")})
-        DropdownMenuItem(onClick = {expanded.value = false}, text = {Text(text="abc")})
-        DropdownMenuItem(onClick = {expanded.value = false}, text = {Text(text="abc")})
-        DropdownMenuItem(onClick = {expanded.value = false}, text = {Text(text="abc")})
-        DropdownMenuItem(onClick = {expanded.value = false}, text = {Text(text="abc")})
+        variables.forEach {
+            variable ->
+            DropdownMenuItem(onClick = {expanded.value = false}, text = {Text(text = variable.name)})
+        }
     }
 }
 
