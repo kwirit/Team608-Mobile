@@ -1,5 +1,5 @@
 package com.example.scratchinterpretermobile.model
 
 abstract class InstructionBlock {
-    abstract fun Run(): Int
+    abstract fun run(): Int
 }
