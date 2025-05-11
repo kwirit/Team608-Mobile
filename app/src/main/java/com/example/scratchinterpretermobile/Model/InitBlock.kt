@@ -1,4 +1,4 @@
-package com.example.scratchinterpretermobile.model
+package com.example.scratchinterpretermobile.Model
 
 class InitBlock: InstructionBlock() {
     var variables = ArrayList<VarBlock>() // Переменные которые будут добавлены в контекст

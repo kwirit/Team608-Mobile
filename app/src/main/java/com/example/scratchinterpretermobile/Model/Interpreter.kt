@@ -1,4 +1,4 @@
-package com.example.scratchinterpretermobile.model
+package com.example.scratchinterpretermobile.Model
 
 class Interpreter {
     // хранит скрипт где каждый элемент скрипта - блок-инструкция

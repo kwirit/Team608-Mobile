@@ -1,4 +1,4 @@
-package com.example.scratchinterpretermobile.model
+package com.example.scratchinterpretermobile.Model
 
 class IntegerBlock(
     override var name: String,
