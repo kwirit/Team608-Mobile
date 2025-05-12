@@ -19,7 +19,14 @@ package com.example.scratchinterpretermobile.Model
 object Context {
     private val context = Stack<HashMap<String, VarBlock>>()
 
-    fun hasKey(key: String): Boolean = context.any { it.containsKey(key) }
+    fun getVar(key: String): VarBlock? {
+        for (scope in context) {
+            if (scope.containsKey(key)) {
+                return scope[key]
+            }
+        }
+        return null
+    }
 
     fun pushScope(scope: HashMap<String, VarBlock> = HashMap()) = context.push(scope)
     fun popScope(): HashMap<String, VarBlock>? = context.pop()

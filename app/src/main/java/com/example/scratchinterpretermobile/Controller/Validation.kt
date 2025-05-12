@@ -5,9 +5,12 @@ import com.example.scratchinterpretermobile.Controller.Error.Error
 import com.example.scratchinterpretermobile.Controller.Error.ErrorStore
 import com.example.scratchinterpretermobile.Model.Stack
 import com.example.scratchinterpretermobile.Model.VarBlock
+import com.example.scratchinterpretermobile.Model.Context
+import com.example.scratchinterpretermobile.Model.IntegerArrayBlock
+import com.example.scratchinterpretermobile.Model.IntegerBlock
 
 fun validateNameVariable(input: String): Int {
-    val nameVariable = input.trim() // Удаление табуляции справа и слева
+    val nameVariable = input.trim()
 
     if (nameVariable.isEmpty()) {
         return 104
@@ -29,8 +32,6 @@ fun validateNameVariable(input: String): Int {
 
     return 0
 }
-
-
 fun validateArrayName(input: String): Int {
     val nameVariable = input.trim()
     val patterns = mapOf(
@@ -74,17 +75,52 @@ fun validateArrayName(input: String): Int {
 }
 
 
-fun calculationArithmeticExpression(input: String): Pair<Int, Int> {
-    val (elements, error) = getElementFromString(input)
-    if (error != 0) return Pair(1, error)
 
-    val (elementsPostfix, errorPostfix) = transferPrefixToPostfix(elements)
-    if (errorPostfix != 0) return Pair(2, errorPostfix)
+fun getElementArray(input: String): Pair<Int, Int> {
+    val trimmedInput = input.trim()
 
-    return Pair(calculationPostfix(elementsPostfix), 0)
+    if (validateArrayName(trimmedInput) != 0) {
+        return Pair(-1, 105)
+    }
+
+    val arrayNameRegex = Regex("^([a-zA-Z_]\\w*)\$$[^$$]*\$$")
+    val arrayNameMatch = arrayNameRegex.find(trimmedInput) ?: return Pair(-1, 105)
+    val arrayName = arrayNameMatch.groupValues[1]
+
+    val indexRegex = Regex("$$$([^$$]+)\$$")
+    val indexMatch = indexRegex.find(trimmedInput) ?: return Pair(-1, 107) // Ошибка: не найден индекс
+    val indexExpr = indexMatch.groupValues[1]
+
+    val (indexValue, indexError) = calculationArithmeticExpression(indexExpr)
+    if (indexError != 0) {
+        return Pair(-1, indexError)
+    }
+
+    val varBlock = Context.getVar(arrayName) ?: return Pair(-1, 108) // Ошибка: переменная не найдена
+
+    return when (varBlock) {
+        is IntegerArrayBlock -> {
+            val array = varBlock.value as? List<Int>
+                ?: return Pair(-1, 111) // Ошибка: значение не является списком Int
+
+            if (indexValue in array.indices) {
+                Pair(array[indexValue], 0)
+            } else {
+                Pair(-1, 109) // Ошибка: выход за границы массива
+            }
+        }
+
+        is IntegerBlock -> {
+            Pair(-1, 110) // Ошибка: ожидался массив, а найдено число
+        }
+
+        else -> {
+            Pair(-1, 111) // Ошибка: неизвестный тип переменной
+        }
+    }
 }
 
-fun getElementFromString(input: String): Pair<MutableList<String>, Int> {
+fun getElementFromString(input: String): MutableList<String> {
     val trimmedInput = "0" + input.trim()
 
     val elements = mutableListOf<String>()
@@ -93,8 +129,20 @@ fun getElementFromString(input: String): Pair<MutableList<String>, Int> {
 
     var currentToken = StringBuilder()
 
+    var flagArray = false
     for (symbol in trimmedInput) {
         if (symbol == ' ') continue
+
+        if (symbol == '[') flagArray = true;
+        if (symbol == ']') {
+            flagArray = false;
+            currentToken.append(symbol)
+            elements.add(currentToken.toString())
+            currentToken.clear()
+            continue
+        }
+
+        if (flagArray) currentToken.append(symbol);
 
         if (currentToken.isNotEmpty() && (symbol.isDigit() || symbol.isLetter() || symbol == '_')) {
             currentToken.append(symbol)
@@ -106,8 +154,6 @@ fun getElementFromString(input: String): Pair<MutableList<String>, Int> {
                 currentToken.clear()
             }
             elements.add(symbol.toString())
-        } else {
-            return Pair(mutableListOf(""), 103)
         }
     }
 
@@ -115,9 +161,8 @@ fun getElementFromString(input: String): Pair<MutableList<String>, Int> {
         elements.add(currentToken.toString())
     }
 
-    return Pair(elements, 0)
+    return elements
 }
-
 fun transferPrefixToPostfix(elements: MutableList<String>): Pair<MutableList<String>, Int> {
     val postfix = mutableListOf<String>()
     val stack = Stack<String>()
@@ -132,60 +177,66 @@ fun transferPrefixToPostfix(elements: MutableList<String>): Pair<MutableList<Str
 
     val operators = "+-*%/"
 
-    var lastElement = ""
     for (element in elements) {
         when {
-            (element != "(") && (element !in operators) && (element != ")") -> {
-                val value = element.toIntOrNull()
-                if (value == null) {
-                    val error = validateNameVariable(element)
-                    if (error != 0) return Pair(mutableListOf(""), error)
+            element in operators -> {
+                while (!stack.isEmpty() && stack.peek() != "(" && priority[element]!! <= priority[stack.peek()]!!) {
+                    postfix.add(stack.pop()!!)
                 }
-                postfix.add(element)
+                stack.push(element)
             }
-
             element == "(" -> stack.push(element)
 
             element == ")" -> {
                 while (!stack.isEmpty() && stack.peek() != "(") {
                     postfix.add(stack.pop()!!)
                 }
-                if (!stack.isEmpty()) stack.pop()
-                else return Pair(mutableListOf(""), 106)
+                if (stack.isEmpty()) return Pair(mutableListOf(), 106)
+                stack.pop()
             }
 
-            element in operators -> {
-                if (lastElement == "(" || lastElement == "") {
-                    return Pair(mutableListOf(""), 106)
+            else -> {
+                if (validateArrayName(element) == 0) {
+                    val arrayNameRegex = Regex("^([a-zA-Z_]\\w*)\$$([^$$]+)\$$")
+                    val match = arrayNameRegex.find(element) ?: return Pair(mutableListOf(), 107)
+
+                    val arrayName = match.groupValues[1]
+                    val indexExpr = match.groupValues[2]
+
+                    val (indexValue, indexError) = calculationArithmeticExpression(indexExpr)
+                    if (indexError != 0) return Pair(mutableListOf(), indexError)
+
+                    val varBlock = Context.getVar(arrayName) ?: return Pair(mutableListOf(), 108)
+                    if (varBlock !is IntegerArrayBlock) return Pair(mutableListOf(), 110)
+
+                    val array = varBlock.value as? List<Int> ?: return Pair(mutableListOf(), 111)
+                    if (indexValue !in array.indices) return Pair(mutableListOf(), 109)
+
+                    postfix.add(array[indexValue].toString())
+                } else {
+                    val value = element.toIntOrNull()
+                    if (value != null) {
+                        postfix.add(value.toString())
+                    } else {
+                        val error = validateNameVariable(element)
+                        if (error != 0) return Pair(mutableListOf(), error)
+
+                        val varBlock = Context.getVar(element) ?: return Pair(mutableListOf(), 108)
+                        if (varBlock !is IntegerBlock) return Pair(mutableListOf(), 110)
+
+                        postfix.add((varBlock.value as Int).toString())
+                    }
                 }
-                while (!stack.isEmpty()
-                    && stack.peek() != "("
-                    && priority[element]!! <= priority[stack.peek()]!!
-                ) {
-                    postfix.add(stack.pop()!!)
-                }
-                stack.push(element)
             }
         }
-        lastElement = element
     }
 
     while (!stack.isEmpty()) {
-        if (stack.peek() == "(")
-            return Pair(mutableListOf(""), 106)
+        if (stack.peek() == "(") return Pair(mutableListOf(), 106)
         postfix.add(stack.pop()!!)
     }
 
     return Pair(postfix, 0)
-}
-
-fun findVariableInNameSpace(name: String): Int? {
-    for (namespace: HashMap<String, VarBlock> in context) {
-        if (namespace.containsKey(name)) {
-            return (namespace[name]?.value ?: -1) as Int?;
-        }
-    }
-    return -1
 }
 
 fun calculationPostfix(postfix: MutableList<String>): Int {
@@ -207,12 +258,16 @@ fun calculationPostfix(postfix: MutableList<String>): Int {
 
         }
 
-        var value = element.toIntOrNull()
-        if (value == null) {
-            value = findVariableInNameSpace(element)
-        }
+        val value = element.toIntOrNull()
         stack.push(value!!)
     }
     return stack.pop()!!;
 }
 
+
+fun calculationArithmeticExpression(input: String): Pair<Int, Int> {
+    val (elements, error) = transferPrefixToPostfix(getElementFromString(input))
+
+    if (error != 0) return Pair(-1, error)
+    return Pair(calculationPostfix(elements), 0)
+}

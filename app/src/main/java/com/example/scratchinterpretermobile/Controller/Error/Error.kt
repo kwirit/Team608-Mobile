@@ -1,6 +1,5 @@
 package com.example.scratchinterpretermobile.Controller.Error
 
-import kotlin.Error
 
 data class Error(
     val id: Int,
@@ -85,11 +84,11 @@ object ErrorStore {
         102 to VARIABLE_HAS_SPACE,
         103 to INVALID_CHARACTERS,
         104 to EMPTY_NAME,
-        201 to REDECLARING_A_VARIABLE,
         105 to INCORRECT_ARRAY_ELEMENT_NAME,
+        201 to REDECLARING_A_VARIABLE,
         202 to INITIALIZATION_ERROR,
         301 to INCORRECT_ARITHMETIC_EXPRESSION
     )
 
-    fun get(id: Int): Error ? = errorMap[id]
+    fun get(id: Int): Error? = errorMap[id]
 }
