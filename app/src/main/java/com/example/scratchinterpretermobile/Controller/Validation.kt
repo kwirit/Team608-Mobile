@@ -2,9 +2,7 @@ package com.example.scratchinterpretermobile.Controller
 
 import com.example.scratchinterpretermobile.Controller.Error.Error
 import com.example.scratchinterpretermobile.Controller.Error.ErrorStore
-import com.example.scratchinterpretermobile.Model.Containers
 import com.example.scratchinterpretermobile.Model.Stack
-import com.example.scratchinterpretermobile.Model.Containers.context
 import com.example.scratchinterpretermobile.Model.VarBlock
 
 fun validateNameVariable(input: String): Int {
