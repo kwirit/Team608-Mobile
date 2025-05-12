@@ -2,7 +2,7 @@ import org.junit.Test
 import org.junit.Assert.*
 import com.example.scratchinterpretermobile.Controller.validateNameVariable
 
-class ValidateUnitTest {
+class ValidateNameVariableUnitTest {
     @Test
     fun validName_returnsSuccess() {
         val error = validateNameVariable("a123");

@@ -38,12 +38,26 @@ var EMPTY_NAME = Error(
     "The variable name cannot be empty.",
     "naming"
 )
+var INCORRECT_ARRAY_ELEMENT_NAME = Error(
+    105,
+    "Invalid array name",
+    "The array element name is invalid.",
+    "nameing"
+)
+
 var INITIALIZATION_ERROR = Error(
     202,
     "Initialization error",
     "The initialization of variable is incorrect.",
     "initialization"
-);
+)
+var INCORRECT_ARITHMETIC_EXPRESSION = Error(
+    301,
+    "Invalid arithmetic expression",
+    "Invalid notation of arithmetic expression.",
+    "arithmeticExpression"
+)
+
 
 object ErrorStore {
     private val errorMap = mapOf(
@@ -52,7 +66,9 @@ object ErrorStore {
         102 to VARIABLE_HAS_SPACE,
         103 to INVALID_CHARACTERS,
         104 to EMPTY_NAME,
-        202 to INITIALIZATION_ERROR
+        105 to INCORRECT_ARRAY_ELEMENT_NAME,
+        202 to INITIALIZATION_ERROR,
+        301 to INCORRECT_ARITHMETIC_EXPRESSION
     )
 
     fun get(id: Int): Error ? = errorMap[id]
