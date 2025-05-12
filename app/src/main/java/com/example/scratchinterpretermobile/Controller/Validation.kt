@@ -1,5 +1,6 @@
 package com.example.scratchinterpretermobile.Controller
 
+
 import com.example.scratchinterpretermobile.Controller.Error.Error
 import com.example.scratchinterpretermobile.Controller.Error.ErrorStore
 import com.example.scratchinterpretermobile.Model.Stack
@@ -30,10 +31,64 @@ fun validateNameVariable(input: String): Int {
 }
 
 
-fun getElementFromString(input: String): MutableList<String> {
-    val trimmedInput = input.trim()
+fun validateArrayName(input: String): Int {
+    val nameVariable = input.trim()
+    val patterns = mapOf(
+        "const" to Regex("\\d+").pattern,
+        "value" to Regex("[1-9]\\d*").pattern,
+        "var" to Regex("[a-zA-Z]\\w*").pattern,
+        "spaces" to Regex("\\s*").pattern
+    )
+
+    val simpleArray = """
+    ${patterns["var"]}$$
+    (${patterns["var"]}|${patterns["const"]})
+    $$
+    """.trim().replace(Regex("\\s+"), "")
+
+    val arithmeticInArray = """
+    ( 
+      (${simpleArray}|${patterns["var"]}|${patterns["const"]})${patterns["spaces"]}
+      (
+        ${patterns["spaces"]}[-+*/]${patterns["spaces"]}
+        (${simpleArray}|${patterns["var"]}|${patterns["const"]})
+      )*
+    )
+    """.trim().replace(Regex("\\s+"), "")
+
+    val array = """
+    ( 
+      ${patterns["var"]}$$
+      ( ${arithmeticInArray} | ${patterns["var"]} | ${patterns["const"]} | 
+        ${patterns["var"]}$$(${patterns["var"]} | ${patterns["const"]})\$$ 
+      )
+      $$
+    )
+    """.trim().replace(Regex("\\s+"), "")
+
+    return when {
+        Regex("^$simpleArray\$").matches(nameVariable) -> 0
+        Regex("^$array\$").matches(nameVariable) -> 0
+        else -> 105
+    }
+}
+
+
+fun calculationArithmeticExpression(input: String): Pair<Int, Int> {
+    val (elements, error) = getElementFromString(input)
+    if (error != 0) return Pair(1, error)
+
+    val (elementsPostfix, errorPostfix) = transferPrefixToPostfix(elements)
+    if (errorPostfix != 0) return Pair(2, errorPostfix)
+
+    return Pair(calculationPostfix(elementsPostfix), 0)
+}
+
+fun getElementFromString(input: String): Pair<MutableList<String>, Int> {
+    val trimmedInput = "0" + input.trim()
 
     val elements = mutableListOf<String>()
+
     val operators = "+-*%/()"
 
     var currentToken = StringBuilder()
@@ -52,7 +107,7 @@ fun getElementFromString(input: String): MutableList<String> {
             }
             elements.add(symbol.toString())
         } else {
-            currentToken.append(symbol)
+            return Pair(mutableListOf(""), 103)
         }
     }
 
@@ -60,14 +115,13 @@ fun getElementFromString(input: String): MutableList<String> {
         elements.add(currentToken.toString())
     }
 
-    return elements
+    return Pair(elements, 0)
 }
 
-
-fun transferPrefixToPostfix(elements: MutableList<String>): MutableList<String> {
-    var postfix = mutableListOf<String>()
-    var stack = Stack<String>()
-    var priority = mapOf(
+fun transferPrefixToPostfix(elements: MutableList<String>): Pair<MutableList<String>, Int> {
+    val postfix = mutableListOf<String>()
+    val stack = Stack<String>()
+    val priority = mapOf(
         "%" to 2,
         "/" to 2,
         "*" to 2,
@@ -78,24 +132,32 @@ fun transferPrefixToPostfix(elements: MutableList<String>): MutableList<String> 
 
     val operators = "+-*%/"
 
+    var lastElement = ""
     for (element in elements) {
         when {
-            element != "(" && element !in operators && element != ")" -> {
+            (element != "(") && (element !in operators) && (element != ")") -> {
+                val value = element.toIntOrNull()
+                if (value == null) {
+                    val error = validateNameVariable(element)
+                    if (error != 0) return Pair(mutableListOf(""), error)
+                }
                 postfix.add(element)
             }
 
-            element == "(" -> {
-                stack.push(element)
-            }
+            element == "(" -> stack.push(element)
 
             element == ")" -> {
                 while (!stack.isEmpty() && stack.peek() != "(") {
                     postfix.add(stack.pop()!!)
                 }
                 if (!stack.isEmpty()) stack.pop()
+                else return Pair(mutableListOf(""), 106)
             }
 
             element in operators -> {
+                if (lastElement == "(" || lastElement == "") {
+                    return Pair(mutableListOf(""), 106)
+                }
                 while (!stack.isEmpty()
                     && stack.peek() != "("
                     && priority[element]!! <= priority[stack.peek()]!!
@@ -105,12 +167,16 @@ fun transferPrefixToPostfix(elements: MutableList<String>): MutableList<String> 
                 stack.push(element)
             }
         }
+        lastElement = element
     }
+
     while (!stack.isEmpty()) {
+        if (stack.peek() == "(")
+            return Pair(mutableListOf(""), 106)
         postfix.add(stack.pop()!!)
     }
 
-    return postfix
+    return Pair(postfix, 0)
 }
 
 fun findVariableInNameSpace(name: String): Int? {
@@ -122,38 +188,23 @@ fun findVariableInNameSpace(name: String): Int? {
     return -1
 }
 
-fun calculationPrefix(postfix: MutableList<String>): Int {
-    var stack = Stack<Int>()
+fun calculationPostfix(postfix: MutableList<String>): Int {
+    val stack = Stack<Int>()
 
     for (element in postfix) {
         if (element in "+-*%/") {
-            if (stack.size() >= 2) {
-                var first = stack.pop()!!
-                var second = stack.pop()!!
-                when {
-                    element == "-" -> {
-                        stack.push(second - first)
-                    }
+            val first = stack.pop()!!
+            val second = stack.pop()!!
+            var result = 0
+            when (element) {
+                "-" -> result = second - first
+                "+" -> result = second + first
+                "*" -> result = second * first
+                "%" -> result = second % first
+                "/" -> result = second / first
+            }
+            stack.push(result)
 
-                    element == "+" -> {
-                        stack.push(second + first)
-                    }
-
-                    element == "*" -> {
-                        stack.push(second * first)
-                    }
-
-                    element == "%" -> {
-                        stack.push(second % first)
-                    }
-
-                    element == "/" -> {
-                        stack.push(second / first)
-                    }
-                }
-                continue
-            } else
-                return -1
         }
 
         var value = element.toIntOrNull()

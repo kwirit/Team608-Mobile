@@ -46,18 +46,35 @@ val EMPTY_NAME = Error(
     "The variable name cannot be empty.",
     "naming"
 )
-val REDECLARING_A_VARIABLE = Error (
-    201,
-    "Initialization error",
-    "The variable is already declared in the context",
-    "initialization"
+
+val INCORRECT_ARRAY_ELEMENT_NAME = Error(
+    105,
+    "Invalid array name",
+    "The array element name is invalid.",
+    "nameing"
 )
+
 val INITIALIZATION_ERROR = Error(
     202,
     "Initialization error",
     "The initialization of variable is incorrect.",
     "initialization"
 )
+
+val REDECLARING_A_VARIABLE = Error (
+    201,
+    "Initialization error",
+    "The variable is already declared in the context",
+    "initialization"
+)
+
+val INCORRECT_ARITHMETIC_EXPRESSION = Error(
+    301,
+    "Invalid arithmetic expression",
+    "Invalid notation of arithmetic expression.",
+    "arithmeticExpression"
+)
+
 
 
 object ErrorStore {
@@ -69,7 +86,9 @@ object ErrorStore {
         103 to INVALID_CHARACTERS,
         104 to EMPTY_NAME,
         201 to REDECLARING_A_VARIABLE,
-        202 to INITIALIZATION_ERROR
+        105 to INCORRECT_ARRAY_ELEMENT_NAME,
+        202 to INITIALIZATION_ERROR,
+        301 to INCORRECT_ARITHMETIC_EXPRESSION
     )
 
     fun get(id: Int): Error ? = errorMap[id]
