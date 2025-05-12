@@ -22,7 +22,7 @@ class AssignmentBlock : InstructionBlock() {
             val name = match.groups[1]?.value?.takeIf { it.isNotEmpty() }
                 ?: return 202
 
-            if (Context.hasKey(name)) {
+            if (Context.getVar(name) == null) {
                 return 201
             }
 
