@@ -22,9 +22,9 @@ class AssignmentBlock : InstructionBlock() {
             val name = match.groups[1]?.value?.takeIf { it.isNotEmpty() }
                 ?: return 202
 
-            if (Context.hasKey(name)) {
-                return 201
-            }
+//            if (Context.hasKey(name)) {
+//                return 201
+//            }
 
             val scope = Context.peekScope() ?: return 1
 
@@ -38,9 +38,9 @@ class AssignmentBlock : InstructionBlock() {
                     //Проверить на корректность арифметического выражения
                     // Посчитать арифметическое выражение
 
-                    val newIntegerArray = IntegerArrayBlock(name, IntArray(arraySize).toList())
-                    newVariables.add(newIntegerArray)
-                    scope[newIntegerArray.name] = newIntegerArray
+//                    val newIntegerArray = IntegerArrayBlock(name, IntArray(arraySize).toList())
+//                    newVariables.add(newIntegerArray)
+//                    scope[newIntegerArray.name] = newIntegerArray
                 }
             }
         }
