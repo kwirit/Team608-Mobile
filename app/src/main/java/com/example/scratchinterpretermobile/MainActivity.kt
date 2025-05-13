@@ -23,7 +23,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import com.example.scratchinterpretermobile.View.DragableScreen
+//import com.example.scratchinterpretermobile.View.DragableScreen
 import com.example.scratchinterpretermobile.View.MainScreen
 import com.example.scratchinterpretermobile.View.MainViewModel
 import com.example.scratchinterpretermobile.ui.theme.ScratchInterpreterMobileTheme
@@ -33,12 +33,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         val mainViewModel = MainViewModel()
         setContent {
-            DragableScreen(
-                modifier = Modifier
-                    .fillMaxSize()
-            ) {
-                MainScreen(mainViewModel)
-            }
+            MainScreen(mainViewModel)
         }
     }
 }

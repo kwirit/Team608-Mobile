@@ -7,6 +7,7 @@ class AssigningBox: ProgramBox() {
     val list = mutableListOf<Variable>()
     @Composable
     override fun render(){
-        AssigningCard(variables = list)
+        BaseBox(name = "Присваивание") {
+        }
     }
 }

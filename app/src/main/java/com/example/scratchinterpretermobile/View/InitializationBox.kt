@@ -9,6 +9,7 @@ import androidx.compose.ui.unit.dp
 class InitializationBox : ProgramBox() {
     @Composable
     override fun render(){
-        InitializationCard()
+        BaseBox(name = "Инициализация") {
+        }
     }
 }
