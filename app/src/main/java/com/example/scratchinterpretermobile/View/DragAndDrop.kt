@@ -24,27 +24,26 @@ fun DragableScreen(
     content: @Composable BoxScope.() -> Unit
 ) {
     val state = remember { DragTargetInfo() }
-    CompositionLocalProvider(
-        LocalDragTargetInfo provides state
-    ) {
-        Box(modifier = modifier.fillMaxSize())
-        {
+    CompositionLocalProvider(LocalDragTargetInfo provides state) {
+        Box(modifier = modifier.fillMaxSize()) {
             content()
+
             if (state.isDragging) {
-                var targetSize by remember {
-                    mutableStateOf(IntSize.Zero)
-                }
-                Box(modifier = Modifier
-                    .graphicsLayer {
-                        val offset = (state.dragPosition + state.dragOffset)
-                        translationX = offset.x.minus(15f)
-                        translationY = offset.y.minus(15f)
-                    }
-                    .onGloballyPositioned {
-                        targetSize = it.size
-                    }
+                Box(
+                    modifier = Modifier
+                        .graphicsLayer {
+                            val offset = state.dragPosition + state.dragOffset
+                            translationX = offset.x - 15f
+                            translationY = offset.y - 15f
+                        }
                 ) {
-                    state.draggableComposable?.invoke()
+                    when (val block = state.draggedBlock) {
+                        is DraggedBlock.Initialization -> InitializationBox()
+                        is DraggedBlock.Assigning -> AssigningBox(variables = block.variables)
+                        is DraggedBlock.If -> IfBox()
+                        is DraggedBlock.Console -> ConsoleBox()
+                        null -> {}
+                    }
                 }
             }
         }
@@ -54,42 +53,46 @@ fun DragableScreen(
 @Composable
 fun <T> DragTarget(
     modifier: Modifier = Modifier,
-    dataToDrop: T,
+    dataToDrop: T?,
+    blockType: DraggedBlock,
     viewModel: MainViewModel,
     showBoxesState: MutableState<Boolean>,
-    content: @Composable (() -> Unit)
+    content: @Composable () -> Unit
 ) {
-
-    var currentPosition by remember { mutableStateOf(Offset.Zero) }
     val currentState = LocalDragTargetInfo.current
+    var currentPosition by remember { mutableStateOf(Offset.Zero) }
 
-    Box(modifier = modifier
-        .onGloballyPositioned {
-            currentPosition = it.localToWindow(
-                Offset.Zero
-            )
-        }
-        .pointerInput(Unit) {
-            detectDragGesturesAfterLongPress(onDragStart = {
-                viewModel.startDragging()
-                showBoxesState.value = true
-                currentState.dataToDrop = dataToDrop
-                currentState.isDragging = true
-                currentState.dragPosition = currentPosition + it
-                currentState.draggableComposable = content
-            }, onDrag = { change, dragAmount ->
-                change.consumeAllChanges()
-                currentState.dragOffset += Offset(dragAmount.x, dragAmount.y)
-            }, onDragEnd = {
-                viewModel.stopDragging()
-                currentState.isDragging = false
-                currentState.dragOffset = Offset.Zero
-            }, onDragCancel = {
-                viewModel.stopDragging()
-                currentState.dragOffset = Offset.Zero
-                currentState.isDragging = false
-            })
-        }) {
+    Box(
+        modifier = modifier
+            .onGloballyPositioned {
+                currentPosition = it.localToWindow(Offset.Zero)
+            }
+            .pointerInput(Unit) {
+                detectDragGesturesAfterLongPress(
+                    onDragStart = {
+                        viewModel.startDragging()
+                        currentState.isDragging = true
+                        currentState.dragPosition = currentPosition + it
+                        currentState.draggedBlock = blockType
+                        showBoxesState.value = false
+                    },
+                    onDrag = { change, dragAmount ->
+                        change.consumeAllChanges()
+                        currentState.dragOffset += Offset(dragAmount.x, dragAmount.y)
+                    },
+                    onDragEnd = {
+                        viewModel.stopDragging()
+                        currentState.isDragging = false
+                        currentState.dragOffset = Offset.Zero
+                    },
+                    onDragCancel = {
+                        viewModel.stopDragging()
+                        currentState.dragOffset = Offset.Zero
+                        currentState.isDragging = false
+                    }
+                )
+            }
+    ) {
         content()
     }
 }
@@ -122,6 +125,6 @@ internal class DragTargetInfo {
     var isDragging: Boolean by mutableStateOf(false)
     var dragPosition by mutableStateOf(Offset.Zero)
     var dragOffset by mutableStateOf(Offset.Zero)
-    var draggableComposable by mutableStateOf<(@Composable () -> Unit)?>(null)
+    var draggedBlock by mutableStateOf<DraggedBlock?>(null)
     var dataToDrop by mutableStateOf<Any?>(null)
 }

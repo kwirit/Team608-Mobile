@@ -1,5 +1,7 @@
 package com.example.scratchinterpretermobile.View
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.material3.Surface
 import androidx.compose.foundation.layout.Box
@@ -39,6 +41,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.example.scratchinterpretermobile.Model.Variable
+import com.example.scratchinterpretermobile.View.DraggedBlock.Initialization
 import com.example.scratchinterpretermobile.ui.theme.Blue
 import com.example.scratchinterpretermobile.ui.theme.LightOrange
 import com.example.scratchinterpretermobile.ui.theme.Orange
@@ -47,20 +50,24 @@ import com.example.scratchinterpretermobile.ui.theme.Orange
 fun MainScreen(viewModel: MainViewModel){
     val showBoxesState = remember { mutableStateOf(false) }
 
-    if(showBoxesState.value == true){
-        ShowListOfBoxes(showBoxesState, viewModel)
-    }
+    var listOfBoxes = mutableListOf<ProgramBox>()
 
+    if(showBoxesState.value == true){
+        ShowListOfBoxes(showBoxesState, viewModel, listOfBoxes)
+    }
     Column {
         TopBar(showBoxesState)
         Column ( Modifier.weight(1f)){
+            listOfBoxes.forEach { item->
+                item.render()
+            }
         }
         BottomBar()
     }
 }
 
 @Composable
-fun ShowListOfBoxes(showBoxesState: MutableState<Boolean>, viewModel: MainViewModel){
+fun ShowListOfBoxes(showBoxesState: MutableState<Boolean>, viewModel: MainViewModel, listOfBoxes: MutableList<ProgramBox>){
     val list = mutableListOf<Variable>()
     list.add(Variable("test1",1))
     list.add(Variable("test2",2))
@@ -72,17 +79,17 @@ fun ShowListOfBoxes(showBoxesState: MutableState<Boolean>, viewModel: MainViewMo
         onDismissRequest = {showBoxesState.value = false},
     ) {
         Column(Modifier.width(320.dp).height(600.dp).padding(20.dp).background(color = Color.White, shape = RoundedCornerShape(20.dp))) {
-            InitializationBox()
-            AssigningBox(variables = list)
-            IfBox()
-            ConsoleBox()
+            InitializationCard(listOfBoxes, showBoxesState)
+            AssigningCard(listOfBoxes,showBoxesState,list)
+            IfCard(listOfBoxes,showBoxesState)
+            ConsoleCard(listOfBoxes,showBoxesState)
         }
     }
 }
 
 @Composable
-fun BaseCard(name: String,content:@Composable () -> Unit){
-    Card(Modifier.fillMaxWidth().height(100.dp).padding(10.dp),
+fun BaseCard(name: String,onClick: () -> Unit = {},content:@Composable () -> Unit){
+    Card(Modifier.fillMaxWidth().height(100.dp).padding(10.dp).clickable(onClick = onClick),
         colors = CardDefaults.cardColors(containerColor = Blue),
     ) {
         Box(Modifier.fillMaxWidth(),contentAlignment = Alignment.Center){
