@@ -43,34 +43,29 @@ import com.example.scratchinterpretermobile.ui.theme.Blue
 import com.example.scratchinterpretermobile.ui.theme.LightOrange
 import com.example.scratchinterpretermobile.ui.theme.Orange
 
-
-@Preview
 @Composable
-fun MainScreen(){
-
+fun MainScreen(viewModel: MainViewModel){
     val showBoxesState = remember { mutableStateOf(false) }
 
     if(showBoxesState.value == true){
-        ShowListOfBoxes(showBoxesState)
+        ShowListOfBoxes(showBoxesState, viewModel)
     }
 
     Column {
         TopBar(showBoxesState)
         Column ( Modifier.weight(1f)){
         }
-
         BottomBar()
     }
-
 }
 
 @Composable
-fun ShowListOfBoxes(showBoxesState: MutableState<Boolean>){
+fun ShowListOfBoxes(showBoxesState: MutableState<Boolean>, viewModel: MainViewModel){
     val list = mutableListOf<Variable>()
-    list.add(Variable("AAAA",2))
-    list.add(Variable("ABA",25))
-    list.add(Variable("AASDASDA",4))
-    list.add(Variable("AASDASDAAA",21))
+    list.add(Variable("test1",1))
+    list.add(Variable("test2",2))
+    list.add(Variable("test3",3))
+    list.add(Variable("test4",4))
     Dialog(
         properties = DialogProperties(
             usePlatformDefaultWidth = false),
@@ -81,55 +76,6 @@ fun ShowListOfBoxes(showBoxesState: MutableState<Boolean>){
             AssigningBox(variables = list)
             IfBox()
             ConsoleBox()
-        }
-    }
-}
-
-@Composable
-fun TopBar(showBoxesState: MutableState<Boolean>){
-    Row(Modifier.fillMaxWidth().height(100.dp).background(color = Orange), horizontalArrangement = Arrangement.End){
-        Button(modifier = Modifier.padding(top = 18.dp, end = 20.dp).size(60.dp),onClick = {
-            showBoxesState.value = true },
-            colors = ButtonDefaults.buttonColors(
-                containerColor = LightOrange,
-                contentColor = Color.White),
-            shape = RoundedCornerShape(16.dp),
-            contentPadding = PaddingValues(0.dp)
-        ) {
-            Icon(painter = painterResource(R.drawable.baseline_add), contentDescription = null, modifier = Modifier.size(50.dp))
-        }
-        Button(modifier = Modifier.padding(top = 18.dp, end = 20.dp).size(60.dp),onClick = {},
-            colors = ButtonDefaults.buttonColors(
-                containerColor = LightOrange,
-                contentColor = Color.Green),
-            shape = RoundedCornerShape(16.dp),
-            contentPadding = PaddingValues(0.dp)
-        ) {
-            Icon(painter = painterResource(R.drawable.play_button), contentDescription = null, modifier = Modifier.size(32.dp))
-        }
-    }
-}
-
-@Composable
-fun BottomBar(){
-    Row(Modifier.fillMaxWidth().height(100.dp).background(color = Orange), horizontalArrangement = Arrangement.Center){
-        Button(modifier = Modifier.padding(top = 18.dp, end = 60.dp).size(60.dp),onClick = {},
-            colors = ButtonDefaults.buttonColors(
-                containerColor = LightOrange,
-                contentColor = Color.White),
-            shape = RoundedCornerShape(16.dp),
-            contentPadding = PaddingValues(0.dp)
-        ) {
-            Icon(painter = painterResource(R.drawable.home), contentDescription = null, modifier = Modifier.size(50.dp))
-        }
-        Button(modifier = Modifier.padding(top = 18.dp, start = 60.dp).size(60.dp),onClick = {},
-            colors = ButtonDefaults.buttonColors(
-                containerColor = LightOrange,
-                contentColor = Color.White),
-            shape = RoundedCornerShape(16.dp),
-            contentPadding = PaddingValues(0.dp)
-        ) {
-            Icon(painter = painterResource(R.drawable.console), contentDescription = null, modifier = Modifier.size(50.dp))
         }
     }
 }
