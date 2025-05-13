@@ -1,6 +1,9 @@
 package com.example.scratchinterpretermobile.Model
 
 import com.example.scratchinterpretermobile.Controller.Error.ErrorStore
+import com.example.scratchinterpretermobile.Controller.calculationPostfix
+import com.example.scratchinterpretermobile.Controller.getElementFromString
+import com.example.scratchinterpretermobile.Controller.transferPrefixToPostfix
 import com.example.scratchinterpretermobile.Controller.validateNameVariable
 
 class AssignmentBlock : InstructionBlock() {
@@ -22,11 +25,10 @@ class AssignmentBlock : InstructionBlock() {
             val name = match.groups[1]?.value?.takeIf { it.isNotEmpty() }
                 ?: return 202
 
-//            if (Context.hasKey(name)) {
-//                return 201
-//            }
-
             val scope = Context.peekScope() ?: return 1
+            if(Context.getVar(name) != null) {
+                return 201
+            }
 
             when {
                 match.groups[2] == null -> {
@@ -37,10 +39,17 @@ class AssignmentBlock : InstructionBlock() {
                 else -> {
                     //Проверить на корректность арифметического выражения
                     // Посчитать арифметическое выражение
+                    val prefixTokens = getElementFromString(word)
 
-//                    val newIntegerArray = IntegerArrayBlock(name, IntArray(arraySize).toList())
-//                    newVariables.add(newIntegerArray)
-//                    scope[newIntegerArray.name] = newIntegerArray
+                    val (postfixTokens, errorTransfer) = transferPrefixToPostfix(prefixTokens)
+                    if(errorTransfer != 0) return errorTransfer
+
+                    val (arifmeticResult, arifmeticError) = calculationPostfix(postfixTokens)
+                    if(arifmeticError != 0) return arifmeticError
+
+                    val newIntegerArrayBlock = IntegerArrayBlock(name, List<Int>(arifmeticResult){0})
+                    newVariables.add(newIntegerArrayBlock)
+                    scope[newIntegerArrayBlock.name] = newIntegerArrayBlock
                 }
             }
         }
@@ -49,7 +58,11 @@ class AssignmentBlock : InstructionBlock() {
     }
 
     override fun run(): Int {
-        // Реализация выполнения
+        for(newVar in newVariables) {
+            var scope = Context.peekScope()
+            scope!!.put(newVar.name, newVar)
+        }
+        
         return 0
     }
 }
