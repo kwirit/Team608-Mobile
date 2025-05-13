@@ -5,7 +5,7 @@ import com.example.scratchinterpretermobile.Controller.calculationArithmeticExpr
 class calculationArithmeticExpressionUnitTest {
     @Test
     fun test() {
-        val (result, error) = calculationArithmeticExpression("10 + 5 - 11 *(321 % 10))")
+        val (result, error) = calculationArithmeticExpression("10 + 5 - 11 *(321 % 10)")
         assertEquals(4, result)
     }
 

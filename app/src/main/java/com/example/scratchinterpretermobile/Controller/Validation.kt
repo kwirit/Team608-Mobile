@@ -73,7 +73,11 @@ fun validateArrayName(input: String): Int {
         else -> 105
     }
 }
-
+fun validateConst(input: String): Int {
+    var regex =  Regex("\\d+")
+    if (regex.matches(input.trim())) return 0
+    else return 101
+}
 
 
 fun getElementArray(input: String): Pair<Int, Int> {
@@ -185,6 +189,7 @@ fun transferPrefixToPostfix(elements: MutableList<String>): Pair<MutableList<Str
                 }
                 stack.push(element)
             }
+
             element == "(" -> stack.push(element)
 
             element == ")" -> {
@@ -196,37 +201,47 @@ fun transferPrefixToPostfix(elements: MutableList<String>): Pair<MutableList<Str
             }
 
             else -> {
-                if (validateArrayName(element) == 0) {
+                if (validateNameVariable(element) == 0 && Context.getVar(element) != null) {
+                    var valueVariable = Context.getVar(element)
+                    if (valueVariable is IntegerBlock && valueVariable.value is Int) {
+                        postfix.add(valueVariable.value.toString())
+                    }
+                }
+                else if (validateConst(element) == 0){
+                    postfix.add(element)
+                }
+                else if (validateArrayName(element) == 0) {
                     val arrayNameRegex = Regex("^([a-zA-Z_]\\w*)\$$([^$$]+)\$$")
                     val match = arrayNameRegex.find(element) ?: return Pair(mutableListOf(), 107)
 
                     val arrayName = match.groupValues[1]
                     val indexExpr = match.groupValues[2]
 
+                    if (validateNameVariable(arrayName) != 0) {
+                        return Pair(mutableListOf(), validateNameVariable(arrayName))
+                    }
+
                     val (indexValue, indexError) = calculationArithmeticExpression(indexExpr)
-                    if (indexError != 0) return Pair(mutableListOf(), indexError)
+                    if (indexError != 0) {
+                        return Pair(mutableListOf(), indexError)
+                    }
 
-                    val varBlock = Context.getVar(arrayName) ?: return Pair(mutableListOf(), 108)
-                    if (varBlock !is IntegerArrayBlock) return Pair(mutableListOf(), 110)
+                    val arrayBlock = Context.getVar(arrayName) ?: return Pair(mutableListOf(), 108)
+                    if (arrayBlock !is IntegerArrayBlock) {
+                        return Pair(mutableListOf(), 110)
+                    }
 
-                    val array = varBlock.value as? List<Int> ?: return Pair(mutableListOf(), 111)
-                    if (indexValue !in array.indices) return Pair(mutableListOf(), 109)
+                    val array = arrayBlock.value as? List<Int> ?: return Pair(mutableListOf(), 111)
+
+                    if (indexValue < 0 || indexValue >= array.size) {
+                        return Pair(mutableListOf(), 109)
+                    }
 
                     postfix.add(array[indexValue].toString())
-                } else {
-                    val value = element.toIntOrNull()
-                    if (value != null) {
-                        postfix.add(value.toString())
-                    } else {
-                        val error = validateNameVariable(element)
-                        if (error != 0) return Pair(mutableListOf(), error)
-
-                        val varBlock = Context.getVar(element) ?: return Pair(mutableListOf(), 108)
-                        if (varBlock !is IntegerBlock) return Pair(mutableListOf(), 110)
-
-                        postfix.add((varBlock.value as Int).toString())
-                    }
                 }
+                else
+                    return Pair(mutableListOf(), 101)
+
             }
         }
     }
