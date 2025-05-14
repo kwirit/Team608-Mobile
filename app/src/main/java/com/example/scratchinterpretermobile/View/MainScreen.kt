@@ -2,9 +2,11 @@ package com.example.scratchinterpretermobile.View
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.material3.Surface
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -12,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import com.example.scratchinterpretermobile.R
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -30,14 +33,17 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -52,22 +58,76 @@ import com.example.scratchinterpretermobile.ui.theme.LightOrange
 import com.example.scratchinterpretermobile.ui.theme.Orange
 
 @Composable
-fun MainScreen(viewModel: MainViewModel){
+fun MainScreen(viewModel: MainViewModel) {
     val showBoxesState = remember { mutableStateOf(false) }
+    val listOfBoxes = remember { mutableStateListOf<ProgramBox>() }
 
-    var listOfBoxes = remember { mutableStateListOf<ProgramBox>() }
-
-    if(showBoxesState.value == true){
-        ShowListOfBoxes(showBoxesState, viewModel, listOfBoxes)
-    }
-    Column {
+    Column(modifier = Modifier.fillMaxSize()) {
         TopBar(showBoxesState)
-        Column ( Modifier.weight(1f).verticalScroll(rememberScrollState())){
-            listOfBoxes.forEach { item->
-                item.render()
+
+        Box(modifier = Modifier.weight(1f)) {
+            val boxHeightDp = 100.dp
+            val density = LocalDensity.current
+
+            var draggingIndex by remember { mutableStateOf<Int?>(null) }
+            var offset by remember { mutableStateOf(0f) }
+
+            Column(
+                modifier = Modifier.verticalScroll(rememberScrollState())
+            ) {
+                listOfBoxes.forEachIndexed { index, item ->
+                    val currentOffset = if (index == draggingIndex) offset else 0f
+
+                    Box(
+                        modifier = Modifier
+                            .height(boxHeightDp)
+                            .fillMaxWidth()
+                            .offset(y = with(density) { currentOffset.toDp() })
+                            .pointerInput(Unit) {
+                                detectDragGestures(
+                                    onDragStart = {
+                                        draggingIndex = index
+                                        offset = 0f
+                                    },
+                                    onDrag = { change, dragAmount ->
+                                        change.consume()
+                                        offset += dragAmount.y
+
+                                        val boxHeightPx = density.run { boxHeightDp.roundToPx() }.toFloat()
+                                        val newIndex = ((offset + boxHeightPx / 2) / boxHeightPx).toInt() + index
+
+                                        if (newIndex != index && newIndex in 0..listOfBoxes.lastIndex) {
+                                            listOfBoxes.add(newIndex, listOfBoxes.removeAt(index))
+                                            draggingIndex = newIndex
+                                            offset = 0f
+                                        }
+                                    },
+                                    onDragEnd = {
+                                        draggingIndex = null
+                                    }
+                                )
+                            }
+                    ) {
+                        Card(
+                            colors = CardDefaults.cardColors(
+                                containerColor = if (index == draggingIndex) Orange else Blue
+                            ),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(4.dp)
+                        ) {
+                            item.render()
+                        }
+                    }
+                }
             }
         }
+
         BottomBar()
+    }
+
+    if (showBoxesState.value) {
+        ShowListOfBoxes(showBoxesState, viewModel, listOfBoxes)
     }
 }
 
