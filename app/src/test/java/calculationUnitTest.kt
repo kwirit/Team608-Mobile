@@ -63,6 +63,19 @@ class calculationUnitTest {
         assertEquals(1 + 1 * 1554, result)
     }
 
+    @Test
+    fun testArrayInArray() {
+        val scope = hashMapOf<String, VarBlock>()
+        scope["a"] = IntegerBlock("a", 1)
+        scope["i"] = IntegerBlock("i", 2)
+        scope["b"] = IntegerBlock("b", 2)
+        scope["arr2"] = IntegerArrayBlock("arr2", listOf(1, 2, 3))
+        scope["arr"] = IntegerArrayBlock("arr", listOf(100, 23, 11, 105, 1, 1231, 1554, 5, 64))
+        Context.pushScope(scope)
+
+        val result = getElementFromString("asda[ 1 + (4 + 0) * 123 - (123 - 1000)]")
+        assertEquals(listOf("asda[1+(4+0)*123 - (123-1000)"), result)
+    }
     @After
     fun tearDown() {
         Context.clear()
