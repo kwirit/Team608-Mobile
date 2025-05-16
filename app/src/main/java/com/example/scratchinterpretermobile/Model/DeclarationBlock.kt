@@ -1,12 +1,11 @@
 package com.example.scratchinterpretermobile.Model
 
-import com.example.scratchinterpretermobile.Controller.Error.ErrorStore
 import com.example.scratchinterpretermobile.Controller.calculationPostfix
 import com.example.scratchinterpretermobile.Controller.getElementFromString
 import com.example.scratchinterpretermobile.Controller.transferPrefixToPostfix
 import com.example.scratchinterpretermobile.Controller.validateNameVariable
 
-class AssignmentBlock : InstructionBlock() {
+class DeclarationBlock : InstructionBlock() {
     private val newVariables = mutableListOf<VarBlock>()
 
     fun processInput(usersInput: String): Int {
