@@ -5,7 +5,7 @@ import com.example.scratchinterpretermobile.Controller.getElementFromString
 import com.example.scratchinterpretermobile.Controller.transferPrefixToPostfix
 import com.example.scratchinterpretermobile.Controller.validateNameVariable
 
-class DeclarationBlock : InstructionBlock() {
+class InitBlock : InstructionBlock() {
     private val newVariables = mutableListOf<VarBlock>()
 
     fun processInput(usersInput: String): Int {
