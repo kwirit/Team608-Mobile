@@ -7,6 +7,7 @@ import com.example.scratchinterpretermobile.Model.IntegerArrayBlock
 import com.example.scratchinterpretermobile.Model.IntegerBlock
 
 
+
 /**
  * Проверяет корректность имени переменной.
  *
@@ -59,11 +60,11 @@ fun validateConst(input: String): Int {
 fun processArrayAccess(element: String, postfix: MutableList<String>): Int {
     val regexName = Regex("^([a-zA-Z_][a-zA-Z0-9_]*)")
     val regexIndex = Regex("\\[(.*?)\\]")
-    val matchName = regexName.find(element) ?: return 107
-    val matchIndex = regexIndex.find(element) ?:return 107
+    val matchName = regexName.find(element) ?: return 407
+    val matchIndex = regexIndex.find(element) ?:return 407
 
-    val arrayName = matchName.groups[1]?.value ?: return 107
-    val indexExpr = matchIndex.groups[1]?.value ?: return 107
+    val arrayName = matchName.groups[1]?.value ?: return 407
+    val indexExpr = matchIndex.groups[1]?.value ?: return 407
 
     if (validateNameVariable(arrayName) != 0) {
         return validateNameVariable(arrayName)
@@ -74,13 +75,13 @@ fun processArrayAccess(element: String, postfix: MutableList<String>): Int {
         return indexError
     }
 
-    val arrayBlock = Context.getVar(arrayName) ?: return 108
+    val arrayBlock = Context.getVar(arrayName) ?: return 408
 
-    if (arrayBlock !is IntegerArrayBlock) return 110
+    if (arrayBlock !is IntegerArrayBlock) return 410
 
-    val array = arrayBlock.value as? List<Int> ?: return 111
+    val array = arrayBlock.value as? List<Int> ?: return 411
 
-    if (indexValue < 0 || indexValue >= array.size) return 109
+    if (indexValue < 0 || indexValue >= array.size) return 409
 
     postfix.add(array[indexValue].toString())
 
@@ -151,7 +152,7 @@ fun transferPrefixToPostfix(elements: MutableList<String>): Pair<MutableList<Str
         "-" to 1,
         "(" to 0
     )
-
+    var resultError = 0
     val operators = "+-*%/"
 
     for (element in elements) {
@@ -169,7 +170,7 @@ fun transferPrefixToPostfix(elements: MutableList<String>): Pair<MutableList<Str
                 while (!stack.isEmpty() && stack.peek() != "(") {
                     postfix.add(stack.pop()!!)
                 }
-                if (stack.isEmpty()) return Pair(mutableListOf(), 106)
+                if (stack.isEmpty()) return Pair(mutableListOf(), 406)
                 stack.pop()
             }
 
@@ -183,13 +184,13 @@ fun transferPrefixToPostfix(elements: MutableList<String>): Pair<MutableList<Str
                             postfix.add(value.value.toString())
                         }
                         else {
-                            return Pair(mutableListOf(), 110)
+                            return Pair(mutableListOf(), 410)
                         }
                     }
 
                     validateArrayName(element) == 0 -> {
                         val error = processArrayAccess(element, postfix)
-                        if (error != 0) return Pair(mutableListOf(), error)
+                        if (error != 0) resultError = 408
                     }
                     else -> return Pair(mutableListOf(), 101)
                 }
@@ -198,11 +199,11 @@ fun transferPrefixToPostfix(elements: MutableList<String>): Pair<MutableList<Str
     }
 
     while (!stack.isEmpty()) {
-        if (stack.peek() == "(") return Pair(mutableListOf(), 106)
+        if (stack.peek() == "(") return Pair(mutableListOf(), 406)
         postfix.add(stack.pop()!!)
     }
 
-    return Pair(postfix, 0)
+    return Pair(postfix, resultError)
 }
 
 /**
@@ -216,8 +217,8 @@ fun calculationPostfix(postfix: MutableList<String>): Pair<Int, Int> {
 
     for (element in postfix) {
         if (element in "+-*%/") {
-            val first = stack.pop() ?: return Pair(-1, 107)
-            val second = stack.pop() ?: return Pair(-1, 107)
+            val first = stack.pop() ?: return Pair(-1, 407)
+            val second = stack.pop() ?: return Pair(-1, 407)
             if ((element == "/" || element == "%") && first == 0){
                 return Pair(-1, 302)
             }
