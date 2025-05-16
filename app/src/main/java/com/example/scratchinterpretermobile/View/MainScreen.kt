@@ -57,12 +57,9 @@ fun MainScreen(viewModel: MainViewModel){
 
     Column {
         TopBar(showBoxesState)
-//        Column ( Modifier.weight(1f).verticalScroll(rememberScrollState())){
-//            listOfBoxes.forEach { item->
-//                item.render()
-//            }
-//        }
-        VerticalReorderList(listOfBoxes)
+        Box ( Modifier.weight(1f)){
+            VerticalReorderList(listOfBoxes)
+        }
         BottomBar()
     }
 }
