@@ -6,7 +6,7 @@ import java.util.UUID
 
 abstract class ProgramBox() {
     val id: String = UUID.randomUUID().toString()
-
+    abstract val value: InstructionBlock
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other !is ProgramBox) return false

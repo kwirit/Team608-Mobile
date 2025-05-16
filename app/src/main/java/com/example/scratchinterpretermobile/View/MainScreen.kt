@@ -63,7 +63,6 @@ fun MainScreen(viewModel: MainViewModel) {
         Box ( Modifier.weight(1f)){
             VerticalReorderList(listOfBoxes)
         }
-
         BottomBar()
     }
 
