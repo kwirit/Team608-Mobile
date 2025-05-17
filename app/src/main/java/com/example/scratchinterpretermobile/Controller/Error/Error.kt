@@ -124,8 +124,6 @@ val ARRAY_INVALID_ELEMENT = Error(
     "array"
 )
 
-
-
 object ErrorStore {
     private val errorMap = mapOf(
         0 to SUCCESS,

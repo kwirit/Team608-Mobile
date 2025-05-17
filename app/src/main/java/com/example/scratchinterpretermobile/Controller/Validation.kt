@@ -46,9 +46,16 @@ fun validateNameVariable(input: String): Int {
  * @return Int - код ошибки (0 - если строка корректна)
  */
 fun validateArrayName(input: String): Int {
+    var resultError = 0;
     val regex = Regex(
-     "([a-zA-Z_]\\w*)\\[\\s*([-+*\\/%]?\\s*(?:[a-zA-Z_]\\w*|\\d+|\\([^()\\r\\n]*\\))\\s*(?:[-+*\\/%]\\s*(?:[a-zA-Z_]\\w*|\\d+|\\([^()\\r\\n]*\\))\\s*)*)?\\]")
-    return if (regex.containsMatchIn(input.trim())) 0 else 105
+     "([a-zA-Z_]\\w*)\\[\\s*([-+*\\/%]?\\s*(?:[a-zA-Z_]\\w*|\\d+|\\([^()\\r\\n]*\\))\\s*(?:[-+*\\/%]\\s*(?:[a-zA-Z_]\\w*|\\d+|\\([^()\\r\\n]*\\))\\s*)*)?\\]"
+    )
+    if (!regex.containsMatchIn(input.trim())) resultError = 105
+
+    val error = processArrayAccess(input);
+    if (error != 0) resultError = error;
+
+    return resultError
 }
 
 fun validateConst(input: String): Int {
@@ -57,9 +64,10 @@ fun validateConst(input: String): Int {
     else return 101
 }
 
-fun processArrayAccess(element: String, postfix: MutableList<String>): Int {
+fun processArrayAccess(element: String): Int {
     val regexName = Regex("^([a-zA-Z_][a-zA-Z0-9_]*)")
     val regexIndex = Regex("\\[(.*?)\\]")
+
     val matchName = regexName.find(element) ?: return 407
     val matchIndex = regexIndex.find(element) ?:return 407
 
@@ -82,8 +90,6 @@ fun processArrayAccess(element: String, postfix: MutableList<String>): Int {
     val array = arrayBlock.value as? List<Int> ?: return 411
 
     if (indexValue < 0 || indexValue >= array.size) return 409
-
-    postfix.add(array[indexValue].toString())
 
     return 0
 }
@@ -152,7 +158,6 @@ fun transferPrefixToPostfix(elements: MutableList<String>): Pair<MutableList<Str
         "-" to 1,
         "(" to 0
     )
-    var resultError = 0
     val operators = "+-*%/"
 
     for (element in elements) {
@@ -189,8 +194,11 @@ fun transferPrefixToPostfix(elements: MutableList<String>): Pair<MutableList<Str
                     }
 
                     validateArrayName(element) == 0 -> {
-                        val error = processArrayAccess(element, postfix)
-                        if (error != 0) resultError = 408
+                        val error = processArrayAccess(element)
+                        if (error == 0) {
+                            postfix.add(element)
+                        }
+                        if (error != 0) return Pair(mutableListOf(), 408)
                     }
                     else -> return Pair(mutableListOf(), 101)
                 }
@@ -203,7 +211,7 @@ fun transferPrefixToPostfix(elements: MutableList<String>): Pair<MutableList<Str
         postfix.add(stack.pop()!!)
     }
 
-    return Pair(postfix, resultError)
+    return Pair(postfix, 0)
 }
 
 /**
