@@ -7,10 +7,13 @@ import androidx.compose.runtime.MutableState
 
 
 @Composable
-fun CreateBoxesDialog(showState: MutableState<Boolean>,content:@Composable () -> Unit){
+fun BoxDialog(showState: MutableState<Boolean>,onConfirmDialog: () -> Unit,content:@Composable () -> Unit){
     CustomDialog(showState){
         content()
-        Button(onClick = {showState.value = false}) {
+        Button(onClick = {
+            onConfirmDialog()
+            showState.value = false
+        }) {
             Text(text = "OK")
         }
     }

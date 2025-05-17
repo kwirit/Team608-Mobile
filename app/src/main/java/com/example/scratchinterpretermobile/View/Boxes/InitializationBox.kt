@@ -22,12 +22,16 @@ class InitializationBox : ProgramBox() {
 
     @Composable
     override fun render(){
-        BaseBox(name = "Инициализация", showState) {
-            TextField(modifier = Modifier.Companion.size(80.dp), onValueChange = { newText ->
+        BaseBox(name = "Инициализация", showState,
+            onConfirmButton = {
                 code = this.value.processInput(text)
+        },
+            dialogContent = {
+            TextField(modifier = Modifier.Companion.size(80.dp), onValueChange = { newText ->
                 text = newText
             }, value = text)
             Text(text = ErrorStore.get(code)!!.title)
+        }) {
         }
     }
 }

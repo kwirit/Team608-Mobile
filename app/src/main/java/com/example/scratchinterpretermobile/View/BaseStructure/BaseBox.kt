@@ -17,24 +17,28 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.example.scratchinterpretermobile.View.Dialogs.BoxDialog
 import com.example.scratchinterpretermobile.View.Dialogs.CreateBoxesDialog
 import com.example.scratchinterpretermobile.View.Dialogs.CustomDialog
 import com.example.scratchinterpretermobile.ui.theme.Blue
 
 @Composable
-fun BaseBox(name: String,showState: MutableState<Boolean>,content:@Composable () -> Unit){
+fun BaseBox(name: String,showState: MutableState<Boolean>,onConfirmButton:() -> Unit,dialogContent:@Composable () -> Unit,boxContent:@Composable () -> Unit){
     Card(Modifier.fillMaxWidth().height(100.dp).padding(10.dp),
         colors = CardDefaults.cardColors(containerColor = Blue),
     ) {
         Box(Modifier.fillMaxWidth(),contentAlignment = Alignment.Center){
-            Button(onClick = {showState.value = true}) {
+            Button(onClick = {
+                showState.value = true
+            }) {
                 Text(text = name)
             }
+            boxContent()
         }
     }
     if(showState.value){
-        CreateBoxesDialog(showState){
-            content()
+        BoxDialog(showState,onConfirmButton){
+            dialogContent()
         }
     }
 }
