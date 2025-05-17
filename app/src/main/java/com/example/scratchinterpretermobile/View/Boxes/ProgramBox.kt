@@ -1,10 +1,12 @@
-package com.example.scratchinterpretermobile.View
+package com.example.scratchinterpretermobile.View.Boxes
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
 import com.example.scratchinterpretermobile.Model.InstructionBlock
 import java.util.UUID
 
 abstract class ProgramBox() {
+    val showState = mutableStateOf(false)
     val id: String = UUID.randomUUID().toString()
     abstract val value: InstructionBlock
     override fun equals(other: Any?): Boolean {

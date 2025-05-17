@@ -3,17 +3,13 @@ import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenu
@@ -26,7 +22,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -36,20 +31,21 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.example.scratchinterpretermobile.Model.Variable
 import com.example.scratchinterpretermobile.ui.theme.Blue
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.unit.dp
+import com.example.scratchinterpretermobile.View.Bars.BottomBar
+import com.example.scratchinterpretermobile.View.Bars.TopBar
+import com.example.scratchinterpretermobile.View.Boxes.ProgramBox
+import com.example.scratchinterpretermobile.View.Cards.AssigningCard
+import com.example.scratchinterpretermobile.View.Cards.ConsoleCard
+import com.example.scratchinterpretermobile.View.Cards.IfCard
+import com.example.scratchinterpretermobile.View.Cards.InitializationCard
 import org.burnoutcrew.reorderable.*
 
 @Composable
@@ -81,32 +77,11 @@ fun ShowListOfBoxes(showBoxesState: MutableState<Boolean>, viewModel: MainViewMo
     list.add(Variable("test2",2))
     list.add(Variable("test3",3))
     list.add(Variable("test4",4))
-    Dialog(
-        properties = DialogProperties(
-            usePlatformDefaultWidth = false),
-        onDismissRequest = {showBoxesState.value = false},
-    ) {
-        Column(Modifier.width(320.dp).height(600.dp).padding(20.dp).background(color = Color.White, shape = RoundedCornerShape(20.dp))) {
-            InitializationCard(listOfBoxes, showBoxesState)
-            AssigningCard(listOfBoxes,showBoxesState,list)
-            IfCard(listOfBoxes,showBoxesState)
-            ConsoleCard(listOfBoxes,showBoxesState)
-        }
-    }
-}
-
-@Composable
-fun BaseCard(name: String,onClick: () -> Unit = {},content:@Composable () -> Unit){
-    Card(Modifier.fillMaxWidth().height(100.dp).padding(10.dp).clickable(onClick = onClick),
-        colors = CardDefaults.cardColors(containerColor = Blue),
-    ) {
-        Box(Modifier.fillMaxWidth(),contentAlignment = Alignment.Center){
-            Column {Text(text = name, textAlign = TextAlign.Center)
-                Row(Modifier.padding(10.dp)){
-                    content()
-                }
-            }
-        }
+    CustomDialog(showBoxesState){
+        InitializationCard(listOfBoxes, showBoxesState)
+        AssigningCard(listOfBoxes,showBoxesState,list)
+        IfCard(listOfBoxes,showBoxesState)
+        ConsoleCard(listOfBoxes,showBoxesState)
     }
 }
 
@@ -122,55 +97,16 @@ fun ListOfVar(variables: MutableList<Variable>){
     }
 }
 
-@Composable
-fun BaseBox(name: String,content:@Composable () -> Unit){
-    Card(Modifier.fillMaxWidth().height(100.dp).padding(10.dp),
-        colors = CardDefaults.cardColors(containerColor = Blue),
-    ) {
-        Box(Modifier.fillMaxWidth(),contentAlignment = Alignment.Center){
-            Column {Text(text = name, textAlign = TextAlign.Center)
-                Row(Modifier.padding(10.dp)){
-                    content()
-                }
-            }
-        }
-    }
-}
 
 @Composable
-fun VerticalReorderList(list: MutableList<ProgramBox>) {
-    val data by rememberUpdatedState(newValue = list)
-    val state = rememberReorderableLazyListState(onMove = { from, to ->
-        data.apply {
-            add(to.index, removeAt(from.index))
-        }
-    })
-
-    LazyColumn(
-        state = state.listState,
-        modifier = Modifier
-            .reorderable(state)
-            .detectReorderAfterLongPress(state)
-            .fillMaxSize()
+fun CustomDialog(showState: MutableState<Boolean>, content:@Composable () -> Unit){
+    Dialog(
+        properties = DialogProperties(
+            usePlatformDefaultWidth = false),
+        onDismissRequest = {showState.value = false},
     ) {
-        items(data, key = { it.id }) { item ->
-            ReorderableItem(state, key = item.id) { isDragging ->
-                val elevation = animateDpAsState(if (isDragging) 30.dp else 0.dp)
-                val scale = animateFloatAsState(if (isDragging) 1.05f else 1f)
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .shadow(elevation.value)
-                        .graphicsLayer {
-                            scaleX = scale.value
-                            scaleY = scale.value
-                        }
-                ) {
-                    Box(Modifier.fillMaxWidth()) {
-                        item.render()
-                    }
-                }
-            }
+        Column(Modifier.width(320.dp).height(600.dp).padding(20.dp).background(color = Color.White, shape = RoundedCornerShape(20.dp))) {
+            content()
         }
     }
 }

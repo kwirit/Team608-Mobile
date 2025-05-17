@@ -1,4 +1,4 @@
-package com.example.scratchinterpretermobile.View
+package com.example.scratchinterpretermobile.View.Bars
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
