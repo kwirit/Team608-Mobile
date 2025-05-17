@@ -1,5 +1,6 @@
 package com.example.scratchinterpretermobile.View
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -44,7 +45,9 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
 import org.burnoutcrew.reorderable.*
@@ -151,14 +154,21 @@ fun VerticalReorderList(list: MutableList<ProgramBox>) {
             .fillMaxSize()
     ) {
         items(data, key = { it.id }) { item ->
-            ReorderableItem(state, key = item) { isDragging ->
+            ReorderableItem(state, key = item.id) { isDragging ->
                 val elevation = animateDpAsState(if (isDragging) 30.dp else 0.dp)
+                val scale = animateFloatAsState(if (isDragging) 1.05f else 1f)
                 Column(
                     modifier = Modifier
-                        .shadow(elevation.value)
                         .fillMaxWidth()
+                        .shadow(elevation.value)
+                        .graphicsLayer {
+                            scaleX = scale.value
+                            scaleY = scale.value
+                        }
                 ) {
-                    item.render()
+                    Box(Modifier.fillMaxWidth()) {
+                        item.render()
+                    }
                 }
             }
         }

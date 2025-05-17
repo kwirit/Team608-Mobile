@@ -17,7 +17,7 @@ import com.example.scratchinterpretermobile.Model.InitBlock
 class InitializationBox : ProgramBox() {
     override val value = InitBlock();
     var text by mutableStateOf("")
-    var code by mutableIntStateOf(0)
+    var code by mutableIntStateOf(104)
 
     @Composable
     override fun render(){
