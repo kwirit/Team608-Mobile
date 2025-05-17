@@ -39,6 +39,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.zIndex
 import com.example.scratchinterpretermobile.View.Bars.BottomBar
 import com.example.scratchinterpretermobile.View.Bars.TopBar
 import com.example.scratchinterpretermobile.View.Boxes.ProgramBox
@@ -54,6 +55,7 @@ import org.burnoutcrew.reorderable.*
 fun MainScreen(viewModel: MainViewModel) {
     val showBoxesState = remember { mutableStateOf(false) }
     val listOfBoxes = remember { mutableStateListOf<ProgramBox>() }
+    val screenState = remember { mutableIntStateOf(0) }
 
     if(showBoxesState.value == true){
         CreateBoxesDialog(showBoxesState, viewModel, listOfBoxes)
@@ -62,9 +64,14 @@ fun MainScreen(viewModel: MainViewModel) {
     Column {
         TopBar(showBoxesState)
         Box ( Modifier.weight(1f)){
-            VerticalReorderList(listOfBoxes)
+            if(screenState.intValue == 0){
+                CodeBlocksScreen(listOfBoxes)
+            }
+            else if (screenState.intValue == 1){
+                ConsoleScreen()
+            }
         }
-        BottomBar()
+        BottomBar(screenState)
     }
 
     if (showBoxesState.value) {
@@ -85,3 +92,12 @@ fun ListOfVar(variables: MutableList<Variable>){
     }
 }
 
+@Composable
+fun CodeBlocksScreen(listOfBoxes: MutableList<ProgramBox>){
+    VerticalReorderList(listOfBoxes)
+}
+
+@Composable
+fun ConsoleScreen(){
+
+}
