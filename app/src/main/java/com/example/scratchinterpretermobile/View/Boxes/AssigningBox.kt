@@ -11,7 +11,13 @@ class AssigningBox: ProgramBox() {
     val list = mutableListOf<Variable>()
     @Composable
     override fun render(){
-        BaseBox(name = "Присваивание", showState) {
+        BaseBox(name = "Присваивание", showState,
+            onConfirmButton = {
+
+        },
+            dialogContent = {
+
+        }) {
         }
     }
 }

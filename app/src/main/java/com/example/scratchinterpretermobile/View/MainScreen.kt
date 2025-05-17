@@ -46,6 +46,8 @@ import com.example.scratchinterpretermobile.View.Cards.AssigningCard
 import com.example.scratchinterpretermobile.View.Cards.ConsoleCard
 import com.example.scratchinterpretermobile.View.Cards.IfCard
 import com.example.scratchinterpretermobile.View.Cards.InitializationCard
+import com.example.scratchinterpretermobile.View.Dialogs.CreateBoxesDialog
+import com.example.scratchinterpretermobile.View.Dialogs.CustomDialog
 import org.burnoutcrew.reorderable.*
 
 @Composable
@@ -54,7 +56,7 @@ fun MainScreen(viewModel: MainViewModel) {
     val listOfBoxes = remember { mutableStateListOf<ProgramBox>() }
 
     if(showBoxesState.value == true){
-        ShowListOfBoxes(showBoxesState, viewModel, listOfBoxes)
+        CreateBoxesDialog(showBoxesState, viewModel, listOfBoxes)
     }
 
     Column {
@@ -66,24 +68,10 @@ fun MainScreen(viewModel: MainViewModel) {
     }
 
     if (showBoxesState.value) {
-        ShowListOfBoxes(showBoxesState, viewModel, listOfBoxes)
+        CreateBoxesDialog(showBoxesState, viewModel, listOfBoxes)
     }
 }
 
-@Composable
-fun ShowListOfBoxes(showBoxesState: MutableState<Boolean>, viewModel: MainViewModel, listOfBoxes: MutableList<ProgramBox>){
-    val list = mutableListOf<Variable>()
-    list.add(Variable("test1",1))
-    list.add(Variable("test2",2))
-    list.add(Variable("test3",3))
-    list.add(Variable("test4",4))
-    CustomDialog(showBoxesState){
-        InitializationCard(listOfBoxes, showBoxesState)
-        AssigningCard(listOfBoxes,showBoxesState,list)
-        IfCard(listOfBoxes,showBoxesState)
-        ConsoleCard(listOfBoxes,showBoxesState)
-    }
-}
 
 @Composable
 fun ListOfVar(variables: MutableList<Variable>){
@@ -97,16 +85,3 @@ fun ListOfVar(variables: MutableList<Variable>){
     }
 }
 
-
-@Composable
-fun CustomDialog(showState: MutableState<Boolean>, content:@Composable () -> Unit){
-    Dialog(
-        properties = DialogProperties(
-            usePlatformDefaultWidth = false),
-        onDismissRequest = {showState.value = false},
-    ) {
-        Column(Modifier.width(320.dp).height(600.dp).padding(20.dp).background(color = Color.White, shape = RoundedCornerShape(20.dp))) {
-            content()
-        }
-    }
-}

@@ -9,7 +9,13 @@ class IfBox: ProgramBox() {
     override val value = InitBlock();
     @Composable
     override fun render(){
-        BaseBox(name = "Условие", showState) {
+        BaseBox(name = "Условие", showState,
+            onConfirmButton = {
+
+        },
+            dialogContent = {
+
+        }) {
         }
     }
 }

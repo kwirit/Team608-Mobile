@@ -9,7 +9,13 @@ class ConsoleBox: ProgramBox() {
     override val value = InitBlock();
     @Composable
     override fun render(){
-        BaseBox(name = "Вывод", showState) {
+        BaseBox(name = "Вывод", showState,
+            onConfirmButton = {
+
+        },
+            dialogContent = {
+
+        }) {
         }
     }
 }
