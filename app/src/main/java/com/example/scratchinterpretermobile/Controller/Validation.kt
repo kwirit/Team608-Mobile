@@ -1,6 +1,18 @@
 package com.example.scratchinterpretermobile.Controller
 
 
+import com.example.scratchinterpretermobile.Controller.Error.ARRAY_BOUNDS_ERROR
+import com.example.scratchinterpretermobile.Controller.Error.ARRAY_EXPECTED
+import com.example.scratchinterpretermobile.Controller.Error.ARRAY_INVALID_ELEMENT
+import com.example.scratchinterpretermobile.Controller.Error.ARRAY_NOT_FOUND
+import com.example.scratchinterpretermobile.Controller.Error.DIVISION_BY_ZERO
+import com.example.scratchinterpretermobile.Controller.Error.EMPTY_NAME
+import com.example.scratchinterpretermobile.Controller.Error.INCORRECT_ARRAY_ELEMENT_NAME
+import com.example.scratchinterpretermobile.Controller.Error.INVALID_ARRAY_ACCESS
+import com.example.scratchinterpretermobile.Controller.Error.INVALID_CHARACTERS
+import com.example.scratchinterpretermobile.Controller.Error.INVALID_VARIABLE_START
+import com.example.scratchinterpretermobile.Controller.Error.UNMATCHED_PARENTHESES
+import com.example.scratchinterpretermobile.Controller.Error.VARIABLE_HAS_SPACE
 import com.example.scratchinterpretermobile.Model.Stack
 import com.example.scratchinterpretermobile.Model.Context
 import com.example.scratchinterpretermobile.Model.IntegerArrayBlock
@@ -18,11 +30,11 @@ fun validateNameVariable(input: String): Int {
     val nameVariable = input.trim()
 
     if (nameVariable.isEmpty()) {
-        return 104
+        return EMPTY_NAME.id
     }
 
     if (" " in nameVariable) {
-        return 102
+        return VARIABLE_HAS_SPACE.id
     }
 
     val regex = Regex("^[a-zA-Z_][a-zA-Z0-9_]*$")
@@ -30,9 +42,9 @@ fun validateNameVariable(input: String): Int {
     if (!regex.matches(nameVariable)) {
         val firstChar = nameVariable.first()
         if (!firstChar.isLetter() && firstChar != '_') {
-            return 101
+            return INVALID_VARIABLE_START.id
         }
-        return 103
+        return INVALID_CHARACTERS.id
     }
 
     return 0
@@ -50,7 +62,7 @@ fun validateArrayName(input: String): Int {
     val regex = Regex(
      "([a-zA-Z_]\\w*)\\[\\s*([-+*\\/%]?\\s*(?:[a-zA-Z_]\\w*|\\d+|\\([^()\\r\\n]*\\))\\s*(?:[-+*\\/%]\\s*(?:[a-zA-Z_]\\w*|\\d+|\\([^()\\r\\n]*\\))\\s*)*)?\\]"
     )
-    if (!regex.containsMatchIn(input.trim())) resultError = 105
+    if (!regex.containsMatchIn(input.trim())) resultError = INCORRECT_ARRAY_ELEMENT_NAME.id
 
     val error = processArrayAccess(input);
     if (error != 0) resultError = error;
@@ -61,18 +73,18 @@ fun validateArrayName(input: String): Int {
 fun validateConst(input: String): Int {
     var regex =  Regex("""\d+""")
     if (regex.matches(input.trim())) return 0
-    else return 101
+    else return INVALID_VARIABLE_START.id
 }
 
 fun processArrayAccess(element: String): Int {
     val regexName = Regex("^([a-zA-Z_][a-zA-Z0-9_]*)")
     val regexIndex = Regex("\\[(.*?)\\]")
 
-    val matchName = regexName.find(element) ?: return 407
-    val matchIndex = regexIndex.find(element) ?:return 407
+    val matchName = regexName.find(element) ?: return INVALID_ARRAY_ACCESS.id
+    val matchIndex = regexIndex.find(element) ?:return INVALID_ARRAY_ACCESS.id
 
-    val arrayName = matchName.groups[1]?.value ?: return 407
-    val indexExpr = matchIndex.groups[1]?.value ?: return 407
+    val arrayName = matchName.groups[1]?.value ?: return INVALID_ARRAY_ACCESS.id
+    val indexExpr = matchIndex.groups[1]?.value ?: return INVALID_ARRAY_ACCESS.id
 
     if (validateNameVariable(arrayName) != 0) {
         return validateNameVariable(arrayName)
@@ -83,13 +95,13 @@ fun processArrayAccess(element: String): Int {
         return indexError
     }
 
-    val arrayBlock = Context.getVar(arrayName) ?: return 408
+    val arrayBlock = Context.getVar(arrayName) ?: return ARRAY_NOT_FOUND.id
 
-    if (arrayBlock !is IntegerArrayBlock) return 410
+    if (arrayBlock !is IntegerArrayBlock) return ARRAY_EXPECTED.id
 
-    val array = arrayBlock.value as? List<Int> ?: return 411
+    val array = arrayBlock.value as? List<Int> ?: return ARRAY_INVALID_ELEMENT.id
 
-    if (indexValue < 0 || indexValue >= array.size) return 409
+    if (indexValue < 0 || indexValue >= array.size) return ARRAY_BOUNDS_ERROR.id
 
     return 0
 }
@@ -175,7 +187,7 @@ fun transferPrefixToPostfix(elements: MutableList<String>): Pair<MutableList<Str
                 while (!stack.isEmpty() && stack.peek() != "(") {
                     postfix.add(stack.pop()!!)
                 }
-                if (stack.isEmpty()) return Pair(mutableListOf(), 406)
+                if (stack.isEmpty()) return Pair(mutableListOf(), UNMATCHED_PARENTHESES.id)
                 stack.pop()
             }
 
@@ -189,7 +201,7 @@ fun transferPrefixToPostfix(elements: MutableList<String>): Pair<MutableList<Str
                             postfix.add(value.value.toString())
                         }
                         else {
-                            return Pair(mutableListOf(), 410)
+                            return Pair(mutableListOf(), ARRAY_EXPECTED.id)
                         }
                     }
 
@@ -198,16 +210,16 @@ fun transferPrefixToPostfix(elements: MutableList<String>): Pair<MutableList<Str
                         if (error == 0) {
                             postfix.add(element)
                         }
-                        if (error != 0) return Pair(mutableListOf(), 408)
+                        if (error != 0) return Pair(mutableListOf(), ARRAY_NOT_FOUND.id)
                     }
-                    else -> return Pair(mutableListOf(), 101)
+                    else -> return Pair(mutableListOf(), INVALID_VARIABLE_START.id)
                 }
             }
         }
     }
 
     while (!stack.isEmpty()) {
-        if (stack.peek() == "(") return Pair(mutableListOf(), 406)
+        if (stack.peek() == "(") return Pair(mutableListOf(), UNMATCHED_PARENTHESES.id)
         postfix.add(stack.pop()!!)
     }
 
@@ -225,10 +237,10 @@ fun calculationPostfix(postfix: MutableList<String>): Pair<Int, Int> {
 
     for (element in postfix) {
         if (element in "+-*%/") {
-            val first = stack.pop() ?: return Pair(-1, 407)
-            val second = stack.pop() ?: return Pair(-1, 407)
+            val first = stack.pop() ?: return Pair(-1, INVALID_ARRAY_ACCESS.id)
+            val second = stack.pop() ?: return Pair(-1, INVALID_ARRAY_ACCESS.id)
             if ((element == "/" || element == "%") && first == 0){
-                return Pair(-1, 302)
+                return Pair(-1, DIVISION_BY_ZERO.id)
             }
             val result = when (element) {
                 "-" -> second - first
@@ -253,7 +265,6 @@ fun calculationPostfix(postfix: MutableList<String>): Pair<Int, Int> {
 /**
  * Вычисляет значение арифметического выражения в инфиксной нотации.
  * Например: "a % b + 4 * (10 - 3 + arr[i + 2])".
- *
  * @param input строка с арифметическим выражением
  * @return Pair<Int, Int> - результат и код ошибки (0 - в случае успеха)
  */

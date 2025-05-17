@@ -90,6 +90,12 @@ val DIVISION_BY_ZERO = Error(
 )
 
 //400
+val UNMATCHED_PARENTHESES = Error(
+    406,
+    "Unmatched parentheses",
+    "The expression contains unmatched or mismatched parentheses.",
+    "Check that all opening '(' and closing ')' parentheses are properly paired."
+)
 
 val INVALID_ARRAY_ACCESS = Error(
     407,
@@ -141,6 +147,7 @@ object ErrorStore {
         301 to INCORRECT_ARITHMETIC_EXPRESSION,
         302 to DIVISION_BY_ZERO,
 
+        406 to UNMATCHED_PARENTHESES,
         407 to INVALID_ARRAY_ACCESS,
         408 to ARRAY_NOT_FOUND,
         409 to ARRAY_BOUNDS_ERROR,
