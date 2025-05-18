@@ -13,25 +13,28 @@ import androidx.compose.ui.unit.dp
 import com.example.scratchinterpretermobile.Controller.Error.ErrorStore
 import com.example.scratchinterpretermobile.Model.InitBlock
 import com.example.scratchinterpretermobile.View.BaseStructure.BaseBox
-import com.example.scratchinterpretermobile.View.Boxes.ProgramBox
 
-class InitializationBox : ProgramBox() {
-    override val value = InitBlock();
-    var text by mutableStateOf("")
+class ArrayInitializationBlock : ProgramBox() {
+    override val value = InitBlock()
+    var arrayName by mutableStateOf("")
+    var arraySize by mutableStateOf("")
     var code by mutableIntStateOf(104)
 
     @Composable
     override fun render(){
-        BaseBox(name = "Инициализация", showState,
+        BaseBox(name = "Инициализация массива", showState,
             onConfirmButton = {
-                code = this.value.processInput(text)
-        },
+                code = this.value.processInput(arrayName, arraySize)
+            },
             dialogContent = {
-            TextField(modifier = Modifier.Companion.size(80.dp), onValueChange = { newText ->
-                text = newText
-            }, value = text)
-            Text(text = ErrorStore.get(code)!!.title)
-        }) {
+                TextField(modifier = Modifier.Companion.size(80.dp), onValueChange = { newArrayName ->
+                    arrayName = newArrayName
+                }, value = arrayName)
+                TextField(modifier = Modifier.Companion.size(80.dp), onValueChange = { newArraySize ->
+                    arraySize = newArraySize
+                }, value = arraySize)
+                Text(text = ErrorStore.get(code)!!.title)
+            }) {
         }
     }
 }

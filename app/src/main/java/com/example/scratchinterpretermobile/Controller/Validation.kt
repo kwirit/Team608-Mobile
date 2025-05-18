@@ -58,7 +58,7 @@ fun validateNameVariable(input: String): Int {
  */
 fun validateSyntaxArrayName(input: String): Int {
     val regex = Regex(
-        "([a-zA-Z_]\\w*)\\[\\s*([-+*\\/%]?\\s*(?:[a-zA-Z_]\\w*|\\d+|\\([^()\\r\\n]*\\))\\s*(?:[-+*\\/%]\\s*(?:[a-zA-Z_]\\w*|\\d+|\\([^()\\r\\n]*\\))\\s*)*)?\\]"
+        """([a-zA-Z_]\w*)\[\s*([-+*\/%]?\s*(?:[a-zA-Z_]\w*|\d+|\([^()\r\n]*\))\s*(?:[-+*\/%]\s*(?:[a-zA-Z_]\w*|\d+|\([^()\r\n]*\))\s*)*)?\]"""
     )
     if (!regex.containsMatchIn(input.trim()))
         return INCORRECT_ARRAY_ELEMENT_NAME.id
@@ -104,7 +104,7 @@ fun processArrayAccess(element: String): Int {
 
     if (arrayBlock !is IntegerArrayBlock) return ARRAY_EXPECTED.id
 
-    val array = arrayBlock.value as? List<Int> ?: return ARRAY_INVALID_ELEMENT.id
+    val array = arrayBlock.value as? MutableList<Int> ?: return ARRAY_INVALID_ELEMENT.id
 
     if (indexValue < 0 || indexValue >= array.size) return ARRAY_BOUNDS_ERROR.id
 

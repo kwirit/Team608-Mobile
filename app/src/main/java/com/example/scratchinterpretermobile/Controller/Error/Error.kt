@@ -172,6 +172,13 @@ val INVALID_ARRAY_ELEMENT_ASSIGNMENT = Error(
     "assignment"
 )
 
+val VARIABLE_NOT_FOUND = Error(
+    601,
+    "Variable not found",
+    "The requested variable was not found in the current scope",
+    "variable"
+)
+
 object ErrorStore {
     private val errorMap = mapOf(
         0 to SUCCESS,
@@ -183,6 +190,7 @@ object ErrorStore {
         103 to INVALID_CHARACTERS,
         104 to EMPTY_NAME,
         105 to INCORRECT_ARRAY_ELEMENT_NAME,
+        106 to
 
         201 to REDECLARING_A_VARIABLE,
         202 to INITIALIZATION_ERROR,
@@ -202,6 +210,7 @@ object ErrorStore {
 //        501 to INVALID_ASSIGNMENT_INTEGER,
         502 to INVALID_ASSIGNMENT_ARRAY,
 //        503 to INVALID_ARRAY_ELEMENT_ASSIGNMENT
+        601 to VARIABLE_NOT_FOUND,
     )
 
     fun get(id: Int): Error? = errorMap[id]
