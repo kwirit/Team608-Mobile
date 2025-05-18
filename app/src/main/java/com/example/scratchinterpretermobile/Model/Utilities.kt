@@ -31,6 +31,7 @@ object Context {
         return null
     }
 
+
     fun pushScope(scope: HashMap<String, VarBlock> = HashMap()) = context.push(scope)
     fun popScope(): HashMap<String, VarBlock>? = context.pop()
     fun peekScope(): HashMap<String, VarBlock>? = context.peek()
