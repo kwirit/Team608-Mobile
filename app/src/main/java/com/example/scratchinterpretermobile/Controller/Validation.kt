@@ -52,6 +52,20 @@ fun validateNameVariable(input: String): Int {
 
 
 /**
+ * Проверяет, синтаксическую корректность элемента массива
+ * @param input строка, которую проверяем
+ * @return Int - код ошибки (0 - в случае успеха)
+ */
+fun validateSyntaxArrayName(input: String): Int {
+    val regex = Regex(
+        "([a-zA-Z_]\\w*)\\[\\s*([-+*\\/%]?\\s*(?:[a-zA-Z_]\\w*|\\d+|\\([^()\\r\\n]*\\))\\s*(?:[-+*\\/%]\\s*(?:[a-zA-Z_]\\w*|\\d+|\\([^()\\r\\n]*\\))\\s*)*)?\\]"
+    )
+    if (!regex.containsMatchIn(input.trim()))
+        return INCORRECT_ARRAY_ELEMENT_NAME.id
+    return 0
+}
+
+/**
  * Проверяет, является ли строка корректным именем массива с индексом.
  *
  * @param input строка, содержащая потенциальное обращение к элементу массива
@@ -195,7 +209,7 @@ fun transferPrefixToPostfix(elements: MutableList<String>): Pair<MutableList<Str
                         }
                     }
 
-                    validateArrayName(element) == 0 -> {
+                    validateSyntaxArrayName(element) == 0 -> {
                         val error = processArrayAccess(element)
                         if (error == 0) {
                             postfix.add(element)

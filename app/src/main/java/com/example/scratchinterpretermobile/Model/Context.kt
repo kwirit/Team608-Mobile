@@ -1,8 +1,9 @@
 package com.example.scratchinterpretermobile.Model
 
 class Context {
-    private val context = Stack<HashMap<String, VarBlock>>()
-
+    private val context = Stack<HashMap<String, VarBlock>>().apply {
+        push(HashMap())
+    }
 
     /**
      * Проверяет тип переменной
