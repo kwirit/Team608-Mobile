@@ -13,6 +13,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -22,9 +23,11 @@ import com.example.scratchinterpretermobile.ui.theme.LightOrange
 import com.example.scratchinterpretermobile.ui.theme.Orange
 
 @Composable
-fun BottomBar(){
+fun BottomBar(screenState: MutableState<Int>){
     Row(Modifier.fillMaxWidth().height(100.dp).background(color = Orange), horizontalArrangement = Arrangement.Center){
-        Button(modifier = Modifier.padding(top = 18.dp, end = 60.dp).size(60.dp),onClick = {},
+        Button(modifier = Modifier.padding(top = 18.dp, end = 60.dp).size(60.dp),onClick = {
+            screenState.value=0
+        },
             colors = ButtonDefaults.buttonColors(
                 containerColor = LightOrange,
                 contentColor = Color.White),
@@ -33,7 +36,9 @@ fun BottomBar(){
         ) {
             Icon(painter = painterResource(R.drawable.home), contentDescription = null, modifier = Modifier.size(50.dp))
         }
-        Button(modifier = Modifier.padding(top = 18.dp, start = 60.dp).size(60.dp),onClick = {},
+        Button(modifier = Modifier.padding(top = 18.dp, start = 60.dp).size(60.dp),onClick = {
+            screenState.value=1
+        },
             colors = ButtonDefaults.buttonColors(
                 containerColor = LightOrange,
                 contentColor = Color.White),
