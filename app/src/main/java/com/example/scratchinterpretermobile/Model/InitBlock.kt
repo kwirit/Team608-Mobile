@@ -1,66 +1,88 @@
 package com.example.scratchinterpretermobile.Model
 
+import com.example.scratchinterpretermobile.Controller.Error.CONTEXT_IS_NULL
+import com.example.scratchinterpretermobile.Controller.Error.MULTIPLE_INITIALIZATION
+import com.example.scratchinterpretermobile.Controller.Error.REDECLARING_A_VARIABLE
+import com.example.scratchinterpretermobile.Controller.Error.SUCCESS
+import com.example.scratchinterpretermobile.Controller.calculationArithmeticExpression
 import com.example.scratchinterpretermobile.Controller.calculationPostfix
 import com.example.scratchinterpretermobile.Controller.getElementFromString
 import com.example.scratchinterpretermobile.Controller.transferPrefixToPostfix
 import com.example.scratchinterpretermobile.Controller.validateNameVariable
 
 class InitBlock : InstructionBlock() {
-    private val newVariables = mutableListOf<VarBlock>()
+    private var newVarBlocks = mutableListOf<VarBlock>()
 
-    fun processInput(usersInput: String): Int {
-        val words = usersInput.split(",").map { it.trim() }
-        val regexVariable = Regex("([\\w]+)(?: *\\[(.+)\\])?")
+    private fun fillIntegerBlock(variableName: String, newBlocks: MutableList<VarBlock>): Int {
+        val words = variableName.split(",").map { it.trim() }
 
-        // влидация
-        words.firstOrNull { validateNameVariable(it) != 0 }?.let {
-            return validateNameVariable(it)
+        for(word in words) {
+            val validateNameVariableError = validateNameVariable(word)
+            if(validateNameVariableError != SUCCESS.id) return validateNameVariableError
+
+            if(Context.getVar(word) != null) return REDECLARING_A_VARIABLE.id
+
+            val newBlock = IntegerBlock(word, 0)
+            newBlocks.add(newBlock)
         }
 
+        return SUCCESS.id
+    }
 
-        words.forEach { word ->
-            val match = regexVariable.find(word) ?: return 202
+    private fun fillIntegerArrayBlock(variableName: String, arrayLength: String, newBlocks: MutableList<VarBlock>): Int {
+        val words = variableName.split(",").map { it.trim() }
+        if(words.size > 1) return MULTIPLE_INITIALIZATION.id
 
-            val name = match.groups[1]?.value?.takeIf { it.isNotEmpty() }
-                ?: return 202
+        val word = words[0]
 
-            val scope = Context.peekScope() ?: return 1
-            if(Context.getVar(name) != null) {
-                return 201
-            }
+        val validateNameVariableError = validateNameVariable(word)
+        if(validateNameVariableError != SUCCESS.id) return validateNameVariableError
 
-            when {
-                match.groups[2] == null -> {
-                    val newIntegerBlock = IntegerBlock(name, 0)
-                    newVariables.add(newIntegerBlock)
-                    scope[newIntegerBlock.name] = newIntegerBlock
-                }
-                else -> {
-                    //Проверить на корректность арифметического выражения
-                    // Посчитать арифметическое выражение
-                    val prefixTokens = getElementFromString(word)
+        val (arrayLength, arifmeticError) = calculationArithmeticExpression(arrayLength)
+        if(arifmeticError != SUCCESS.id) return arifmeticError
 
-                    val (postfixTokens, errorTransfer) = transferPrefixToPostfix(prefixTokens)
-                    if(errorTransfer != 0) return errorTransfer
+        val newBlock = IntegerArrayBlock(word, mutableListOf<Int>(arrayLength))
+        newBlocks.add((newBlock))
 
-                    val (arifmeticResult, arifmeticError) = calculationPostfix(postfixTokens)
-                    if(arifmeticError != 0) return arifmeticError
+        return SUCCESS.id
+    }
 
-                    val newIntegerArrayBlock = IntegerArrayBlock(name, List<Int>(arifmeticResult){0})
-                    newVariables.add(newIntegerArrayBlock)
-                    scope[newIntegerArrayBlock.name] = newIntegerArrayBlock
-                }
-            }
+    private fun updateContext(newBlocks: MutableList<VarBlock>): Int {
+        val scope = Context.peekScope()
+
+        for(varBlock in newVarBlocks) {
+            scope!!.remove(varBlock.name)
         }
 
-        return 0
+        for(varBlock in newBlocks) {
+            scope!!.put(varBlock.name, varBlock)
+        }
+
+        return SUCCESS.id
+    }
+
+    fun processInput(variableName:String, arrayLength:String = ""): Int {
+        if(Context.peekScope() == null) return CONTEXT_IS_NULL.id
+
+        val newBlocks = mutableListOf<VarBlock>()
+
+        var fillError = SUCCESS.id
+        if(arrayLength == "") {
+            fillError = fillIntegerBlock(variableName, newBlocks)
+        }
+        else {
+            fillError = fillIntegerArrayBlock(variableName, arrayLength, newBlocks)
+        }
+
+        if(fillError != SUCCESS.id) return fillError
+
+        updateContext(newBlocks)
+
+        return SUCCESS.id
     }
 
     override fun run(): Int {
-        for(newVar in newVariables) {
-            var scope = Context.peekScope()
-            scope!!.put(newVar.name, newVar)
-        }
+        //
         
         return 0
     }

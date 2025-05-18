@@ -17,7 +17,10 @@ package com.example.scratchinterpretermobile.Model
 //}
 
 object Context {
-    private val context = Stack<HashMap<String, VarBlock>>()
+//    private val context = Stack<HashMap<String, VarBlock>>().apply {  }
+    private val context = Stack<HashMap<String, VarBlock>>().apply {
+        push(HashMap())
+    }
 
     fun getVar(key: String): VarBlock? {
         for (scope in context) {
@@ -27,6 +30,17 @@ object Context {
         }
         return null
     }
+
+    fun getListVariablesNames(): MutableList<String> {
+        val namesVariables = mutableListOf<String>()
+
+        for (scope in context) {
+            namesVariables.addAll(scope.keys)
+        }
+
+        return namesVariables
+    }
+
 
     fun pushScope(scope: HashMap<String, VarBlock> = HashMap()) = context.push(scope)
     fun popScope(): HashMap<String, VarBlock>? = context.pop()
