@@ -3,6 +3,30 @@ package com.example.scratchinterpretermobile.Model
 class Context {
     private val context = Stack<HashMap<String, VarBlock>>()
 
+
+    /**
+     * Проверяет тип переменной
+     * @param key строка, которая является именем переменной
+     * @return Boolean - true (переменная принадлежит Int)
+     */
+    fun isInt(key: String): Boolean {
+        val value = getVar(key)
+        if (value is IntegerBlock)
+            return true;
+        return false
+    }
+    /**
+     * Проверяет тип переменной
+     * @param key строка, которая является именем переменной
+     * @return Boolean - true (переменная принадлежит IntArray)
+     */
+    fun isArrayInt(key: String): Boolean {
+        val value = getVar(key)
+        if (value is IntegerArrayBlock)
+            return true;
+        return false
+    }
+
     fun getVar(key: String): VarBlock? {
         for (scope in context) {
             if (scope.containsKey(key)) {
