@@ -47,7 +47,6 @@ import com.example.scratchinterpretermobile.View.Boxes.ProgramBox
 import com.example.scratchinterpretermobile.View.Cards.AssigningCard
 import com.example.scratchinterpretermobile.View.Cards.ConsoleCard
 import com.example.scratchinterpretermobile.View.Cards.IfCard
-import com.example.scratchinterpretermobile.View.Cards.InitializationCard
 import com.example.scratchinterpretermobile.View.Dialogs.CreateBoxesDialog
 import com.example.scratchinterpretermobile.View.Dialogs.CustomDialog
 import org.burnoutcrew.reorderable.*

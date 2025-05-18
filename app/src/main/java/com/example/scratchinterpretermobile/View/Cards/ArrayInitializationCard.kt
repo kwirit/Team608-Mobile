@@ -8,13 +8,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.scratchinterpretermobile.View.BaseStructure.BaseCard
-import com.example.scratchinterpretermobile.View.Boxes.InitializationBox
+import com.example.scratchinterpretermobile.View.Boxes.ArrayInitializationBlock
+import com.example.scratchinterpretermobile.View.Boxes.VariableInitializationBox
 import com.example.scratchinterpretermobile.View.Boxes.ProgramBox
 
 @Composable
-fun InitializationCard(listOfBoxes: MutableList<ProgramBox>, showBoxesState: MutableState<Boolean> = mutableStateOf(false)){
-    BaseCard(name = "Инициализация", onClick = {
-        listOfBoxes.add(InitializationBox())
+fun ArrayInitializationCard(listOfBoxes: MutableList<ProgramBox>, showBoxesState: MutableState<Boolean> = mutableStateOf(false)){
+    BaseCard(name = "Инициализация массива", onClick = {
+        listOfBoxes.add(ArrayInitializationBlock())
         showBoxesState.value = false
     }) {
         TextField(modifier =  Modifier.size(80.dp),onValueChange = {}, value = "text")

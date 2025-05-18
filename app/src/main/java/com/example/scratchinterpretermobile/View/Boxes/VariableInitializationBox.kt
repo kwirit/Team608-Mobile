@@ -13,16 +13,15 @@ import androidx.compose.ui.unit.dp
 import com.example.scratchinterpretermobile.Controller.Error.ErrorStore
 import com.example.scratchinterpretermobile.Model.InitBlock
 import com.example.scratchinterpretermobile.View.BaseStructure.BaseBox
-import com.example.scratchinterpretermobile.View.Boxes.ProgramBox
 
-class InitializationBox : ProgramBox() {
+class VariableInitializationBox : ProgramBox() {
     override val value = InitBlock();
     var text by mutableStateOf("")
     var code by mutableIntStateOf(104)
 
     @Composable
     override fun render(){
-        BaseBox(name = "Инициализация", showState,
+        BaseBox(name = "Инициализация переменной", showState,
             onConfirmButton = {
                 code = this.value.processInput(text)
         },
