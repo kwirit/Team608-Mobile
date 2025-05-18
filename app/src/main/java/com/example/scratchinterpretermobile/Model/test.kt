@@ -1,7 +1,6 @@
 package com.example.scratchinterpretermobile.Model
 
 fun main() {
-    val regex = Regex("[^,]*")
-
-
+    val initBlock = InitBlock()
+    val initError = initBlock.processInput("abcd","1 + 2 + 7")
 }

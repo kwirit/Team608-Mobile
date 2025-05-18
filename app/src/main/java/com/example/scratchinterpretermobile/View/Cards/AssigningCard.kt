@@ -9,11 +9,11 @@ import com.example.scratchinterpretermobile.View.Boxes.ProgramBox
 import com.example.scratchinterpretermobile.View.ListOfVar
 
 @Composable
-fun AssigningCard(listOfBoxes: MutableList<ProgramBox>, showBoxesState: MutableState<Boolean>, variables: MutableList<Variable>){
+fun AssigningCard(listOfBoxes: MutableList<ProgramBox>, showBoxesState: MutableState<Boolean>){
     BaseCard(name = "Присваивание", onClick = {
         listOfBoxes.add(AssigningBox())
         showBoxesState.value = false
     }) {
-        ListOfVar(variables)
+        ListOfVar()
     }
 }

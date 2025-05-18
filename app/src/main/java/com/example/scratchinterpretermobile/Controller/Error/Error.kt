@@ -130,6 +130,13 @@ val ARRAY_INVALID_ELEMENT = Error(
     "array"
 )
 
+val MULTIPLE_INITIALIZATION = Error(
+    412,
+    "Multiple initialization error",
+    "Multiple initialization of arrays is not allowed",
+    "array"
+)
+
 object ErrorStore {
     private val errorMap = mapOf(
         0 to SUCCESS,
@@ -153,6 +160,7 @@ object ErrorStore {
         409 to ARRAY_BOUNDS_ERROR,
         410 to ARRAY_EXPECTED,
         411 to ARRAY_INVALID_ELEMENT,
+        412 to MULTIPLE_INITIALIZATION
     )
 
     fun get(id: Int): Error? = errorMap[id]
