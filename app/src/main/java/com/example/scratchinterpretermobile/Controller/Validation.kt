@@ -1,23 +1,40 @@
 package com.example.scratchinterpretermobile.Controller
 
 
-import com.example.scratchinterpretermobile.Controller.Error.Error
-import com.example.scratchinterpretermobile.Controller.Error.ErrorStore
+import com.example.scratchinterpretermobile.Controller.Error.ARRAY_BOUNDS_ERROR
+import com.example.scratchinterpretermobile.Controller.Error.ARRAY_EXPECTED
+import com.example.scratchinterpretermobile.Controller.Error.ARRAY_INVALID_ELEMENT
+import com.example.scratchinterpretermobile.Controller.Error.ARRAY_NOT_FOUND
+import com.example.scratchinterpretermobile.Controller.Error.DIVISION_BY_ZERO
+import com.example.scratchinterpretermobile.Controller.Error.EMPTY_NAME
+import com.example.scratchinterpretermobile.Controller.Error.INCORRECT_ARRAY_ELEMENT_NAME
+import com.example.scratchinterpretermobile.Controller.Error.INVALID_ARRAY_ACCESS
+import com.example.scratchinterpretermobile.Controller.Error.INVALID_CHARACTERS
+import com.example.scratchinterpretermobile.Controller.Error.INVALID_VARIABLE_START
+import com.example.scratchinterpretermobile.Controller.Error.UNMATCHED_PARENTHESES
+import com.example.scratchinterpretermobile.Controller.Error.VARIABLE_HAS_SPACE
 import com.example.scratchinterpretermobile.Model.Stack
-import com.example.scratchinterpretermobile.Model.VarBlock
-import com.example.scratchinterpretermobile.Model.Context
+import com.example.scratchinterpretermobile.Model.mainContext
 import com.example.scratchinterpretermobile.Model.IntegerArrayBlock
 import com.example.scratchinterpretermobile.Model.IntegerBlock
 
+
+
+/**
+ * Проверяет корректность имени переменной.
+ *
+ * @param input строка, которую проверяем как имя переменной
+ * @return Int - код ошибки (0 - если имя корректно)
+ */
 fun validateNameVariable(input: String): Int {
     val nameVariable = input.trim()
 
     if (nameVariable.isEmpty()) {
-        return 104
+        return EMPTY_NAME.id
     }
 
     if (" " in nameVariable) {
-        return 102
+        return VARIABLE_HAS_SPACE.id
     }
 
     val regex = Regex("^[a-zA-Z_][a-zA-Z0-9_]*$")
@@ -25,103 +42,77 @@ fun validateNameVariable(input: String): Int {
     if (!regex.matches(nameVariable)) {
         val firstChar = nameVariable.first()
         if (!firstChar.isLetter() && firstChar != '_') {
-            return 101
+            return INVALID_VARIABLE_START.id
         }
-        return 103
+        return INVALID_CHARACTERS.id
     }
 
     return 0
 }
-fun validateArrayName(input: String): Int {
-    val nameVariable = input.trim()
-    val patterns = mapOf(
-        "const" to Regex("\\d+").pattern,
-        "value" to Regex("[1-9]\\d*").pattern,
-        "var" to Regex("[a-zA-Z]\\w*").pattern,
-        "spaces" to Regex("\\s*").pattern
+
+
+/**
+ * Проверяет, синтаксическую корректность элемента массива
+ * @param input строка, которую проверяем
+ * @return Int - код ошибки (0 - в случае успеха)
+ */
+fun validateSyntaxArrayName(input: String): Int {
+    val regex = Regex(
+        "([a-zA-Z_]\\w*)\\[\\s*([-+*\\/%]?\\s*(?:[a-zA-Z_]\\w*|\\d+|\\([^()\\r\\n]*\\))\\s*(?:[-+*\\/%]\\s*(?:[a-zA-Z_]\\w*|\\d+|\\([^()\\r\\n]*\\))\\s*)*)?\\]"
     )
-
-    val simpleArray = """
-    ${patterns["var"]}$$
-    (${patterns["var"]}|${patterns["const"]})
-    $$
-    """.trim().replace(Regex("\\s+"), "")
-
-    val arithmeticInArray = """
-    ( 
-      (${simpleArray}|${patterns["var"]}|${patterns["const"]})${patterns["spaces"]}
-      (
-        ${patterns["spaces"]}[-+*/]${patterns["spaces"]}
-        (${simpleArray}|${patterns["var"]}|${patterns["const"]})
-      )*
-    )
-    """.trim().replace(Regex("\\s+"), "")
-
-    val array = """
-    ( 
-      ${patterns["var"]}$$
-      ( ${arithmeticInArray} | ${patterns["var"]} | ${patterns["const"]} | 
-        ${patterns["var"]}$$(${patterns["var"]} | ${patterns["const"]})\$$ 
-      )
-      $$
-    )
-    """.trim().replace(Regex("\\s+"), "")
-
-    return when {
-        Regex("^$simpleArray\$").matches(nameVariable) -> 0
-        Regex("^$array\$").matches(nameVariable) -> 0
-        else -> 105
-    }
+    if (!regex.containsMatchIn(input.trim()))
+        return INCORRECT_ARRAY_ELEMENT_NAME.id
+    return 0
 }
 
+/**
+ * Проверяет, является ли строка корректным именем массива с индексом.
+ *
+ * @param input строка, содержащая потенциальное обращение к элементу массива
+ * @return Int - код ошибки (0 - если строка корректна)
+ */
+fun validateArrayName(input: String): Int {
+    return processArrayAccess(input)
+}
 
+fun validateConst(input: String): Int {
+    var regex =  Regex("""\d+""")
+    if (regex.matches(input.trim())) return 0
+    else return INVALID_VARIABLE_START.id
+}
 
-fun getElementArray(input: String): Pair<Int, Int> {
-    val trimmedInput = input.trim()
+fun processArrayAccess(element: String): Int {
+    val regexName = Regex("^([a-zA-Z_][a-zA-Z0-9_]*)")
+    val regexIndex = Regex("\\[(.*?)\\]")
 
-    if (validateArrayName(trimmedInput) != 0) {
-        return Pair(-1, 105)
+    val matchName = regexName.find(element) ?: return INVALID_ARRAY_ACCESS.id
+    val matchIndex = regexIndex.find(element) ?:return INVALID_ARRAY_ACCESS.id
+
+    val arrayName = matchName.groups[1]?.value ?: return INVALID_ARRAY_ACCESS.id
+    val indexExpr = matchIndex.groups[1]?.value ?: return INVALID_ARRAY_ACCESS.id
+
+    if (validateNameVariable(arrayName) != 0) {
+        return validateNameVariable(arrayName)
     }
-
-    val arrayNameRegex = Regex("^([a-zA-Z_]\\w*)\$$[^$$]*\$$")
-    val arrayNameMatch = arrayNameRegex.find(trimmedInput) ?: return Pair(-1, 105)
-    val arrayName = arrayNameMatch.groupValues[1]
-
-    val indexRegex = Regex("$$$([^$$]+)\$$")
-    val indexMatch = indexRegex.find(trimmedInput) ?: return Pair(-1, 107) // Ошибка: не найден индекс
-    val indexExpr = indexMatch.groupValues[1]
 
     val (indexValue, indexError) = calculationArithmeticExpression(indexExpr)
     if (indexError != 0) {
-        return Pair(-1, indexError)
+        return indexError
     }
 
-    val varBlock = Context.getVar(arrayName) ?: return Pair(-1, 108) // Ошибка: переменная не найдена
+    val arrayBlock = mainContext.getVar(arrayName) ?: return ARRAY_NOT_FOUND.id
 
-    return when (varBlock) {
-        is IntegerArrayBlock -> {
-            val array = varBlock.value as? List<Int>
-                ?: return Pair(-1, 111) // Ошибка: значение не является списком Int
+    if (arrayBlock !is IntegerArrayBlock) return ARRAY_EXPECTED.id
 
-            if (indexValue in array.indices) {
-                Pair(array[indexValue], 0)
-            } else {
-                Pair(-1, 109) // Ошибка: выход за границы массива
-            }
-        }
+    val array = arrayBlock.value as? List<Int> ?: return ARRAY_INVALID_ELEMENT.id
 
-        is IntegerBlock -> {
-            Pair(-1, 110) // Ошибка: ожидался массив, а найдено число
-        }
+    if (indexValue < 0 || indexValue >= array.size) return ARRAY_BOUNDS_ERROR.id
 
-        else -> {
-            Pair(-1, 111) // Ошибка: неизвестный тип переменной
-        }
-    }
+    return 0
 }
 
 fun getElementFromString(input: String): MutableList<String> {
-    val trimmedInput = "0" + input.trim()
+    val trimmedInput = input.trim()
 
     val elements = mutableListOf<String>()
 
@@ -142,7 +133,10 @@ fun getElementFromString(input: String): MutableList<String> {
             continue
         }
 
-        if (flagArray) currentToken.append(symbol);
+        if (flagArray) {
+            currentToken.append(symbol)
+            continue;
+        }
 
         if (currentToken.isNotEmpty() && (symbol.isDigit() || symbol.isLetter() || symbol == '_')) {
             currentToken.append(symbol)
@@ -163,6 +157,12 @@ fun getElementFromString(input: String): MutableList<String> {
 
     return elements
 }
+
+/**
+ * Преобразует выражение из инфиксной формы в постфиксную нотацию.
+ * @param elements список токенов исходного выражения
+ * @return Pair<MutableList<String>, Int> - постфиксное выражение и код ошибки (0 - в случае успеха)
+ */
 fun transferPrefixToPostfix(elements: MutableList<String>): Pair<MutableList<String>, Int> {
     val postfix = mutableListOf<String>()
     val stack = Stack<String>()
@@ -174,100 +174,108 @@ fun transferPrefixToPostfix(elements: MutableList<String>): Pair<MutableList<Str
         "-" to 1,
         "(" to 0
     )
-
     val operators = "+-*%/"
 
     for (element in elements) {
-        when {
-            element in operators -> {
+        when (element) {
+            in operators -> {
                 while (!stack.isEmpty() && stack.peek() != "(" && priority[element]!! <= priority[stack.peek()]!!) {
                     postfix.add(stack.pop()!!)
                 }
                 stack.push(element)
             }
-            element == "(" -> stack.push(element)
 
-            element == ")" -> {
+            "(" -> stack.push(element)
+
+            ")" -> {
                 while (!stack.isEmpty() && stack.peek() != "(") {
                     postfix.add(stack.pop()!!)
                 }
-                if (stack.isEmpty()) return Pair(mutableListOf(), 106)
+                if (stack.isEmpty()) return Pair(mutableListOf(), UNMATCHED_PARENTHESES.id)
                 stack.pop()
             }
 
             else -> {
-                if (validateArrayName(element) == 0) {
-                    val arrayNameRegex = Regex("^([a-zA-Z_]\\w*)\$$([^$$]+)\$$")
-                    val match = arrayNameRegex.find(element) ?: return Pair(mutableListOf(), 107)
+                when {
+                    validateConst(element) == 0 -> postfix.add(element)
 
-                    val arrayName = match.groupValues[1]
-                    val indexExpr = match.groupValues[2]
-
-                    val (indexValue, indexError) = calculationArithmeticExpression(indexExpr)
-                    if (indexError != 0) return Pair(mutableListOf(), indexError)
-
-                    val varBlock = Context.getVar(arrayName) ?: return Pair(mutableListOf(), 108)
-                    if (varBlock !is IntegerArrayBlock) return Pair(mutableListOf(), 110)
-
-                    val array = varBlock.value as? List<Int> ?: return Pair(mutableListOf(), 111)
-                    if (indexValue !in array.indices) return Pair(mutableListOf(), 109)
-
-                    postfix.add(array[indexValue].toString())
-                } else {
-                    val value = element.toIntOrNull()
-                    if (value != null) {
-                        postfix.add(value.toString())
-                    } else {
-                        val error = validateNameVariable(element)
-                        if (error != 0) return Pair(mutableListOf(), error)
-
-                        val varBlock = Context.getVar(element) ?: return Pair(mutableListOf(), 108)
-                        if (varBlock !is IntegerBlock) return Pair(mutableListOf(), 110)
-
-                        postfix.add((varBlock.value as Int).toString())
+                    validateNameVariable(element) == 0 && mainContext.getVar(element) != null -> {
+                        val value = mainContext.getVar(element)
+                        if (value is IntegerBlock) {
+                            postfix.add(value.value.toString())
+                        }
+                        else {
+                            return Pair(mutableListOf(), ARRAY_EXPECTED.id)
+                        }
                     }
+
+                    validateSyntaxArrayName(element) == 0 -> {
+                        val error = processArrayAccess(element)
+                        if (error == 0) {
+                            postfix.add(element)
+                        }
+                        if (error != 0) return Pair(mutableListOf(), ARRAY_NOT_FOUND.id)
+                    }
+                    else -> return Pair(mutableListOf(), INVALID_VARIABLE_START.id)
                 }
             }
         }
     }
 
     while (!stack.isEmpty()) {
-        if (stack.peek() == "(") return Pair(mutableListOf(), 106)
+        if (stack.peek() == "(") return Pair(mutableListOf(), UNMATCHED_PARENTHESES.id)
         postfix.add(stack.pop()!!)
     }
 
     return Pair(postfix, 0)
 }
 
-fun calculationPostfix(postfix: MutableList<String>): Int {
+/**
+ * Выполняет вычисление выражения в постфиксной (обратной польской) нотации.
+ *
+ * @param postfix список токенов в постфиксной форме
+ * @return Pair<Int, Int> - результат вычисления и код ошибки (0 - в случае успеха)
+ */
+fun calculationPostfix(postfix: MutableList<String>): Pair<Int, Int> {
     val stack = Stack<Int>()
 
     for (element in postfix) {
         if (element in "+-*%/") {
-            val first = stack.pop()!!
-            val second = stack.pop()!!
-            var result = 0
-            when (element) {
-                "-" -> result = second - first
-                "+" -> result = second + first
-                "*" -> result = second * first
-                "%" -> result = second % first
-                "/" -> result = second / first
+            val first = stack.pop() ?: return Pair(-1, INVALID_ARRAY_ACCESS.id)
+            val second = stack.pop() ?: return Pair(-1, INVALID_ARRAY_ACCESS.id)
+            if ((element == "/" || element == "%") && first == 0){
+                return Pair(-1, DIVISION_BY_ZERO.id)
+            }
+            val result = when (element) {
+                "-" -> second - first
+                "+" -> second + first
+                "*" -> second * first
+                "%" -> second % first
+                "/" -> second / first
+                else -> -1
             }
             stack.push(result)
 
         }
-
-        val value = element.toIntOrNull()
-        stack.push(value!!)
+        else {
+            val value = element.toIntOrNull()
+            stack.push(value!!)
+        }
     }
-    return stack.pop()!!;
+    return Pair(stack.pop()!!, 0);
 }
 
 
+/**
+ * Вычисляет значение арифметического выражения в инфиксной нотации.
+ * Например: "a % b + 4 * (10 - 3 + arr[i + 2])".
+ * @param input строка с арифметическим выражением
+ * @return Pair<Int, Int> - результат и код ошибки (0 - в случае успеха)
+ */
 fun calculationArithmeticExpression(input: String): Pair<Int, Int> {
     val (elements, error) = transferPrefixToPostfix(getElementFromString(input))
-
     if (error != 0) return Pair(-1, error)
-    return Pair(calculationPostfix(elements), 0)
+    val (result, errorCalculation) = calculationPostfix(elements)
+    if (errorCalculation != 0) return Pair(-1, errorCalculation)
+    return Pair(result, 0)
 }
