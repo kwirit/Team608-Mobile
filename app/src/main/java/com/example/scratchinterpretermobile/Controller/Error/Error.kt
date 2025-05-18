@@ -1,6 +1,5 @@
 package com.example.scratchinterpretermobile.Controller.Error
 
-
 data class Error(
     val id: Int,
     val title: String,
@@ -15,6 +14,7 @@ val SUCCESS = Error(
     "success",
     "systemic"
 )
+
 val CONTEXT_IS_NULL = Error (
     1,
     "error",
@@ -22,8 +22,14 @@ val CONTEXT_IS_NULL = Error (
     "systemic"
 )
 
-//100
+val CLASS_DOESNT_NOT_EXIST = Error(
+    2,
+    "The class does not exist",
+    "The class does not exist",
+    "systemic"
+)
 
+//100
 val INVALID_VARIABLE_START = Error(
     101,
     "Invalid start of variable name",
@@ -137,10 +143,40 @@ val MULTIPLE_INITIALIZATION = Error(
     "array"
 )
 
+// 500
+val VARIABLE_DOES_NOT_EXIST = Error(
+    500,
+    "The variable is not initialized",
+    "The variable is not initialized in the context",
+    "assignment"
+)
+
+val INVALID_ASSIGNMENT_INTEGER = Error(
+    501,
+    "Incorrect assignment to integer variable",
+    "A syntax error has occurred",
+    "assignment"
+)
+
+val INVALID_ASSIGNMENT_ARRAY = Error(
+    502,
+    "Does not match the array size",
+    "The number of assigned values does not match the size of the array",
+    "assignment"
+)
+
+val INVALID_ARRAY_ELEMENT_ASSIGNMENT = Error(
+    503,
+    "Invalid array element assignment",
+    "Syntax error assigning array element.",
+    "assignment"
+)
+
 object ErrorStore {
     private val errorMap = mapOf(
         0 to SUCCESS,
         1 to CONTEXT_IS_NULL,
+//        2 to CLASS_DOESNT_NOT_EXIST,
 
         101 to INVALID_VARIABLE_START,
         102 to VARIABLE_HAS_SPACE,
@@ -160,7 +196,12 @@ object ErrorStore {
         409 to ARRAY_BOUNDS_ERROR,
         410 to ARRAY_EXPECTED,
         411 to ARRAY_INVALID_ELEMENT,
-        412 to MULTIPLE_INITIALIZATION
+        412 to MULTIPLE_INITIALIZATION,
+
+        500 to VARIABLE_DOES_NOT_EXIST,
+//        501 to INVALID_ASSIGNMENT_INTEGER,
+        502 to INVALID_ASSIGNMENT_ARRAY,
+//        503 to INVALID_ARRAY_ELEMENT_ASSIGNMENT
     )
 
     fun get(id: Int): Error? = errorMap[id]

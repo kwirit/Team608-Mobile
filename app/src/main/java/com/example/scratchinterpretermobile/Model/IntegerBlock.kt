@@ -10,3 +10,12 @@ class IntegerBlock(
             intValue = value as Int
         }
 }
+
+fun getCopyIntegerBlock(varBlock: IntegerBlock): IntegerBlock {
+    val name = varBlock.name
+    val original = varBlock.value as Int
+
+    val copyBlock = IntegerBlock(name, original)
+
+    return copyBlock
+}

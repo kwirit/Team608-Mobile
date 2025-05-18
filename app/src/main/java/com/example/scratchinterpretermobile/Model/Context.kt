@@ -37,6 +37,28 @@ class Context {
         return null
     }
 
+    fun setVar(key: String, varBlock: VarBlock) {
+        for (scope in context) {
+            if (scope.containsKey(key)) {
+                scope[key] = varBlock
+                return
+            }
+        }
+        // Или добавляем в верхний скоуп, если не нашли
+        context.peek()?.set(key, varBlock)
+    }
+
+    fun removeVar(key: String) {
+        for(scope in context) {
+            if(scope.containsKey(key)) {
+                scope.remove(key)
+                break
+            }
+        }
+
+        return;
+    }
+
     fun pushScope(scope: HashMap<String, VarBlock> = HashMap()) = context.push(scope)
     fun popScope(): HashMap<String, VarBlock>? = context.pop()
     fun peekScope(): HashMap<String, VarBlock>? = context.peek()

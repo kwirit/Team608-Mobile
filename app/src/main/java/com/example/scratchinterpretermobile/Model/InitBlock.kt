@@ -5,9 +5,6 @@ import com.example.scratchinterpretermobile.Controller.Error.MULTIPLE_INITIALIZA
 import com.example.scratchinterpretermobile.Controller.Error.REDECLARING_A_VARIABLE
 import com.example.scratchinterpretermobile.Controller.Error.SUCCESS
 import com.example.scratchinterpretermobile.Controller.calculationArithmeticExpression
-import com.example.scratchinterpretermobile.Controller.calculationPostfix
-import com.example.scratchinterpretermobile.Controller.getElementFromString
-import com.example.scratchinterpretermobile.Controller.transferPrefixToPostfix
 import com.example.scratchinterpretermobile.Controller.validateNameVariable
 
 class InitBlock : InstructionBlock() {
@@ -61,13 +58,38 @@ class InitBlock : InstructionBlock() {
         return SUCCESS.id
     }
 
-    fun processInput(variableName:String, arrayLength:String = ""): Int {
+    private fun removeContextChanges() {
+        for(varBlock in newVarBlocks) {
+            mainContext.removeVar(varBlock.name)
+        }
+
+        return;
+    }
+
+    private fun updateNewVarBlocks(newBlocks: MutableList<VarBlock>): Int {
+        newVarBlocks.clear()
+        for(block in newBlocks) {
+            if(block is IntegerBlock) {
+                newVarBlocks.add(getCopyIntegerBlock(block))
+            }
+            else {
+                newVarBlocks.add((getCopyIntegerArrayBlock(block as IntegerArrayBlock)))
+            }
+        }
+
+        return SUCCESS.id
+    }
+
+    fun processInput(variableName:String, arrayLength:String = String()): Int {
         if(mainContext.peekScope() == null) return CONTEXT_IS_NULL.id
+
+        // Отменяем изменения контекста
+        removeContextChanges()
 
         val newBlocks = mutableListOf<VarBlock>()
 
         var fillError = SUCCESS.id
-        if(arrayLength == "") {
+        if(arrayLength.isEmpty()) {
             fillError = fillIntegerBlock(variableName, newBlocks)
         }
         else {
@@ -77,6 +99,8 @@ class InitBlock : InstructionBlock() {
         if(fillError != SUCCESS.id) return fillError
 
         updateContext(newBlocks)
+
+        updateNewVarBlocks(newBlocks)
 
         return SUCCESS.id
     }
