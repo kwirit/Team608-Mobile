@@ -1,9 +1,8 @@
 package com.example.scratchinterpretermobile.Model
 
 import com.example.scratchinterpretermobile.Controller.calculationArithmeticExpression
-import com.example.scratchinterpretermobile.Model.Context
 
-class ConditionsBlock(
+class LoopBlock(
     private val leftPartCondition: String,
     private val rightPartCondition: String,
     private val operator: String = "=="
@@ -11,8 +10,7 @@ class ConditionsBlock(
 
     private var resultValue: Boolean = false
 
-    private var thenBlock: MutableList<InstructionBlock> = mutableListOf()
-    private var elseBlock: MutableList<InstructionBlock> = mutableListOf()
+    private var blocksToRun: MutableList<InstructionBlock> = mutableListOf()
 
     private var scope: HashMap<String, VarBlock> = hashMapOf();
 
@@ -50,29 +48,32 @@ class ConditionsBlock(
     }
 
     fun addThenBlock(index: Int, block: InstructionBlock) {
-        thenBlock.add(index, block)
-    }
-    fun addElseBlock(index: Int, block: InstructionBlock) {
-        elseBlock.add(index, block)
+        blocksToRun.add(index, block)
     }
 
     override fun run(): Int {
-        val compareError = compare()
+        var compareError = compare()
+
         if (compareError != 0){
             Context.popScope();
             return compareError
         }
 
-        val blocksToRun = if (resultValue) thenBlock else elseBlock
-
-        for (block in blocksToRun) {
-            val result = block.run();
-            if (result != 0) {
+        while (resultValue) {
+            for (block in blocksToRun) {
+                val result = block.run();
+                if (result != 0) {
+                    Context.popScope();
+                    return result
+                }
+            }
+            compareError = compare()
+            if (compareError != 0){
                 Context.popScope();
-                return result
+                return compareError
             }
         }
-        Context.popScope();
-        return 0
+        Context.popScope()
+        return 0;
     }
 }

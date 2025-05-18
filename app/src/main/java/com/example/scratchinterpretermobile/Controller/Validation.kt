@@ -58,16 +58,7 @@ fun validateNameVariable(input: String): Int {
  * @return Int - код ошибки (0 - если строка корректна)
  */
 fun validateArrayName(input: String): Int {
-    var resultError = 0;
-    val regex = Regex(
-     "([a-zA-Z_]\\w*)\\[\\s*([-+*\\/%]?\\s*(?:[a-zA-Z_]\\w*|\\d+|\\([^()\\r\\n]*\\))\\s*(?:[-+*\\/%]\\s*(?:[a-zA-Z_]\\w*|\\d+|\\([^()\\r\\n]*\\))\\s*)*)?\\]"
-    )
-    if (!regex.containsMatchIn(input.trim())) resultError = INCORRECT_ARRAY_ELEMENT_NAME.id
-
-    val error = processArrayAccess(input);
-    if (error != 0) resultError = error;
-
-    return resultError
+    return processArrayAccess(input)
 }
 
 fun validateConst(input: String): Int {
@@ -155,7 +146,6 @@ fun getElementFromString(input: String): MutableList<String> {
 
 /**
  * Преобразует выражение из инфиксной формы в постфиксную нотацию.
- *
  * @param elements список токенов исходного выражения
  * @return Pair<MutableList<String>, Int> - постфиксное выражение и код ошибки (0 - в случае успеха)
  */

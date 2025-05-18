@@ -34,6 +34,28 @@ object Context {
 
     fun clear() = context.clear()
 
+    fun getListOfIntVariable(): MutableList<String> {
+        val result = mutableListOf<String>()
+        for (scope in context) {
+            for ((key, value) in scope) {
+                if (value is IntegerBlock) {
+                    result.add(key)
+                }
+            }
+        }
+        return result
+    }
+    fun getListOfIntArrayVariable(): MutableList<String> {
+        val result = mutableListOf<String>()
+        for (scope in context) {
+            for ((key, value) in scope) {
+                if (value is IntegerArrayBlock) {
+                    result.add(key)
+                }
+            }
+        }
+        return result
+    }
 }
 
 
