@@ -137,6 +137,12 @@ val MULTIPLE_INITIALIZATION = Error(
     "array"
 )
 
+val VARIABLE_NOT_FOUND = Error(
+    601,
+    "Variable not found",
+    "The requested variable was not found in the current scope",
+    "variable"
+)
 object ErrorStore {
     private val errorMap = mapOf(
         0 to SUCCESS,
@@ -147,6 +153,7 @@ object ErrorStore {
         103 to INVALID_CHARACTERS,
         104 to EMPTY_NAME,
         105 to INCORRECT_ARRAY_ELEMENT_NAME,
+        106 to
 
         201 to REDECLARING_A_VARIABLE,
         202 to INITIALIZATION_ERROR,
@@ -160,7 +167,9 @@ object ErrorStore {
         409 to ARRAY_BOUNDS_ERROR,
         410 to ARRAY_EXPECTED,
         411 to ARRAY_INVALID_ELEMENT,
-        412 to MULTIPLE_INITIALIZATION
+        412 to MULTIPLE_INITIALIZATION,
+
+        601 to VARIABLE_NOT_FOUND,
     )
 
     fun get(id: Int): Error? = errorMap[id]
