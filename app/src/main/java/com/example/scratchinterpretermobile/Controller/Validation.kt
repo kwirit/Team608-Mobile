@@ -14,7 +14,7 @@ import com.example.scratchinterpretermobile.Controller.Error.INVALID_VARIABLE_ST
 import com.example.scratchinterpretermobile.Controller.Error.UNMATCHED_PARENTHESES
 import com.example.scratchinterpretermobile.Controller.Error.VARIABLE_HAS_SPACE
 import com.example.scratchinterpretermobile.Model.Stack
-import com.example.scratchinterpretermobile.Model.Context
+import com.example.scratchinterpretermobile.Model.mainContext
 import com.example.scratchinterpretermobile.Model.IntegerArrayBlock
 import com.example.scratchinterpretermobile.Model.IntegerBlock
 
@@ -86,7 +86,7 @@ fun processArrayAccess(element: String): Int {
         return indexError
     }
 
-    val arrayBlock = Context.getVar(arrayName) ?: return ARRAY_NOT_FOUND.id
+    val arrayBlock = mainContext.getVar(arrayName) ?: return ARRAY_NOT_FOUND.id
 
     if (arrayBlock !is IntegerArrayBlock) return ARRAY_EXPECTED.id
 
@@ -185,8 +185,8 @@ fun transferPrefixToPostfix(elements: MutableList<String>): Pair<MutableList<Str
                 when {
                     validateConst(element) == 0 -> postfix.add(element)
 
-                    validateNameVariable(element) == 0 && Context.getVar(element) != null -> {
-                        val value = Context.getVar(element)
+                    validateNameVariable(element) == 0 && mainContext.getVar(element) != null -> {
+                        val value = mainContext.getVar(element)
                         if (value is IntegerBlock) {
                             postfix.add(value.value.toString())
                         }

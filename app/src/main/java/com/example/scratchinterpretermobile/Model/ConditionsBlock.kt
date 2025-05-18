@@ -17,7 +17,7 @@ class ConditionsBlock(
     private var scope: HashMap<String, VarBlock> = hashMapOf();
 
     init {
-        Context.pushScope(scope)
+        mainContext.pushScope(scope)
     }
 
     /**
@@ -59,7 +59,7 @@ class ConditionsBlock(
     override fun run(): Int {
         val compareError = compare()
         if (compareError != 0){
-            Context.popScope();
+            mainContext.popScope();
             return compareError
         }
 
@@ -68,11 +68,11 @@ class ConditionsBlock(
         for (block in blocksToRun) {
             val result = block.run();
             if (result != 0) {
-                Context.popScope();
+                mainContext.popScope();
                 return result
             }
         }
-        Context.popScope();
+        mainContext.popScope();
         return 0
     }
 }
