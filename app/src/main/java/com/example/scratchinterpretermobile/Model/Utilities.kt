@@ -31,17 +31,6 @@ object Context {
         return null
     }
 
-    fun getListVariablesNames(): MutableList<String> {
-        val namesVariables = mutableListOf<String>()
-
-        for (scope in context) {
-            namesVariables.addAll(scope.keys)
-        }
-
-        return namesVariables
-    }
-
-
     fun pushScope(scope: HashMap<String, VarBlock> = HashMap()) = context.push(scope)
     fun popScope(): HashMap<String, VarBlock>? = context.pop()
     fun peekScope(): HashMap<String, VarBlock>? = context.peek()
