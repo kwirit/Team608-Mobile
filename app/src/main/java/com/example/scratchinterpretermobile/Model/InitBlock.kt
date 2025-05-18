@@ -24,8 +24,8 @@ class InitBlock : InstructionBlock() {
             val name = match.groups[1]?.value?.takeIf { it.isNotEmpty() }
                 ?: return 202
 
-            val scope = Context.peekScope() ?: return 1
-            if(Context.getVar(name) != null) {
+            val scope = mainContext.peekScope() ?: return 1
+            if(mainContext.getVar(name) != null) {
                 return 201
             }
 
@@ -58,7 +58,7 @@ class InitBlock : InstructionBlock() {
 
     override fun run(): Int {
         for(newVar in newVariables) {
-            var scope = Context.peekScope()
+            var scope = mainContext.peekScope()
             scope!!.put(newVar.name, newVar)
         }
         

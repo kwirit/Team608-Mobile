@@ -15,7 +15,7 @@ class LoopBlock(
     private var scope: HashMap<String, VarBlock> = hashMapOf();
 
     init {
-        Context.pushScope(scope)
+        mainContext.pushScope(scope)
     }
 
     /**
@@ -55,7 +55,7 @@ class LoopBlock(
         var compareError = compare()
 
         if (compareError != 0){
-            Context.popScope();
+            mainContext.popScope();
             return compareError
         }
 
@@ -63,17 +63,17 @@ class LoopBlock(
             for (block in blocksToRun) {
                 val result = block.run();
                 if (result != 0) {
-                    Context.popScope();
+                    mainContext.popScope();
                     return result
                 }
             }
             compareError = compare()
             if (compareError != 0){
-                Context.popScope();
+                mainContext.popScope();
                 return compareError
             }
         }
-        Context.popScope()
+        mainContext.popScope()
         return 0;
     }
 }
