@@ -36,6 +36,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.*
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.graphicsLayer
@@ -83,11 +84,16 @@ fun MainScreen(viewModel: MainViewModel) {
 @Composable
 fun ListOfVar(){
     val variables = mainContext.getListOfIntVariable();
+    val arrays = mainContext.getListOfIntArrayVariable();
     val expanded = remember { mutableStateOf(false) }
     TextButton(onClick = {expanded.value = true}) { Text("Variable")}
     DropdownMenu(expanded = expanded.value,onDismissRequest = {expanded.value = false}) {
         variables.forEach {
             variable ->
+            DropdownMenuItem(onClick = {expanded.value = false}, text = {Text(text = variable)})
+        }
+        arrays.forEach {
+                variable ->
             DropdownMenuItem(onClick = {expanded.value = false}, text = {Text(text = variable)})
         }
     }

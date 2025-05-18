@@ -15,20 +15,24 @@ import com.example.scratchinterpretermobile.Model.InitBlock
 import com.example.scratchinterpretermobile.View.BaseStructure.BaseBox
 
 class ArrayInitializationBlock : ProgramBox() {
-    override val value = InitBlock();
-    var text by mutableStateOf("")
+    override val value = InitBlock()
+    var arrayName by mutableStateOf("")
+    var arraySize by mutableStateOf("")
     var code by mutableIntStateOf(104)
 
     @Composable
     override fun render(){
         BaseBox(name = "Инициализация массива", showState,
             onConfirmButton = {
-                code = this.value.processInput(text)
+                code = this.value.processInput(arrayName, arraySize)
             },
             dialogContent = {
-                TextField(modifier = Modifier.Companion.size(80.dp), onValueChange = { newText ->
-                    text = newText
-                }, value = text)
+                TextField(modifier = Modifier.Companion.size(80.dp), onValueChange = { newArrayName ->
+                    arrayName = newArrayName
+                }, value = arrayName)
+                TextField(modifier = Modifier.Companion.size(80.dp), onValueChange = { newArraySize ->
+                    arraySize = newArraySize
+                }, value = arraySize)
                 Text(text = ErrorStore.get(code)!!.title)
             }) {
         }
