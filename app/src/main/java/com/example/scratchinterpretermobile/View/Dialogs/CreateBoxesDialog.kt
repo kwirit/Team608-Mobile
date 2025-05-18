@@ -19,7 +19,7 @@ fun CreateBoxesDialog(showBoxesState: MutableState<Boolean>, viewModel: MainView
     list.add(Variable("test4",4))
     CustomDialog(showBoxesState){
         InitializationCard(listOfBoxes, showBoxesState)
-        AssigningCard(listOfBoxes,showBoxesState,list)
+        AssigningCard(listOfBoxes,showBoxesState)
         IfCard(listOfBoxes,showBoxesState)
         ConsoleCard(listOfBoxes,showBoxesState)
     }

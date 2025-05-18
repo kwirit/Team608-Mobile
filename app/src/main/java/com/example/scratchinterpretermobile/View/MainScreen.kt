@@ -40,6 +40,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.zIndex
+import com.example.scratchinterpretermobile.Model.Context
 import com.example.scratchinterpretermobile.View.Bars.BottomBar
 import com.example.scratchinterpretermobile.View.Bars.TopBar
 import com.example.scratchinterpretermobile.View.Boxes.ProgramBox
@@ -81,13 +82,14 @@ fun MainScreen(viewModel: MainViewModel) {
 
 
 @Composable
-fun ListOfVar(variables: MutableList<Variable>){
+fun ListOfVar(){
+    val variables = Context.getListOfIntVariable();
     val expanded = remember { mutableStateOf(false) }
     TextButton(onClick = {expanded.value = true}) { Text("Variable")}
     DropdownMenu(expanded = expanded.value,onDismissRequest = {expanded.value = false}) {
         variables.forEach {
             variable ->
-            DropdownMenuItem(onClick = {expanded.value = false}, text = {Text(text = variable.name)})
+            DropdownMenuItem(onClick = {expanded.value = false}, text = {Text(text = variable)})
         }
     }
 }
