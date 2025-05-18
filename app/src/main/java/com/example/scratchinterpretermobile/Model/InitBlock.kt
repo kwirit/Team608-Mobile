@@ -20,7 +20,7 @@ class InitBlock : InstructionBlock() {
             val validateNameVariableError = validateNameVariable(word)
             if(validateNameVariableError != SUCCESS.id) return validateNameVariableError
 
-            if(Context.getVar(word) != null) return REDECLARING_A_VARIABLE.id
+            if(mainContext.getVar(word) != null) return REDECLARING_A_VARIABLE.id
 
             val newBlock = IntegerBlock(word, 0)
             newBlocks.add(newBlock)
@@ -48,7 +48,7 @@ class InitBlock : InstructionBlock() {
     }
 
     private fun updateContext(newBlocks: MutableList<VarBlock>): Int {
-        val scope = Context.peekScope()
+        val scope = mainContext.peekScope()
 
         for(varBlock in newVarBlocks) {
             scope!!.remove(varBlock.name)
@@ -62,7 +62,7 @@ class InitBlock : InstructionBlock() {
     }
 
     fun processInput(variableName:String, arrayLength:String = ""): Int {
-        if(Context.peekScope() == null) return CONTEXT_IS_NULL.id
+        if(mainContext.peekScope() == null) return CONTEXT_IS_NULL.id
 
         val newBlocks = mutableListOf<VarBlock>()
 
