@@ -7,8 +7,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import com.example.scratchinterpretermobile.Controller.Error.ErrorStore
+import com.example.scratchinterpretermobile.Model.AssignmentBlock
 import com.example.scratchinterpretermobile.Model.InitBlock
 import com.example.scratchinterpretermobile.Model.IntegerArrayBlock
 import com.example.scratchinterpretermobile.Model.IntegerBlock
@@ -20,33 +25,43 @@ import com.example.scratchinterpretermobile.View.Widgets.ListOfVar
 import com.example.scratchinterpretermobile.View.Widgets.VariableTextField
 
 class AssigningBox: ProgramBox() {
-    override val value = InitBlock();
+    override val value = AssignmentBlock();
     val checkVariableState = mutableStateOf(true)
     val checkArrayState = mutableStateOf(false)
+    var arithmeticField by mutableStateOf("")
+    var arrayIndex by mutableStateOf("")
+    var code by mutableIntStateOf(104)
+    var selectedVariable = mutableStateOf<VarBlock?>(null)
     @Composable
     override fun render(){
         BaseBox(name = "Присваивание", showState,
             onConfirmButton = {
-
+                if(arithmeticField != ""){
+                    code = value.processInput(selectedVariable.value!!.name,arithmeticField)
+                }
         },
             dialogContent = {
                 Row{
-                    val selectedVariable = ListOfVar()
-
+                    selectedVariable = ListOfVar()
                     if (selectedVariable.value is IntegerBlock) {
+                        arithmeticField = ""
                         VariableAssignment()
                     }
                     if(selectedVariable.value is IntegerArrayBlock){
+                        arithmeticField = ""
                         val arrayBlock = selectedVariable.value as IntegerArrayBlock
                         ArrayAssignment(arrayBlock)
                     }
                 }
+                Text(text = ErrorStore.get(code)!!.title)
         }) {
         }
     }
     @Composable
     fun VariableAssignment(){
-        VariableTextField(onValueChange = {newText -> }, "")
+        VariableTextField(onValueChange = {newText ->
+            arithmeticField = newText;
+        }, value = arithmeticField)
     }
     @Composable
     fun ArrayAssignment(arrayBlock: IntegerArrayBlock){
@@ -73,13 +88,21 @@ class AssigningBox: ProgramBox() {
     }
     @Composable
     fun SingleElementInput(){
-        VariableTextField(onValueChange = {newText -> }, "")
-        VariableTextField(onValueChange = {newText -> }, "")
+        VariableTextField(onValueChange = {newText ->
+            arrayIndex = newText;
+        }, value = arrayIndex)
+        VariableTextField(onValueChange = {newText ->
+            arithmeticField = newText;
+        }, value = arithmeticField)
     }
     @Composable
     fun AllElementsInput(arrayBlock: IntegerArrayBlock){
-        val value = (arrayBlock.value as MutableList<Int>).size
-        Text(text = "$value")
+        val arraySize = (arrayBlock.value as MutableList<Int>).size
+        Column {
+            repeat(arraySize) { index ->
+                Text(text = index.toString())
+            }
+        }
     }
 
 }
