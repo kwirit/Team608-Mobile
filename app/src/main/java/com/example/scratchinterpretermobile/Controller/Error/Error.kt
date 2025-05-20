@@ -95,6 +95,13 @@ val DIVISION_BY_ZERO = Error(
     "arithmetic"
 )
 
+val EMPTY_ARITHMETIC = Error(
+    303,
+    "Empty arithmetic",
+    "Empty arithmetic",
+    "arithmetic"
+)
+
 //400
 val UNMATCHED_PARENTHESES = Error(
     406,
@@ -197,6 +204,7 @@ object ErrorStore {
 
         301 to INCORRECT_ARITHMETIC_EXPRESSION,
         302 to DIVISION_BY_ZERO,
+        303 to EMPTY_ARITHMETIC,
 
         406 to UNMATCHED_PARENTHESES,
         407 to INVALID_ARRAY_ACCESS,
