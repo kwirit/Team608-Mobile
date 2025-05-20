@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.dp
 import com.example.scratchinterpretermobile.Controller.Error.ErrorStore
 import com.example.scratchinterpretermobile.Model.InitBlock
 import com.example.scratchinterpretermobile.View.BaseStructure.BaseBox
+import com.example.scratchinterpretermobile.View.Widgets.VariableTextField
 
 class ArrayInitializationBlock : ProgramBox() {
     override val value = InitBlock()
@@ -27,10 +28,10 @@ class ArrayInitializationBlock : ProgramBox() {
                 code = this.value.processInput(arrayName, arraySize)
             },
             dialogContent = {
-                TextField(modifier = Modifier.Companion.size(80.dp), onValueChange = { newArrayName ->
+                VariableTextField(onValueChange = { newArrayName ->
                     arrayName = newArrayName
                 }, value = arrayName)
-                TextField(modifier = Modifier.Companion.size(80.dp), onValueChange = { newArraySize ->
+                VariableTextField(onValueChange = { newArraySize ->
                     arraySize = newArraySize
                 }, value = arraySize)
                 Text(text = ErrorStore.get(code)!!.title)

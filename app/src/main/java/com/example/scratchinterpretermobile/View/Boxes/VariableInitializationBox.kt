@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.dp
 import com.example.scratchinterpretermobile.Controller.Error.ErrorStore
 import com.example.scratchinterpretermobile.Model.InitBlock
 import com.example.scratchinterpretermobile.View.BaseStructure.BaseBox
+import com.example.scratchinterpretermobile.View.Widgets.VariableTextField
 
 class VariableInitializationBox : ProgramBox() {
     override val value = InitBlock();
@@ -26,7 +27,7 @@ class VariableInitializationBox : ProgramBox() {
                 code = this.value.processInput(text)
         },
             dialogContent = {
-            TextField(modifier = Modifier.Companion.size(80.dp), onValueChange = { newText ->
+                VariableTextField(onValueChange = { newText ->
                 text = newText
             }, value = text)
             Text(text = ErrorStore.get(code)!!.title)

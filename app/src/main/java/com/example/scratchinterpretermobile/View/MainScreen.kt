@@ -80,25 +80,6 @@ fun MainScreen(viewModel: MainViewModel) {
     }
 }
 
-
-@Composable
-fun ListOfVar(){
-    val variables = mainContext.getListOfIntVariable();
-    val arrays = mainContext.getListOfIntArrayVariable();
-    val expanded = remember { mutableStateOf(false) }
-    TextButton(onClick = {expanded.value = true}) { Text("Variable")}
-    DropdownMenu(expanded = expanded.value,onDismissRequest = {expanded.value = false}) {
-        variables.forEach {
-            variable ->
-            DropdownMenuItem(onClick = {expanded.value = false}, text = {Text(text = variable)})
-        }
-        arrays.forEach {
-                variable ->
-            DropdownMenuItem(onClick = {expanded.value = false}, text = {Text(text = variable)})
-        }
-    }
-}
-
 @Composable
 fun CodeBlocksScreen(listOfBoxes: MutableList<ProgramBox>){
     VerticalReorderList(listOfBoxes)

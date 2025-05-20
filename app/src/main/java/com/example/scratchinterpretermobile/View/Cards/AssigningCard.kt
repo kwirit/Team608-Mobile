@@ -1,12 +1,13 @@
 package com.example.scratchinterpretermobile.View.Cards
 
+import androidx.compose.foundation.layout.Row
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import com.example.scratchinterpretermobile.Model.Variable
 import com.example.scratchinterpretermobile.View.BaseStructure.BaseCard
 import com.example.scratchinterpretermobile.View.Boxes.AssigningBox
 import com.example.scratchinterpretermobile.View.Boxes.ProgramBox
-import com.example.scratchinterpretermobile.View.ListOfVar
+import com.example.scratchinterpretermobile.View.Widgets.ListOfVar
 
 @Composable
 fun AssigningCard(listOfBoxes: MutableList<ProgramBox>, showBoxesState: MutableState<Boolean>){
