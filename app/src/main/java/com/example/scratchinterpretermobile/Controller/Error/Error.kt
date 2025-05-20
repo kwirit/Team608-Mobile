@@ -197,7 +197,7 @@ object ErrorStore {
         103 to INVALID_CHARACTERS,
         104 to EMPTY_NAME,
         105 to INCORRECT_ARRAY_ELEMENT_NAME,
-        106 to
+//        106 to
 
         201 to REDECLARING_A_VARIABLE,
         202 to INITIALIZATION_ERROR,

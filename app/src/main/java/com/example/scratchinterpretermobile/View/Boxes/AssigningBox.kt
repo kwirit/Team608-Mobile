@@ -54,7 +54,7 @@ class AssigningBox: ProgramBox() {
                         ArrayAssignment(arrayBlock)
                     }
                 }
-                Text(text = mainContext.getVar("hi")!!.value.toString())
+//                Text(text = mainContext.getVar("hi")!!.value.toString())
         }) {
         }
     }
