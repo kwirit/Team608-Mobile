@@ -2,6 +2,8 @@ package com.example.scratchinterpretermobile.Model
 
 import com.example.scratchinterpretermobile.Controller.Error.CLASS_DOESNT_NOT_EXIST
 import com.example.scratchinterpretermobile.Controller.Error.CONTEXT_IS_NULL
+import com.example.scratchinterpretermobile.Controller.Error.EMPTY_ARITHMETIC
+import com.example.scratchinterpretermobile.Controller.Error.EMPTY_NAME
 import com.example.scratchinterpretermobile.Controller.Error.INVALID_ARRAY_ELEMENT_ASSIGNMENT
 import com.example.scratchinterpretermobile.Controller.Error.INVALID_ASSIGNMENT_ARRAY
 import com.example.scratchinterpretermobile.Controller.Error.INVALID_ASSIGNMENT_INTEGER
@@ -117,6 +119,9 @@ class AssignmentBlock:InstructionBlock() {
 
     fun processInput(nameVariable:String, valueVariable:String, arrayIndex:String = String()): Int {
         if(mainContext == null) return CONTEXT_IS_NULL.id
+
+        if(nameVariable.isEmpty()) return EMPTY_NAME.id
+        else if(valueVariable.isEmpty()) return EMPTY_ARITHMETIC.id
 
         var varBlock = mainContext.getVar(nameVariable) ?: return VARIABLE_DOES_NOT_EXIST.id
 
