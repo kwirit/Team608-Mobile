@@ -6,8 +6,8 @@ import com.example.scratchinterpretermobile.Controller.validateNameVariable
 import com.example.scratchinterpretermobile.Controller.validateSyntaxArrayName
 
 class PrintBlock(
-    private var output: String = "",
-    private var consoleOutput: String = ""
+    public var output: String = "",
+    public var consoleOutput: String = ""
 ) : InstructionBlock() {
 
     fun updateOutput(newOutput: String) {
@@ -27,7 +27,7 @@ class PrintBlock(
         else {
             val (resultCalculation, errorCalculation) = calculationArithmeticExpression(output)
             if (errorCalculation == 0) {
-                consoleOutput.plus(resultCalculation.toString())
+                consoleOutput = resultCalculation.toString()
             }
             else return errorCalculation
         }
