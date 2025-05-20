@@ -19,6 +19,7 @@ import com.example.scratchinterpretermobile.Model.IntegerArrayBlock
 import com.example.scratchinterpretermobile.Model.IntegerBlock
 import com.example.scratchinterpretermobile.Model.VarBlock
 import com.example.scratchinterpretermobile.Model.Variable
+import com.example.scratchinterpretermobile.Model.mainContext
 import com.example.scratchinterpretermobile.View.BaseStructure.BaseBox
 import com.example.scratchinterpretermobile.View.Boxes.ProgramBox
 import com.example.scratchinterpretermobile.View.Widgets.ListOfVar
@@ -53,7 +54,7 @@ class AssigningBox: ProgramBox() {
                         ArrayAssignment(arrayBlock)
                     }
                 }
-                Text(text = ErrorStore.get(code)!!.title)
+                Text(text = mainContext.getVar("hi")!!.value.toString())
         }) {
         }
     }

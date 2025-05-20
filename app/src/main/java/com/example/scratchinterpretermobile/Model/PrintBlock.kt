@@ -7,7 +7,7 @@ import com.example.scratchinterpretermobile.Controller.validateSyntaxArrayName
 
 class PrintBlock(
     private var output: String = "",
-    private var consoleOutput: String = ""
+    public var consoleOutput: String = ""
 ) : InstructionBlock() {
 
     fun updateOutput(newOutput: String) {
