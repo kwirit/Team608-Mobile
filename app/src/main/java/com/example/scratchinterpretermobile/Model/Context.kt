@@ -87,4 +87,15 @@ class Context {
         }
         return result
     }
+
+    fun GetListVarBlock(): MutableList<VarBlock> {
+        val result = mutableListOf<VarBlock>();
+        for(scope in context) {
+            for((key, value ) in scope) {
+                result.add(value)
+            }
+        }
+
+        return result
+    }
 }
