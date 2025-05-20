@@ -27,3 +27,17 @@ class Stack<T> : Iterable<T> {
     fun toList(): List<T> = elements.toList()
     fun toReversedList(): List<T> = elements.asReversed()
 }
+
+
+/*
+    -1 - ошибка
+    0 - IntegerBlock
+    1 - IntegerArrayBlock
+ */
+fun GetTypeVarBlock(nameVarBlock:String): Int {
+    val varBlock = mainContext.getVar(nameVarBlock);
+
+    if(varBlock is IntegerBlock) return 0
+    else if(varBlock is IntegerArrayBlock) return 1
+    else return -1
+}
