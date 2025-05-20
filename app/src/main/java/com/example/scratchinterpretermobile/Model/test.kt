@@ -1,6 +1,6 @@
 package com.example.scratchinterpretermobile.Model
 
 fun main() {
-    val assignmentBlock = AssignmentBlock()
-
+    val initBlock = InitBlock()
+    initBlock.processInput("ar", "10")
 }

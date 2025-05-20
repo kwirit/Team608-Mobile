@@ -38,7 +38,9 @@ class InitBlock : InstructionBlock() {
         val (arrayLength, arifmeticError) = calculationArithmeticExpression(arrayLength)
         if(arifmeticError != SUCCESS.id) return arifmeticError
 
-        val newBlock = IntegerArrayBlock(word, mutableListOf<Int>(arrayLength))
+        val list = MutableList<Int>(arrayLength) {0}
+//        val newBlock = IntegerArrayBlock(word, mutableListOf<Int>(arrayLength))
+        val newBlock = IntegerArrayBlock(word, list)
         newBlocks.add((newBlock))
 
         return SUCCESS.id
