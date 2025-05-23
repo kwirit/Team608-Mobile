@@ -24,8 +24,8 @@ import org.burnoutcrew.reorderable.rememberReorderableLazyListState
 import org.burnoutcrew.reorderable.reorderable
 
 @Composable
-fun VerticalReorderList(list: MutableList<ProgramBox>) {
-    val data by rememberUpdatedState(newValue = list)
+fun VerticalReorderList(viewModel: MainViewModel) {
+    val data by rememberUpdatedState(newValue = viewModel.boxes)
     val state = rememberReorderableLazyListState(onMove = { from, to ->
         data.apply {
             add(to.index, removeAt(from.index))

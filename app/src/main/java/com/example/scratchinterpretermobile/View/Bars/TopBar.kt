@@ -35,7 +35,9 @@ fun TopBar(showBoxesState: MutableState<Boolean>){
         ) {
             Icon(painter = painterResource(R.drawable.baseline_add), contentDescription = null, modifier = Modifier.size(50.dp))
         }
-        Button(modifier = Modifier.padding(top = 18.dp, end = 20.dp).size(60.dp),onClick = {},
+        Button(modifier = Modifier.padding(top = 18.dp, end = 20.dp).size(60.dp),onClick = {
+
+        },
             colors = ButtonDefaults.buttonColors(
                 containerColor = LightOrange,
                 contentColor = Color.Green),

@@ -3,28 +3,34 @@ package com.example.scratchinterpretermobile.View
 import androidx.compose.runtime.*
 import androidx.lifecycle.ViewModel
 import com.example.scratchinterpretermobile.Model.InstructionBlock
+import com.example.scratchinterpretermobile.View.Boxes.ArrayInitializationBox
+import com.example.scratchinterpretermobile.View.Boxes.AssigningBox
+import com.example.scratchinterpretermobile.View.Boxes.ConsoleBox
+import com.example.scratchinterpretermobile.View.Boxes.IfBox
+import com.example.scratchinterpretermobile.View.Boxes.ProgramBox
+import com.example.scratchinterpretermobile.View.Boxes.VariableInitializationBox
 
 class MainViewModel :ViewModel() {
+    val boxes = mutableStateListOf<ProgramBox>()
 
-    var isCurrentlyDragging by mutableStateOf(false)
-        private set
-
-    var items by mutableStateOf(emptyList<InstructionBlock>())
-        private set
-
-    var addedPersons = mutableStateListOf<InstructionBlock>()
-        private set
-
-    fun startDragging(){
-        isCurrentlyDragging = true
-    }
-    fun stopDragging(){
-        isCurrentlyDragging = false
+    fun addAssigningBox() {
+        boxes.add(AssigningBox())
     }
 
-    fun addPerson(personUiItem: InstructionBlock){
-        println("Added Person")
-        addedPersons.add(personUiItem)
+    fun addIfBox() {
+        boxes.add(IfBox())
+    }
+
+    fun addConsoleBox() {
+        boxes.add(ConsoleBox())
+    }
+
+    fun addVariableInitBox() {
+        boxes.add(VariableInitializationBox())
+    }
+
+    fun addArrayInitBox() {
+        boxes.add(ArrayInitializationBox())
     }
 
 }

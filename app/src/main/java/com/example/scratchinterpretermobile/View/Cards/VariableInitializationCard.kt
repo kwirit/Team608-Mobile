@@ -12,9 +12,9 @@ import com.example.scratchinterpretermobile.View.Boxes.VariableInitializationBox
 import com.example.scratchinterpretermobile.View.Boxes.ProgramBox
 
 @Composable
-fun VariableInitializationCard(listOfBoxes: MutableList<ProgramBox>, showBoxesState: MutableState<Boolean> = mutableStateOf(false)){
+fun VariableInitializationCard(onAdd: () -> Unit, showBoxesState: MutableState<Boolean> = mutableStateOf(false)){
     BaseCard(name = "Инициализация переменной", onClick = {
-        listOfBoxes.add(VariableInitializationBox())
+        onAdd()
         showBoxesState.value = false
     }) {
         TextField(modifier =  Modifier.size(80.dp),onValueChange = {}, value = "text")

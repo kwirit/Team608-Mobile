@@ -55,18 +55,17 @@ import org.burnoutcrew.reorderable.*
 @Composable
 fun MainScreen(viewModel: MainViewModel) {
     val showBoxesState = remember { mutableStateOf(false) }
-    val listOfBoxes = remember { mutableStateListOf<ProgramBox>() }
     val screenState = remember { mutableIntStateOf(0) }
 
-    if(showBoxesState.value == true){
-        CreateBoxesDialog(showBoxesState, viewModel, listOfBoxes)
+    if (showBoxesState.value) {
+        CreateBoxesDialog(showBoxesState, viewModel)
     }
 
     Column {
         TopBar(showBoxesState)
         Box ( Modifier.weight(1f)){
             if(screenState.intValue == 0){
-                CodeBlocksScreen(listOfBoxes)
+                CodeBlocksScreen(viewModel)
             }
             else if (screenState.intValue == 1){
                 ConsoleScreen()
@@ -75,14 +74,11 @@ fun MainScreen(viewModel: MainViewModel) {
         BottomBar(screenState)
     }
 
-    if (showBoxesState.value) {
-        CreateBoxesDialog(showBoxesState, viewModel, listOfBoxes)
-    }
 }
 
 @Composable
-fun CodeBlocksScreen(listOfBoxes: MutableList<ProgramBox>){
-    VerticalReorderList(listOfBoxes)
+fun CodeBlocksScreen(viewModel: MainViewModel){
+    VerticalReorderList(viewModel)
 }
 
 @Composable

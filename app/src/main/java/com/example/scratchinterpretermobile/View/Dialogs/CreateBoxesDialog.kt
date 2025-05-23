@@ -12,17 +12,17 @@ import com.example.scratchinterpretermobile.View.Cards.VariableInitializationCar
 import com.example.scratchinterpretermobile.View.MainViewModel
 
 @Composable
-fun CreateBoxesDialog(showBoxesState: MutableState<Boolean>, viewModel: MainViewModel, listOfBoxes: MutableList<ProgramBox>){
+fun CreateBoxesDialog(showBoxesState: MutableState<Boolean>, viewModel: MainViewModel){
     val list = mutableListOf<Variable>()
     list.add(Variable("test1",1))
     list.add(Variable("test2",2))
     list.add(Variable("test3",3))
     list.add(Variable("test4",4))
-    CustomDialog(showBoxesState){
-        VariableInitializationCard(listOfBoxes, showBoxesState)
-        AssigningCard(listOfBoxes,showBoxesState)
-        IfCard(listOfBoxes,showBoxesState)
-        ConsoleCard(listOfBoxes,showBoxesState)
-        ArrayInitializationCard(listOfBoxes,showBoxesState)
+    CustomDialog(showBoxesState) {
+        VariableInitializationCard(onAdd = { viewModel.addVariableInitBox() }, showBoxesState)
+        AssigningCard(onAdd = { viewModel.addAssigningBox() }, showBoxesState)
+        IfCard(onAdd = { viewModel.addIfBox() }, showBoxesState)
+        ConsoleCard(onAdd = { viewModel.addConsoleBox() }, showBoxesState)
+        ArrayInitializationCard(onAdd = { viewModel.addArrayInitBox() }, showBoxesState)
     }
 }
