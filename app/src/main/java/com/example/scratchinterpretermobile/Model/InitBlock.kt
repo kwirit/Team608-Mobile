@@ -1,6 +1,7 @@
 package com.example.scratchinterpretermobile.Model
 
 import com.example.scratchinterpretermobile.Controller.Error.CONTEXT_IS_NULL
+import com.example.scratchinterpretermobile.Controller.Error.INVAILD_ARRAY_LENGTH
 import com.example.scratchinterpretermobile.Controller.Error.MULTIPLE_INITIALIZATION
 import com.example.scratchinterpretermobile.Controller.Error.REDECLARING_A_VARIABLE
 import com.example.scratchinterpretermobile.Controller.Error.SUCCESS
@@ -37,9 +38,9 @@ class InitBlock : InstructionBlock() {
 
         val (arrayLength, arifmeticError) = calculationArithmeticExpression(arrayLength)
         if(arifmeticError != SUCCESS.id) return arifmeticError
+        else if(arrayLength <= 0) return INVAILD_ARRAY_LENGTH.id;
 
         val list = MutableList<Int>(arrayLength) {0}
-//        val newBlock = IntegerArrayBlock(word, mutableListOf<Int>(arrayLength))
         val newBlock = IntegerArrayBlock(word, list)
         newBlocks.add((newBlock))
 
@@ -99,6 +100,7 @@ class InitBlock : InstructionBlock() {
         }
 
         if(fillError != SUCCESS.id) return fillError
+        
 
         updateContext(newBlocks)
 
