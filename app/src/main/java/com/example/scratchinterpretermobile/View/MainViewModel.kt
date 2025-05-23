@@ -1,5 +1,6 @@
 package com.example.scratchinterpretermobile.View
 
+import android.util.Log
 import androidx.compose.runtime.*
 import androidx.lifecycle.ViewModel
 import com.example.scratchinterpretermobile.Model.InstructionBlock
@@ -31,6 +32,23 @@ class MainViewModel :ViewModel() {
 
     fun addArrayInitBox() {
         boxes.add(ArrayInitializationBox())
+    }
+
+    fun parseCardToInstructionBoxes(list: MutableList<ProgramBox>): MutableList<InstructionBlock>{
+        var instructionList: MutableList<InstructionBlock> = mutableListOf()
+        for (card in list){
+            instructionList.add(card.value)
+        }
+        return instructionList
+    }
+
+    fun run(){
+        val instructionList: MutableList<InstructionBlock> = parseCardToInstructionBoxes(boxes)
+        Log.d("MainViewModel", "Instruction list size: ${instructionList.size}")
+
+        for ((index, instruction) in instructionList.withIndex()) {
+            Log.d("MainViewModel", "Instruction[$index] = $instruction")
+        }
     }
 
 }

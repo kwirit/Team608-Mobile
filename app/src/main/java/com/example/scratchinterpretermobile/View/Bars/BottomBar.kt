@@ -19,11 +19,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.scratchinterpretermobile.R
+import com.example.scratchinterpretermobile.View.MainViewModel
 import com.example.scratchinterpretermobile.ui.theme.LightOrange
 import com.example.scratchinterpretermobile.ui.theme.Orange
 
 @Composable
-fun BottomBar(screenState: MutableState<Int>){
+fun BottomBar(screenState: MutableState<Int>,viewModel: MainViewModel){
     Row(Modifier.fillMaxWidth().height(100.dp).background(color = Orange), horizontalArrangement = Arrangement.Center){
         Button(modifier = Modifier.padding(top = 18.dp, end = 60.dp).size(60.dp),onClick = {
             screenState.value=0

@@ -62,7 +62,7 @@ fun MainScreen(viewModel: MainViewModel) {
     }
 
     Column {
-        TopBar(showBoxesState)
+        TopBar(showBoxesState, viewModel)
         Box ( Modifier.weight(1f)){
             if(screenState.intValue == 0){
                 CodeBlocksScreen(viewModel)
@@ -71,7 +71,7 @@ fun MainScreen(viewModel: MainViewModel) {
                 ConsoleScreen()
             }
         }
-        BottomBar(screenState)
+        BottomBar(screenState, viewModel)
     }
 
 }

@@ -19,11 +19,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.scratchinterpretermobile.R
+import com.example.scratchinterpretermobile.View.MainViewModel
 import com.example.scratchinterpretermobile.ui.theme.LightOrange
 import com.example.scratchinterpretermobile.ui.theme.Orange
 
 @Composable
-fun TopBar(showBoxesState: MutableState<Boolean>){
+fun TopBar(showBoxesState: MutableState<Boolean>, viewModel: MainViewModel){
     Row(Modifier.fillMaxWidth().height(100.dp).background(color = Orange), horizontalArrangement = Arrangement.End){
         Button(modifier = Modifier.padding(top = 18.dp, end = 20.dp).size(60.dp),onClick = {
             showBoxesState.value = true },
@@ -36,7 +37,7 @@ fun TopBar(showBoxesState: MutableState<Boolean>){
             Icon(painter = painterResource(R.drawable.baseline_add), contentDescription = null, modifier = Modifier.size(50.dp))
         }
         Button(modifier = Modifier.padding(top = 18.dp, end = 20.dp).size(60.dp),onClick = {
-
+            viewModel.run()
         },
             colors = ButtonDefaults.buttonColors(
                 containerColor = LightOrange,
