@@ -5,8 +5,8 @@ import com.example.scratchinterpretermobile.Controller.calculationArithmeticExpr
 import com.example.scratchinterpretermobile.Controller.validateNameVariable
 
 class PrintBlock(
-    private var output: String = "",
-    private var consoleOutput: String = ""
+    var output: String = "",
+    var consoleOutput: String = ""
 ) : InstructionBlock() {
 
     fun updateOutput(newOutput: String) {

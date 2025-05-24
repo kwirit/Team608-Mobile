@@ -5,7 +5,7 @@ class Interpreter() {
         interpreterContext.clear()
 
         for (block in blocksToRun) {
-            block.setContext(interpreterContext)
+            block.context = interpreterContext
             val result = block.run();
             if (result != 0) {
                 return result
