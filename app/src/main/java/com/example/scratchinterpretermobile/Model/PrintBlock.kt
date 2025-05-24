@@ -3,7 +3,6 @@ package com.example.scratchinterpretermobile.Model
 import com.example.scratchinterpretermobile.Controller.Error.VARIABLE_NOT_FOUND
 import com.example.scratchinterpretermobile.Controller.calculationArithmeticExpression
 import com.example.scratchinterpretermobile.Controller.validateNameVariable
-import com.example.scratchinterpretermobile.Controller.validateSyntaxArrayName
 
 class PrintBlock(
     public var output: String = "",

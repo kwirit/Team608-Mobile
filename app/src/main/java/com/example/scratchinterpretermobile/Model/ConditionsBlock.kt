@@ -4,10 +4,10 @@ import com.example.scratchinterpretermobile.Controller.calculationArithmeticExpr
 import com.example.scratchinterpretermobile.Model.Context
 
 class ConditionsBlock(
-    private val leftPartCondition: String,
-    private val rightPartCondition: String,
-    private val operator: String = "=="
 ) : InstructionBlock() {
+    private var operator: String = "=="
+    private var leftPartCondition: String = ""
+    private var rightPartCondition: String = ""
 
     private var resultValue: Boolean = false
 
@@ -18,6 +18,12 @@ class ConditionsBlock(
 
     init {
         mainContext.pushScope(scope)
+    }
+
+    fun processInput(leftPartCondition: String, rightPartCondition: String, operator: String) {
+        this.leftPartCondition = leftPartCondition
+        this.rightPartCondition = rightPartCondition
+        this.operator = operator
     }
 
     /**
