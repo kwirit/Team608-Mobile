@@ -16,7 +16,7 @@ class InitBlock : InstructionBlock() {
         for(name in names) {
             val validateNameVariableError = validateNameVariable(name)
             if(validateNameVariableError != SUCCESS.id) return validateNameVariableError
-            else if(mainContext.getVar(name) != null) return REDECLARING_A_VARIABLE.id
+            else if(context.getVar(name) != null) return REDECLARING_A_VARIABLE.id
 
             variableNames.add(name)
         }
@@ -25,10 +25,10 @@ class InitBlock : InstructionBlock() {
     }
 
     fun initIntegerBlock(input:String): Int {
-        if(mainContext == null) return CONTEXT_IS_NULL.id
+        if(context == null) return CONTEXT_IS_NULL.id
 
         // Удаляем инициализированные переменные этого блока из контекста
-        for(varBlock in newVarBlocks) mainContext.removeVar(varBlock.getName())
+        for(varBlock in newVarBlocks) context.removeVar(varBlock.getName())
         newVarBlocks.clear()
 
         val variableNames = mutableListOf<String>()
@@ -36,7 +36,7 @@ class InitBlock : InstructionBlock() {
         if(fillError != SUCCESS.id) return fillError
 
         // Добавляем новые переменные в контекст и сохраняем их копию
-        val scoupe = mainContext.peekScope()
+        val scoupe = context.peekScope()
         for(variableName in variableNames) {
             val newIntegerBlock = IntegerBlock(variableName, 0)
             newVarBlocks.add(newIntegerBlock.getCopy())
@@ -47,10 +47,10 @@ class InitBlock : InstructionBlock() {
     }
 
     fun initIntegerArrayBlock(inputArrayName:String, inputArrayLength:String): Int {
-        if(mainContext == null) return CONTEXT_IS_NULL.id
+        if(context == null) return CONTEXT_IS_NULL.id
 
         // Удаляем инициализированные переменные этого блока из контекста
-        for(varBlock in newVarBlocks) mainContext.removeVar(varBlock.getName())
+        for(varBlock in newVarBlocks) context.removeVar(varBlock.getName())
         newVarBlocks.clear()
 
         val arrayNames = mutableListOf<String>()
@@ -64,7 +64,7 @@ class InitBlock : InstructionBlock() {
         else if(arrayLength <= 0) return INVALID_ARRAY_LENGTH.id
 
         // Добавляем новый массив в контекст и сохраняем копию
-        val scope = mainContext.peekScope()
+        val scope = context.peekScope()
         for(arrayName in arrayNames) {
             val newIntegerArrayBlock = IntegerArrayBlock(arrayName, MutableList<Int>(arrayLength) {0})
             newVarBlocks.add(newIntegerArrayBlock.getCopy())

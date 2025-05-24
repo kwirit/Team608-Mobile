@@ -6,6 +6,7 @@ import com.example.scratchinterpretermobile.Controller.Error.ARRAY_EXPECTED
 import com.example.scratchinterpretermobile.Controller.Error.ARRAY_INVALID_ELEMENT
 import com.example.scratchinterpretermobile.Controller.Error.ARRAY_NOT_FOUND
 import com.example.scratchinterpretermobile.Controller.Error.DIVISION_BY_ZERO
+import com.example.scratchinterpretermobile.Controller.Error.EMPTY_ARITHMETIC
 import com.example.scratchinterpretermobile.Controller.Error.EMPTY_NAME
 import com.example.scratchinterpretermobile.Controller.Error.INCORRECT_ARRAY_ELEMENT_NAME
 import com.example.scratchinterpretermobile.Controller.Error.INVALID_ARRAY_ACCESS
@@ -104,7 +105,7 @@ fun processArrayAccess(element: String): Int {
 
     if (arrayBlock !is IntegerArrayBlock) return ARRAY_EXPECTED.id
 
-    val array = arrayBlock.value as? MutableList<Int> ?: return ARRAY_INVALID_ELEMENT.id
+    val array = arrayBlock.getValue() ?: return ARRAY_INVALID_ELEMENT.id
 
     if (indexValue < 0 || indexValue >= array.size) return ARRAY_BOUNDS_ERROR.id
 
@@ -202,7 +203,7 @@ fun transferPrefixToPostfix(elements: MutableList<String>): Pair<MutableList<Str
                     validateNameVariable(element) == 0 && mainContext.getVar(element) != null -> {
                         val value = mainContext.getVar(element)
                         if (value is IntegerBlock) {
-                            postfix.add(value.value.toString())
+                            postfix.add(value.getValue().toString())
                         }
                         else {
                             return Pair(mutableListOf(), ARRAY_EXPECTED.id)
@@ -262,6 +263,7 @@ fun calculationPostfix(postfix: MutableList<String>): Pair<Int, Int> {
             stack.push(value!!)
         }
     }
+    if(stack.isEmpty()) return Pair(-1, EMPTY_ARITHMETIC.id)
     return Pair(stack.pop()!!, 0);
 }
 
