@@ -18,7 +18,7 @@ class InitBlock : InstructionBlock() {
             val validateNameVariableError = validateNameVariable(word)
             if(validateNameVariableError != SUCCESS.id) return validateNameVariableError
 
-            if(mainContext.getVar(word) != null) return REDECLARING_A_VARIABLE.id
+            if(context.getVar(word) != null) return REDECLARING_A_VARIABLE.id
 
             val newBlock = IntegerBlock(word, 0)
             newBlocks.add(newBlock)
@@ -38,7 +38,7 @@ class InitBlock : InstructionBlock() {
         val validateNameVariableError = validateNameVariable(word)
         if(validateNameVariableError != SUCCESS.id) return validateNameVariableError
 
-        if(mainContext.getVar(word) != null) return REDECLARING_A_VARIABLE.id;
+        if(context.getVar(word) != null) return REDECLARING_A_VARIABLE.id;
 
         val (arrayLength, arifmeticError) = calculationArithmeticExpression(arrayLength)
         if(arifmeticError != SUCCESS.id) return arifmeticError
@@ -52,7 +52,7 @@ class InitBlock : InstructionBlock() {
     }
 
     private fun updateContext(newBlocks: MutableList<VarBlock>): Int {
-        val scope = mainContext.peekScope()
+        val scope = context.peekScope()
 
         for(varBlock in newVarBlocks) {
             scope!!.remove(varBlock.name)
@@ -67,7 +67,7 @@ class InitBlock : InstructionBlock() {
 
     private fun removeContextChanges() {
         for(varBlock in newVarBlocks) {
-            mainContext.removeVar(varBlock.name)
+            context.removeVar(varBlock.name)
         }
 
         return;
@@ -88,7 +88,7 @@ class InitBlock : InstructionBlock() {
     }
 
 //    fun initIntegerArray(variableName: String, arrayLength:String = String()): Int {
-//        if(mainContext.peekScope() == null) return CONTEXT_IS_NULL.id
+//        if(context.peekScope() == null) return CONTEXT_IS_NULL.id
 //
 //        removeContextChanges()
 //
@@ -103,7 +103,7 @@ class InitBlock : InstructionBlock() {
 //    }
 
 //    fun initInteger(variableName: String): Int {
-//        if(mainContext.peekScope() == null) return CONTEXT_IS_NULL.id
+//        if(context.peekScope() == null) return CONTEXT_IS_NULL.id
 //
 //        removeContextChanges()
 //
@@ -119,7 +119,7 @@ class InitBlock : InstructionBlock() {
 //    }
 
     fun processInput(variableName:String, arrayLength:String = String()): Int {
-        if(mainContext.peekScope() == null) return CONTEXT_IS_NULL.id
+        if(context.peekScope() == null) return CONTEXT_IS_NULL.id
 
         // Отменяем изменения контекста
         removeContextChanges()

@@ -15,13 +15,15 @@ class LoopBlock(
     private var scope: HashMap<String, VarBlock> = hashMapOf();
 
     init {
-        mainContext.pushScope(scope)
+        context.pushScope(scope)
     }
+
     fun processInput(leftPartCondition: String, rightPartCondition: String, operator: String) {
         this.leftPartCondition = leftPartCondition
         this.rightPartCondition = rightPartCondition
         this.operator = operator
     }
+
     /**
      * Выполняет сравнение двух арифметических выражений на основе заданного оператора.
      * @return 0 в случае успеха, код ошибки — в случае неудачи.
@@ -51,15 +53,12 @@ class LoopBlock(
         return 0
     }
 
-    fun addThenBlock(index: Int, block: InstructionBlock) {
-        blocksToRun.add(index, block)
-    }
 
     override fun run(): Int {
         var compareError = compare()
 
         if (compareError != 0){
-            mainContext.popScope();
+            context.popScope();
             return compareError
         }
 
@@ -67,17 +66,17 @@ class LoopBlock(
             for (block in blocksToRun) {
                 val result = block.run();
                 if (result != 0) {
-                    mainContext.popScope();
+                    context.popScope();
                     return result
                 }
             }
             compareError = compare()
             if (compareError != 0){
-                mainContext.popScope();
+                context.popScope();
                 return compareError
             }
         }
-        mainContext.popScope()
+        context.popScope()
         return 0;
     }
 }
