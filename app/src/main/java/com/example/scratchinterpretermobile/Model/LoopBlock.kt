@@ -3,10 +3,10 @@ package com.example.scratchinterpretermobile.Model
 import com.example.scratchinterpretermobile.Controller.calculationArithmeticExpression
 
 class LoopBlock(
-    private val leftPartCondition: String,
-    private val rightPartCondition: String,
-    private val operator: String = "=="
 ) : InstructionBlock() {
+    private var leftPartCondition: String = ""
+    private var rightPartCondition: String = ""
+    private var operator: String = "=="
 
     private var resultValue: Boolean = false
 
@@ -17,7 +17,11 @@ class LoopBlock(
     init {
         mainContext.pushScope(scope)
     }
-
+    fun processInput(leftPartCondition: String, rightPartCondition: String, operator: String) {
+        this.leftPartCondition = leftPartCondition
+        this.rightPartCondition = rightPartCondition
+        this.operator = operator
+    }
     /**
      * Выполняет сравнение двух арифметических выражений на основе заданного оператора.
      * @return 0 в случае успеха, код ошибки — в случае неудачи.
