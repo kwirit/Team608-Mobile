@@ -28,6 +28,8 @@ class InitBlock : InstructionBlock() {
     }
 
     private fun fillIntegerArrayBlock(variableName: String, arrayLength: String, newBlocks: MutableList<VarBlock>): Int {
+        if(arrayLength.isEmpty()) return INVAILD_ARRAY_LENGTH.id
+
         val words = variableName.split(",").map { it.trim() }
         if(words.size > 1) return MULTIPLE_INITIALIZATION.id
 
@@ -85,20 +87,20 @@ class InitBlock : InstructionBlock() {
         return SUCCESS.id
     }
 
-//    fun initIntegerArray(variableName: String, arrayLength: String): Int {
-//        if(mainContext.peekScope() == null) return CONTEXT_IS_NULL.id
-//
-//        removeContextChanges()
-//
-//        val newBlocks = mutableListOf<VarBlock>()
-//        val fillError = fillIntegerArrayBlock(variableName, arrayLength, newBlocks)
-//        if(fillError != SUCCESS.id) return fillError
-//
-//        updateContext(newBlocks)
-//        updateNewVarBlocks(newBlocks)
-//
-//        return SUCCESS.id
-//    }
+    fun initIntegerArray(variableName: String, arrayLength:String = String()): Int {
+        if(mainContext.peekScope() == null) return CONTEXT_IS_NULL.id
+
+        removeContextChanges()
+
+        val newBlocks = mutableListOf<VarBlock>()
+        val fillError = fillIntegerArrayBlock(variableName, arrayLength, newBlocks)
+        if(fillError != SUCCESS.id) return fillError
+
+        updateContext(newBlocks)
+        updateNewVarBlocks(newBlocks)
+
+        return SUCCESS.id
+    }
 
 //    fun initInteger(variableName: String): Int {
 //        if(mainContext.peekScope() == null) return CONTEXT_IS_NULL.id
