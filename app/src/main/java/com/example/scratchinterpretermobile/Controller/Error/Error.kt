@@ -207,6 +207,13 @@ val VARIABLE_NOT_FOUND = Error(
     "variable"
 )
 
+val INVALID_CHARACTERS_IN_STRING = Error(
+    701,
+    "Invalid characters in string",
+    "The string contains disallowed or unsupported characters.",
+    "string"
+)
+
 object ErrorStore {
     private val errorMap = mapOf(
         0 to SUCCESS,
@@ -218,7 +225,6 @@ object ErrorStore {
         103 to INVALID_CHARACTERS,
         104 to EMPTY_NAME,
         105 to INCORRECT_ARRAY_ELEMENT_NAME,
-//        106 to
 
         201 to REDECLARING_A_VARIABLE,
         202 to INITIALIZATION_ERROR,
@@ -243,6 +249,8 @@ object ErrorStore {
 //        503 to INVALID_ARRAY_ELEMENT_ASSIGNMENT
         504 to INVALID_ARRAY_INDEX,
         601 to VARIABLE_NOT_FOUND,
+
+        701 to INVALID_CHARACTERS_IN_STRING,
     )
 
     fun get(id: Int): Error? = errorMap[id]
