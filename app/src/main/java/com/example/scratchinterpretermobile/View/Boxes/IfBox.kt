@@ -1,6 +1,7 @@
 package com.example.scratchinterpretermobile.View.Boxes
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -20,8 +21,8 @@ import com.example.scratchinterpretermobile.View.Widgets.VerticalReorderList
 
 class IfBox: ProgramBox() {
     val boxes = mutableStateListOf<ProgramBox>()
-    val showBoxesState = mutableStateOf(false)
     override val value = ConditionsBlock();
+    val showInnerBoxesState = mutableStateOf(false)
     @Composable
     override fun render(){
         BaseBox(name = "Условие", showState,
@@ -29,11 +30,11 @@ class IfBox: ProgramBox() {
 
         },
             dialogContent = {
-                Box(Modifier.fillMaxSize()){
-                    InnerCreationButton(showBoxesState, modifier = Modifier.padding(10.dp).align(Alignment.TopEnd))
+                Column {
+                    InnerCreationButton(showInnerBoxesState)
                     VerticalReorderList(boxes)
-                    if(showBoxesState.value){
-                        CreateBoxesDialog(showBoxesState,boxes)
+                    if(showInnerBoxesState.value){
+                        CreateBoxesDialog(showInnerBoxesState,boxes)
                     }
                 }
         }) {
