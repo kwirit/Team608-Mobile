@@ -156,8 +156,7 @@ class AssignmentBlock:InstructionBlock() {
         return SUCCESS.id
     }
 
-
-
+    
     override fun run(): Int {
         return SUCCESS.id
     }
