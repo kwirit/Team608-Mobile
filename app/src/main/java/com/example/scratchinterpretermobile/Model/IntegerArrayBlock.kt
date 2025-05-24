@@ -1,22 +1,31 @@
 package com.example.scratchinterpretermobile.Model
 
 class IntegerArrayBlock(
-    override var name: String,
-    private var arrayValue: MutableList<Int>
-) : VarBlock() {
+    private var name:String,
+    private var value:MutableList<Int>
+): VarBlock<MutableList<Int>> {
 
-    override var value: Any
-        get() = arrayValue
-        set(value) {
-            arrayValue = value as MutableList<Int>
-        }
-}
+    override fun getName(): String {
+        return name
+    }
 
-fun getCopyIntegerArrayBlock(varBlock: IntegerArrayBlock): IntegerArrayBlock {
-    val name = varBlock.name
-    val original = varBlock.value as MutableList<Int>
+    override fun setName(newName: String) {
+        name = newName
+    }
 
-    val copyList = original.toMutableList()
+    override fun getValue(): MutableList<Int> {
+        return value
+    }
 
-    return IntegerArrayBlock(name, copyList)
+    override fun setValue(newValue: MutableList<Int>) {
+        value = newValue
+    }
+
+    fun getCopy(): IntegerArrayBlock {
+        val originalName = name
+        val originalValue = value
+
+        return IntegerArrayBlock(originalName, originalValue.toMutableList())
+    }
+
 }

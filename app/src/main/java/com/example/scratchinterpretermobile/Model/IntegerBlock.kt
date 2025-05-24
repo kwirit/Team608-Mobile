@@ -1,21 +1,31 @@
 package com.example.scratchinterpretermobile.Model
 
 class IntegerBlock(
-    override var name: String,
-    private var intValue: Int
-) : VarBlock() {
-    override var value: Any
-        get() = intValue
-        set(value) {
-            intValue = value as Int
-        }
-}
+    private var name:String,
+    private var value:Int
+): VarBlock<Int> {
 
-fun getCopyIntegerBlock(varBlock: IntegerBlock): IntegerBlock {
-    val name = varBlock.name
-    val original = varBlock.value as Int
+    override fun getName(): String {
+        return name
+    }
 
-    val copyBlock = IntegerBlock(name, original)
+    override fun setName(newName: String) {
+        name = newName
+    }
 
-    return copyBlock
+    override fun getValue(): Int {
+        return value
+    }
+
+    override fun setValue(newValue: Int) {
+        value = newValue
+    }
+
+    fun getCopy(): IntegerBlock {
+        val originalName = name
+        val originalValue = value
+
+        return IntegerBlock(originalName, originalValue)
+    }
+
 }
