@@ -1,7 +1,9 @@
 package com.example.scratchinterpretermobile.View.Dialogs
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -21,7 +23,7 @@ fun CustomDialog(showState: MutableState<Boolean>, content:@Composable () -> Uni
             usePlatformDefaultWidth = false),
         onDismissRequest = {showState.value = false},
     ) {
-        Column(Modifier.width(320.dp).height(600.dp).padding(20.dp).background(color = Color.White, shape = RoundedCornerShape(20.dp))) {
+        Column(Modifier.fillMaxWidth().height(600.dp).padding(20.dp).background(color = Color.White, shape = RoundedCornerShape(20.dp))) {
             content()
         }
     }

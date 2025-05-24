@@ -1,12 +1,27 @@
 package com.example.scratchinterpretermobile.View.Boxes
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
-import com.example.scratchinterpretermobile.Model.InitBlock
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import com.example.scratchinterpretermobile.Model.ConditionsBlock
 import com.example.scratchinterpretermobile.View.BaseStructure.BaseBox
-import com.example.scratchinterpretermobile.View.Boxes.ProgramBox
+import com.example.scratchinterpretermobile.View.Dialogs.CreateBoxesDialog
+import com.example.scratchinterpretermobile.View.Widgets.InnerCreationButton
+import com.example.scratchinterpretermobile.View.Widgets.VerticalReorderList
 
 class IfBox: ProgramBox() {
-    override val value = InitBlock();
+    val boxes = mutableStateListOf<ProgramBox>()
+    val showBoxesState = mutableStateOf(false)
+    override val value = ConditionsBlock();
     @Composable
     override fun render(){
         BaseBox(name = "Условие", showState,
@@ -14,7 +29,13 @@ class IfBox: ProgramBox() {
 
         },
             dialogContent = {
-
+                Box(Modifier.fillMaxSize()){
+                    InnerCreationButton(showBoxesState, modifier = Modifier.padding(10.dp).align(Alignment.TopEnd))
+                    VerticalReorderList(boxes)
+                    if(showBoxesState.value){
+                        CreateBoxesDialog(showBoxesState,boxes)
+                    }
+                }
         }) {
         }
     }

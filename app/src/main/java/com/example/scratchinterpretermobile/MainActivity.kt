@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -25,15 +26,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 //import com.example.scratchinterpretermobile.View.DragableScreen
 import com.example.scratchinterpretermobile.View.MainScreen
-import com.example.scratchinterpretermobile.View.MainViewModel
+import com.example.scratchinterpretermobile.View.ViewModels.MainViewModel
 import com.example.scratchinterpretermobile.ui.theme.ScratchInterpreterMobileTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val mainViewModel = MainViewModel()
+        val mainViewModel: MainViewModel by viewModels()
         setContent {
-            MainScreen(mainViewModel)
+            ScratchInterpreterMobileTheme {
+                MainScreen(mainViewModel)
+            }
         }
     }
 }

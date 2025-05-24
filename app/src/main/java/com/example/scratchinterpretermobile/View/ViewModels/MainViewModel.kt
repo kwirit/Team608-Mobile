@@ -1,9 +1,12 @@
-package com.example.scratchinterpretermobile.View
+package com.example.scratchinterpretermobile.View.ViewModels
 
-import android.util.Log
-import androidx.compose.runtime.*
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.lifecycle.ViewModel
 import com.example.scratchinterpretermobile.Model.InstructionBlock
+import com.example.scratchinterpretermobile.Model.Interpreter
 import com.example.scratchinterpretermobile.View.Boxes.ArrayInitializationBox
 import com.example.scratchinterpretermobile.View.Boxes.AssigningBox
 import com.example.scratchinterpretermobile.View.Boxes.ConsoleBox
@@ -11,28 +14,11 @@ import com.example.scratchinterpretermobile.View.Boxes.IfBox
 import com.example.scratchinterpretermobile.View.Boxes.ProgramBox
 import com.example.scratchinterpretermobile.View.Boxes.VariableInitializationBox
 
-class MainViewModel :ViewModel() {
+class MainViewModel : ViewModel() {
+    val showBoxesState = mutableStateOf(false)
+    val screenState =  mutableIntStateOf(0)
+
     val boxes = mutableStateListOf<ProgramBox>()
-
-    fun addAssigningBox() {
-        boxes.add(AssigningBox())
-    }
-
-    fun addIfBox() {
-        boxes.add(IfBox())
-    }
-
-    fun addConsoleBox() {
-        boxes.add(ConsoleBox())
-    }
-
-    fun addVariableInitBox() {
-        boxes.add(VariableInitializationBox())
-    }
-
-    fun addArrayInitBox() {
-        boxes.add(ArrayInitializationBox())
-    }
 
     fun parseCardToInstructionBoxes(list: MutableList<ProgramBox>): MutableList<InstructionBlock>{
         var instructionList: MutableList<InstructionBlock> = mutableListOf()
@@ -44,11 +30,8 @@ class MainViewModel :ViewModel() {
 
     fun run(){
         val instructionList: MutableList<InstructionBlock> = parseCardToInstructionBoxes(boxes)
-        Log.d("MainViewModel", "Instruction list size: ${instructionList.size}")
-
-        for ((index, instruction) in instructionList.withIndex()) {
-            Log.d("MainViewModel", "Instruction[$index] = $instruction")
-        }
+        val interpreter: Interpreter = Interpreter()
+//        interpreter.run(instructionList)
     }
 
 }
