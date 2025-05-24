@@ -1,23 +1,11 @@
 package com.example.scratchinterpretermobile.Model
 
-class Interpreter(
-    blocksToRun: MutableList<InstructionBlock> = mutableListOf()
-) {
-    var blocksToRun: MutableList<InstructionBlock> = mutableListOf()
-    // хранит скрипт где каждый элемент скрипта - блок-инструкция
+class Interpreter() {
+    fun run(blocksToRun: MutableList<InstructionBlock> = mutableListOf()): Int {
+        interpreterContext.clear()
 
-    fun add(index: Int, block: InstructionBlock) {
-        blocksToRun.add(index, block);
-    }
-    fun remove(block: InstructionBlock) {
-        blocksToRun.remove(block)
-    }
-    fun removeByIndex(index: Int) {
-        blocksToRun.removeAt(index)
-    }
-
-    fun run(): Int {
         for (block in blocksToRun) {
+            block.setContext(interpreterContext)
             val result = block.run();
             if (result != 0) {
                 return result
