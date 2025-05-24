@@ -1,6 +1,8 @@
 package com.example.scratchinterpretermobile.Model
 
-abstract class VarBlock {
-    abstract var name: String
-    abstract var value: Any
+interface VarBlock<T>{
+    fun getName(): String
+    fun setName(newName: String)
+    fun getValue(): T
+    fun setValue(newValue: T)
 }
