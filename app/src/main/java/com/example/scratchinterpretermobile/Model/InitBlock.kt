@@ -85,6 +85,37 @@ class InitBlock : InstructionBlock() {
         return SUCCESS.id
     }
 
+//    fun initIntegerArray(variableName: String, arrayLength: String): Int {
+//        if(mainContext.peekScope() == null) return CONTEXT_IS_NULL.id
+//
+//        removeContextChanges()
+//
+//        val newBlocks = mutableListOf<VarBlock>()
+//        val fillError = fillIntegerArrayBlock(variableName, arrayLength, newBlocks)
+//        if(fillError != SUCCESS.id) return fillError
+//
+//        updateContext(newBlocks)
+//        updateNewVarBlocks(newBlocks)
+//
+//        return SUCCESS.id
+//    }
+
+//    fun initInteger(variableName: String): Int {
+//        if(mainContext.peekScope() == null) return CONTEXT_IS_NULL.id
+//
+//        removeContextChanges()
+//
+//        val newBlocks = mutableListOf<VarBlock>()
+//
+//        val fillError = fillIntegerBlock(variableName, newBlocks)
+//        if(fillError != SUCCESS.id) return fillError
+//
+//        updateContext(newBlocks)
+//        updateNewVarBlocks(newBlocks)
+//
+//        return SUCCESS.id
+//    }
+
     fun processInput(variableName:String, arrayLength:String = String()): Int {
         if(mainContext.peekScope() == null) return CONTEXT_IS_NULL.id
 
@@ -102,7 +133,7 @@ class InitBlock : InstructionBlock() {
         }
 
         if(fillError != SUCCESS.id) return fillError
-        
+
 
         updateContext(newBlocks)
 
