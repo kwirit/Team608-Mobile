@@ -1,7 +1,7 @@
 package com.example.scratchinterpretermobile.Model
 
 class Context {
-    private val context = Stack<HashMap<String, VarBlock>>().apply {
+    private val context = Stack<HashMap<String, VarBlock<*>>>().apply {
         push(HashMap())
     }
 
@@ -28,7 +28,7 @@ class Context {
         return false
     }
 
-    fun getVar(key: String): VarBlock? {
+    fun getVar(key: String): VarBlock<*>? {
         for (scope in context) {
             if (scope.containsKey(key)) {
                 return scope[key]
@@ -37,7 +37,7 @@ class Context {
         return null
     }
 
-    fun setVar(key: String, varBlock: VarBlock) {
+    fun setVar(key: String, varBlock: VarBlock<*>) {
         for (scope in context) {
             if (scope.containsKey(key)) {
                 scope[key] = varBlock
@@ -59,9 +59,9 @@ class Context {
         return;
     }
 
-    fun pushScope(scope: HashMap<String, VarBlock> = HashMap()) = context.push(scope)
-    fun popScope(): HashMap<String, VarBlock>? = context.pop()
-    fun peekScope(): HashMap<String, VarBlock>? = context.peek()
+    fun pushScope(scope: HashMap<String, VarBlock<*>> = HashMap()) = context.push(scope)
+    fun popScope(): HashMap<String, VarBlock<*>>? = context.pop()
+    fun peekScope(): HashMap<String, VarBlock<*>>? = context.peek()
 
     fun clear() = context.clear()
 
@@ -88,8 +88,8 @@ class Context {
         return result
     }
 
-    fun GetListVarBlock(): MutableList<VarBlock> {
-        val result = mutableListOf<VarBlock>();
+    fun GetListVarBlock(): MutableList<VarBlock<*>> {
+        val result = mutableListOf<VarBlock<*>>();
         for(scope in context) {
             for((key, value ) in scope) {
                 result.add(value)

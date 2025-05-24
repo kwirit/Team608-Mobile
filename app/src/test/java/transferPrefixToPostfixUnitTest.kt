@@ -12,7 +12,7 @@ import com.example.scratchinterpretermobile.Model.mainContext
 class transferPrefixToPostfixUnitTest {
     @Test
     fun test() {
-        val scope = hashMapOf<String, VarBlock>()
+        val scope = hashMapOf<String, VarBlock<*>>()
         scope["i"] = IntegerBlock("i", 2)
 
         scope["arr"] = IntegerArrayBlock("arr", mutableListOf(10, 20, 30, 40))

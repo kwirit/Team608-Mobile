@@ -12,7 +12,7 @@ class LoopBlock(
 
     private var blocksToRun: MutableList<InstructionBlock> = mutableListOf()
 
-    private var scope: HashMap<String, VarBlock> = hashMapOf();
+    private var scope: HashMap<String, VarBlock<*>> = hashMapOf();
 
     init {
         context.pushScope(scope)

@@ -7,7 +7,7 @@ import org.junit.Assert.*
 class calculationUnitTest {
     @Test
     fun testBasicArithmetic() {
-        val scope = hashMapOf<String, VarBlock>()
+        val scope = hashMapOf<String, VarBlock<*>>()
 
         scope["x"] = IntegerBlock("x", 10)
         scope["y"] = IntegerBlock("y", 5)
@@ -22,7 +22,7 @@ class calculationUnitTest {
 
     @Test
     fun testWithArrayAccess() {
-        val scope = hashMapOf<String, VarBlock>()
+        val scope = hashMapOf<String, VarBlock<*>>()
         scope["i"] = IntegerBlock("i", 2)
 
         scope["arr"] = IntegerArrayBlock("arr", mutableListOf(10, 20, 30, 40))
@@ -36,7 +36,7 @@ class calculationUnitTest {
 
     @Test
     fun testNestedExpressions() {
-        val scope = hashMapOf<String, VarBlock>()
+        val scope = hashMapOf<String, VarBlock<*>>()
         scope["a"] = IntegerBlock("a", 10)
         scope["b"] = IntegerBlock("b", 2)
         scope["c"] = IntegerBlock("c", 3)
@@ -65,7 +65,7 @@ class calculationUnitTest {
 
     @Test
     fun testArrayInArray() {
-        val scope = hashMapOf<String, VarBlock>()
+        val scope = hashMapOf<String, VarBlock<*>>()
         scope["a"] = IntegerBlock("a", 1)
         scope["i"] = IntegerBlock("i", 2)
         scope["b"] = IntegerBlock("b", 2)

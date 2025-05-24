@@ -22,10 +22,10 @@ class PrintBlock(
         if (output == "") return 0
         val errorValidateNameVariable = validateNameVariable(output)
         if (errorValidateNameVariable == 0) {
-            val value: VarBlock = context.getVar(output) ?: return VARIABLE_NOT_FOUND.id
+            val value: VarBlock<*> = context.getVar(output) ?: return VARIABLE_NOT_FOUND.id
             when (value) {
-                is IntegerArrayBlock -> consoleOutput = (value.value as MutableList<Int>).joinToString(separator = " ")
-                is IntegerBlock -> consoleOutput = (value.value as Int).toString()
+                is IntegerArrayBlock -> consoleOutput = value.getValue().joinToString(separator = " ")
+                is IntegerBlock -> consoleOutput = value.getValue().toString()
             }
         }
         else {
