@@ -149,7 +149,7 @@ val MULTIPLE_INITIALIZATION = Error(
     "Multiple initialization of arrays is not allowed",
     "array"
 )
-val INVAILD_ARRAY_LENGTH = Error(
+val INVALID_ARRAY_LENGTH = Error(
     413,
     "Invalid array length",
     "The length of the array must be a natural number.",
@@ -219,7 +219,7 @@ object ErrorStore {
         410 to ARRAY_EXPECTED,
         411 to ARRAY_INVALID_ELEMENT,
         412 to MULTIPLE_INITIALIZATION,
-        413 to INVAILD_ARRAY_LENGTH,
+        413 to INVALID_ARRAY_LENGTH,
 
         500 to VARIABLE_DOES_NOT_EXIST,
 //        501 to INVALID_ASSIGNMENT_INTEGER,
