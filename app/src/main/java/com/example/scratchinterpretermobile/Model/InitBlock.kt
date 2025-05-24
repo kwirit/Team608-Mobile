@@ -36,6 +36,8 @@ class InitBlock : InstructionBlock() {
         val validateNameVariableError = validateNameVariable(word)
         if(validateNameVariableError != SUCCESS.id) return validateNameVariableError
 
+        if(mainContext.getVar(word) != null) return REDECLARING_A_VARIABLE.id;
+
         val (arrayLength, arifmeticError) = calculationArithmeticExpression(arrayLength)
         if(arifmeticError != SUCCESS.id) return arifmeticError
         else if(arrayLength <= 0) return INVAILD_ARRAY_LENGTH.id;
