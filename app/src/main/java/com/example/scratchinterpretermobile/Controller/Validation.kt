@@ -3,7 +3,6 @@ package com.example.scratchinterpretermobile.Controller
 
 import com.example.scratchinterpretermobile.Controller.Error.ARRAY_BOUNDS_ERROR
 import com.example.scratchinterpretermobile.Controller.Error.ARRAY_EXPECTED
-import com.example.scratchinterpretermobile.Controller.Error.ARRAY_INVALID_ELEMENT
 import com.example.scratchinterpretermobile.Controller.Error.ARRAY_NOT_FOUND
 import com.example.scratchinterpretermobile.Controller.Error.DIVISION_BY_ZERO
 import com.example.scratchinterpretermobile.Controller.Error.EMPTY_ARITHMETIC
@@ -16,7 +15,7 @@ import com.example.scratchinterpretermobile.Controller.Error.INVALID_VARIABLE_ST
 import com.example.scratchinterpretermobile.Controller.Error.UNMATCHED_PARENTHESES
 import com.example.scratchinterpretermobile.Controller.Error.VARIABLE_HAS_SPACE
 import com.example.scratchinterpretermobile.Model.Stack
-import com.example.scratchinterpretermobile.Model.mainContext
+import com.example.scratchinterpretermobile.Model.UIContext
 import com.example.scratchinterpretermobile.Model.IntegerArrayBlock
 import com.example.scratchinterpretermobile.Model.IntegerBlock
 import com.example.scratchinterpretermobile.Model.StringBlock
@@ -111,7 +110,7 @@ fun processArrayAccess(element: String): Pair<Int, Int> {
         return Pair(-1, indexError)
     }
 
-    val arrayBlock = mainContext.getVar(arrayName) ?: return Pair(-1, ARRAY_NOT_FOUND.id)
+    val arrayBlock = UIContext.getVar(arrayName) ?: return Pair(-1, ARRAY_NOT_FOUND.id)
 
     if (arrayBlock !is IntegerArrayBlock) return Pair(-1, ARRAY_EXPECTED.id)
 
@@ -211,9 +210,9 @@ fun transferPrefixToPostfix(elements: MutableList<String>): Pair<MutableList<Str
                 when {
                     validateConst(element) == 0 -> postfix.add(element)
 
-                    validateNameVariable(element) == 0 && mainContext.getVar(element) != null -> {
+                    validateNameVariable(element) == 0 && UIContext.getVar(element) != null -> {
 
-                        when (val value = mainContext.getVar(element)) {
+                        when (val value = UIContext.getVar(element)) {
                             is IntegerBlock -> postfix.add(value.getValue().toString())
                             is StringBlock -> postfix.add(value.getValue())
                             else -> return Pair(mutableListOf(), ARRAY_EXPECTED.id)
@@ -321,8 +320,8 @@ fun transferStringPrefixToPostfix(elements: MutableList<String>): Pair<MutableLi
                     validateConst(element) == 0 -> postfix.add(Pair(element, "Const"))
                     validateString(element) == 0 -> postfix.add(Pair(element, "String"))
 
-                    validateNameVariable(element) == 0 && mainContext.getVar(element) != null -> {
-                        when (val value = mainContext.getVar(element)) {
+                    validateNameVariable(element) == 0 && UIContext.getVar(element) != null -> {
+                        when (val value = UIContext.getVar(element)) {
                             is IntegerBlock -> postfix.add(Pair(value.getValue().toString(), "Const"))
                             is StringBlock -> postfix.add(Pair(value.getValue(), "String"))
                             else -> return Pair(mutableListOf(), ARRAY_EXPECTED.id)

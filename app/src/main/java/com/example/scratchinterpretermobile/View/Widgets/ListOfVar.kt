@@ -9,11 +9,11 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import com.example.scratchinterpretermobile.Model.VarBlock
-import com.example.scratchinterpretermobile.Model.mainContext
+import com.example.scratchinterpretermobile.Model.UIContext
 
 @Composable
 fun ListOfVar(): MutableState<VarBlock<*>?> {
-    val variables = mainContext.GetListVarBlock()
+    val variables = UIContext.GetListVarBlock()
     val selectedVariable = remember { mutableStateOf<VarBlock<*>?>(null) }
     val expanded = remember { mutableStateOf(false) }
 

@@ -5,24 +5,16 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import com.example.scratchinterpretermobile.Controller.Error.ErrorStore
 import com.example.scratchinterpretermobile.Model.AssignmentBlock
-import com.example.scratchinterpretermobile.Model.InitBlock
 import com.example.scratchinterpretermobile.Model.IntegerArrayBlock
 import com.example.scratchinterpretermobile.Model.IntegerBlock
 import com.example.scratchinterpretermobile.Model.VarBlock
-import com.example.scratchinterpretermobile.Model.Variable
-import com.example.scratchinterpretermobile.Model.mainContext
 import com.example.scratchinterpretermobile.View.BaseStructure.BaseBox
-import com.example.scratchinterpretermobile.View.Boxes.ProgramBox
 import com.example.scratchinterpretermobile.View.Widgets.ListOfVar
 import com.example.scratchinterpretermobile.View.Widgets.VariableTextField
 

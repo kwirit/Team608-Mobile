@@ -1,6 +1,6 @@
 package com.example.scratchinterpretermobile.Model
 
-var mainContext = Context()
+var UIContext = Context()
 var interpreterContext = Context()
 
 class Stack<T> : Iterable<T> {

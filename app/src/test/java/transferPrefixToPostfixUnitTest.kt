@@ -2,12 +2,10 @@ import org.junit.Test
 import org.junit.After
 import org.junit.Assert.*
 import com.example.scratchinterpretermobile.Controller.transferPrefixToPostfix
-import com.example.scratchinterpretermobile.Controller.validateArrayName
-import com.example.scratchinterpretermobile.Model.Context
 import com.example.scratchinterpretermobile.Model.IntegerArrayBlock
 import com.example.scratchinterpretermobile.Model.IntegerBlock
 import com.example.scratchinterpretermobile.Model.VarBlock
-import com.example.scratchinterpretermobile.Model.mainContext
+import com.example.scratchinterpretermobile.Model.UIContext
 
 class transferPrefixToPostfixUnitTest {
     @Test
@@ -17,7 +15,7 @@ class transferPrefixToPostfixUnitTest {
 
         scope["arr"] = IntegerArrayBlock("arr", mutableListOf(10, 20, 30, 40))
 
-        mainContext.pushScope(scope)
+        UIContext.pushScope(scope)
 
         val (result, error) = transferPrefixToPostfix(mutableListOf("arr[i+1]"))
         assertEquals(0, error)
@@ -26,7 +24,7 @@ class transferPrefixToPostfixUnitTest {
 
     @After
     fun tearDown() {
-        mainContext.clear()
+        UIContext.clear()
     }
 
 }
