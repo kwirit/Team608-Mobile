@@ -42,34 +42,35 @@ class AssigningBox: ProgramBox() {
     override fun render(){
         BaseBox(name = "Присваивание", showState,
             onConfirmButton = {
-                if(isVar.value){
-                    value.assignIntegerBlock(selectedVariable.value!!.getName(),arithmeticField)
-                }
-                else if(isIndexArray.value){
-                    if(arrayIndex == ""){
-                        value.assignIntegerArrayBlock(selectedVariable.value!!.getName(),arithmeticField)
-                    }
-                    else{
-                        value.assignElementIntegerArrayBlock(selectedVariable.value!!.getName(),arrayIndex,arithmeticField)
-                    }
-                }
-                else if(isArray.value){
-                    for((index,field) in arrayListField.withIndex()){
-                        value.assignElementIntegerArrayBlock(selectedVariable.value!!.getName(),index.toString(),field)
-                    }
-                }
+//                if(isVar.value){
+//                    value.assignIntegerBlock(selectedVariable.value!!.getName(),arithmeticField)
+//                }
+//                else if(isIndexArray.value){
+//                    if(arrayIndex == ""){
+//                        value.assignIntegerArrayBlock(selectedVariable.value!!.getName(),arithmeticField)
+//                    }
+//                    else{
+//                        value.assignElementIntegerArrayBlock(selectedVariable.value!!.getName(),arrayIndex,arithmeticField)
+//                    }
+//                }
+//                else if(isArray.value){
+//                    for((index,field) in arrayListField.withIndex()){
+//                        value.assignElementIntegerArrayBlock(selectedVariable.value!!.getName(),index.toString(),field)
+//                    }
+//                }
         },
             dialogContent = {
-                Row{
-                    selectedVariable = ListOfVar()
-                    if (selectedVariable.value is IntegerBlock) {
-                        arithmeticField = ""
+                Row {
+                    selectedVariable = ListOfVar(previousVar = selectedVariable)
+                    if (selectedVariable.value is IntegerBlock || isVar.value) {
+                        isVar.value = true
+                        isArray.value = false
+                        isIndexArray.value = false
                         VariableAssignment()
                     }
-                    if(selectedVariable.value is IntegerArrayBlock){
-                        arithmeticField = ""
-                        val arrayBlock = selectedVariable.value as IntegerArrayBlock
-                        ArrayAssignment(arrayBlock)
+                    if (selectedVariable.value is IntegerArrayBlock || isArray.value || isIndexArray.value) {
+                        isVar.value = false
+                        ArrayAssignment()
                     }
                 }
         }) {
@@ -82,7 +83,7 @@ class AssigningBox: ProgramBox() {
         }, value = arithmeticField)
     }
     @Composable
-    fun ArrayAssignment(arrayBlock: IntegerArrayBlock){
+    fun ArrayAssignment(){
         Checkbox(
             checked = checkVariableState.value,
             onCheckedChange = {
@@ -101,11 +102,13 @@ class AssigningBox: ProgramBox() {
             SingleElementInput()
         }
         if(checkArrayState.value){
-            AllElementsInput(arrayBlock)
+            AllElementsInput()
         }
     }
     @Composable
     fun SingleElementInput(){
+        isIndexArray.value = true
+        isArray.value = false
         VariableTextField(onValueChange = {newText ->
             arrayIndex = newText;
         }, value = arrayIndex)
@@ -114,8 +117,14 @@ class AssigningBox: ProgramBox() {
         }, value = arithmeticField)
     }
     @Composable
-    fun AllElementsInput(arrayBlock: IntegerArrayBlock) {
-        val arraySize = arrayBlock.getValue().size
+    fun AllElementsInput() {
+        isArray.value = true
+        isIndexArray.value = false
+
+        val arraySize = when (val varBlock = selectedVariable.value) {
+            is IntegerArrayBlock -> varBlock.getValue().size
+            else -> 0
+        }
 
         if (arrayListField.size != arraySize) {
             arrayListField.clear()
