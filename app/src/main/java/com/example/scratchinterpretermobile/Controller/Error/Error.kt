@@ -79,6 +79,13 @@ val INITIALIZATION_ERROR = Error(
     "initialization"
 )
 
+val ASSIGNING_DIFFERENT_TYPES = Error(
+    203,
+    "Assigning different types",
+    "Assigning different data types is prohibited.",
+    "initialization"
+)
+
 // 300
 
 val INCORRECT_ARITHMETIC_EXPRESSION = Error(
@@ -185,6 +192,14 @@ val INVALID_ARRAY_ELEMENT_ASSIGNMENT = Error(
     "assignment"
 )
 
+val INVALID_ARRAY_INDEX = Error(
+    504,
+    "Invalid array index",
+    "The element index is out of array bounds",
+    "assignment"
+)
+
+// 600
 val VARIABLE_NOT_FOUND = Error(
     601,
     "Variable not found",
@@ -213,6 +228,7 @@ object ErrorStore {
 
         201 to REDECLARING_A_VARIABLE,
         202 to INITIALIZATION_ERROR,
+        203 to ASSIGNING_DIFFERENT_TYPES,
 
         301 to INCORRECT_ARITHMETIC_EXPRESSION,
         302 to DIVISION_BY_ZERO,
@@ -231,6 +247,7 @@ object ErrorStore {
 //        501 to INVALID_ASSIGNMENT_INTEGER,
         502 to INVALID_ASSIGNMENT_ARRAY,
 //        503 to INVALID_ARRAY_ELEMENT_ASSIGNMENT
+        504 to INVALID_ARRAY_INDEX,
         601 to VARIABLE_NOT_FOUND,
 
         701 to INVALID_CHARACTERS_IN_STRING,

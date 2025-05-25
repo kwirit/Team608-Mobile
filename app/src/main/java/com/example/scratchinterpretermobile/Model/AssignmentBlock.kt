@@ -1,143 +1,162 @@
 package com.example.scratchinterpretermobile.Model
 
-import com.example.scratchinterpretermobile.Controller.Error.CLASS_DOESNT_NOT_EXIST
-import com.example.scratchinterpretermobile.Controller.Error.CONTEXT_IS_NULL
-import com.example.scratchinterpretermobile.Controller.Error.EMPTY_ARITHMETIC
-import com.example.scratchinterpretermobile.Controller.Error.EMPTY_NAME
-import com.example.scratchinterpretermobile.Controller.Error.INVALID_ARRAY_ELEMENT_ASSIGNMENT
+import com.example.scratchinterpretermobile.Controller.Error.ASSIGNING_DIFFERENT_TYPES
+import com.example.scratchinterpretermobile.Controller.Error.INVALID_ARRAY_ACCESS
+import com.example.scratchinterpretermobile.Controller.Error.INVALID_ARRAY_INDEX
 import com.example.scratchinterpretermobile.Controller.Error.INVALID_ASSIGNMENT_ARRAY
-import com.example.scratchinterpretermobile.Controller.Error.INVALID_ASSIGNMENT_INTEGER
 import com.example.scratchinterpretermobile.Controller.Error.SUCCESS
 import com.example.scratchinterpretermobile.Controller.Error.VARIABLE_DOES_NOT_EXIST
 import com.example.scratchinterpretermobile.Controller.calculationArithmeticExpression
+import com.example.scratchinterpretermobile.Controller.validateNameVariable
+
 
 class AssignmentBlock:InstructionBlock() {
-    var oldVarBlock:VarBlock? = null
-    var newVarBlock:VarBlock? = null
+    private var newVarBlock:VarBlock<*>? = null
 
-    private fun updateOldVarBlock(varBlock: VarBlock): Int {
-        if(varBlock is IntegerBlock) {
-            oldVarBlock = getCopyIntegerBlock(varBlock)
-        }
-        else if(varBlock is IntegerArrayBlock) {
-            oldVarBlock = getCopyIntegerArrayBlock(varBlock)
-        }
+    private fun getIntegerBlock(integerName: String, integerValue: String): Pair<IntegerBlock, Int> {
+        val newIntegerBlock = IntegerBlock("", 0)
+
+        val name = integerName.trim()
+        val validateNameError = validateNameVariable(name)
+        if(validateNameError != SUCCESS.id) return Pair(newIntegerBlock, validateNameError)
+
+        val integerBlock = context.getVar(name) ?: return Pair(newIntegerBlock, VARIABLE_DOES_NOT_EXIST.id)
+
+        if(!(integerBlock is IntegerBlock)) return Pair(newIntegerBlock, ASSIGNING_DIFFERENT_TYPES.id)
+
+        val (value, calculationValueError) = calculationArithmeticExpression(integerValue)
+        if(calculationValueError != SUCCESS.id) return Pair(newIntegerBlock, calculationValueError)
+
+        newIntegerBlock.setName(name)
+        newIntegerBlock.setValue(value)
+
+        return Pair(newIntegerBlock, SUCCESS.id)
+    }
+
+    fun assignIntegerBlock(integerName:String, integerValue:String):Int {
+        val (newIntegerBlock, getError) = getIntegerBlock(integerName, integerValue)
+        if(getError != SUCCESS.id) return getError
+
+        context.setVar(newIntegerBlock.getName(), newIntegerBlock)
+        newVarBlock = newIntegerBlock.getCopy()
 
         return SUCCESS.id
     }
 
-    private fun assignmentIntegerBlock(varBlock: IntegerBlock, valueVariable: String): Int {
-        var newIntegerBlock = getCopyIntegerBlock(varBlock)
+    private fun getIntegerArrayBlockByElements(arrayName: String, arrayElements: List<String>): Pair<IntegerArrayBlock, Int> {
+        val newIntegerArrayBlock = IntegerArrayBlock(arrayName, mutableListOf<Int>())
 
-        val (newValue, calculatingError) = calculationArithmeticExpression(valueVariable)
-        if(calculatingError != SUCCESS.id) return calculatingError
+        val name = arrayName.trim()
+        val validateNameError = validateNameVariable(arrayName)
+        if(validateNameError != SUCCESS.id) return Pair(newIntegerArrayBlock, validateNameError)
 
-        varBlock.value = newValue // Работа с контекстом проверить
+        val arrayBlock = context.getVar(arrayName) ?: return Pair(newIntegerArrayBlock, VARIABLE_DOES_NOT_EXIST.id)
 
-        newIntegerBlock.value = newValue
-        newVarBlock = newIntegerBlock
+        if(!(arrayBlock is IntegerArrayBlock)) return Pair(newIntegerArrayBlock, ASSIGNING_DIFFERENT_TYPES.id)
+
+        if(arrayElements.size != arrayBlock.getValue().size) return Pair(newIntegerArrayBlock, INVALID_ARRAY_ACCESS.id)
+
+        val value = mutableListOf<Int>()
+        for(arrayElement in arrayElements) {
+            val (arrayElementValue, calculationValueError) = calculationArithmeticExpression(arrayElement)
+            if(calculationValueError != SUCCESS.id) return Pair(newIntegerArrayBlock, calculationValueError)
+
+            value.add(arrayElementValue)
+        }
+
+        newIntegerArrayBlock.setName(name)
+        newIntegerArrayBlock.setValue(value)
+
+        return Pair(newIntegerArrayBlock, SUCCESS.id)
+    }
+
+    private fun getIntegerArrayBlockByArray(arrayName: String, anotherArrayName: String): Pair<IntegerArrayBlock, Int> {
+        val newIntegerArrayBlock = IntegerArrayBlock("", mutableListOf<Int>())
+
+        // первый массив
+        val name = arrayName.trim()
+        val validateNameError = validateNameVariable(name)
+        if(validateNameError != SUCCESS.id) return Pair(newIntegerArrayBlock, validateNameError)
+        val integerBlock = context.getVar(name) ?: return Pair(newIntegerArrayBlock, VARIABLE_DOES_NOT_EXIST.id)
+
+        // второй массив
+        val anotherName = anotherArrayName.trim()
+        val validateAnotherNameError = validateNameVariable(anotherName)
+        if(validateAnotherNameError != SUCCESS.id) return Pair(newIntegerArrayBlock, validateAnotherNameError)
+        val anotherIntegerBlock = context.getVar(anotherName) ?: return Pair(newIntegerArrayBlock, VARIABLE_DOES_NOT_EXIST.id)
+
+        if(!(integerBlock is IntegerArrayBlock) || !(anotherIntegerBlock is IntegerArrayBlock)) {
+            return Pair(newIntegerArrayBlock, ASSIGNING_DIFFERENT_TYPES.id)
+        }
+
+        newIntegerArrayBlock.setName(anotherIntegerBlock.getName())
+        newIntegerArrayBlock.setValue(anotherIntegerBlock.getValue())
+
+        return Pair(newIntegerArrayBlock, SUCCESS.id)
+    }
+
+
+    fun assignIntegerArrayBlock(arrayName:String, arrayValue: String): Int {
+        val arrayElements = arrayValue.split(",").map { it.trim() }
+
+        var newIntegerArrayBlock: IntegerArrayBlock? = null
+        if(arrayElements.size >= 1) {
+            if(arrayElements.size > 1) {
+                val (resultingArray, getError) = getIntegerArrayBlockByElements(arrayName, arrayElements)
+                if(getError != SUCCESS.id) return getError
+                newIntegerArrayBlock = resultingArray
+            }
+            else {
+                val (resultingArray, getError) = getIntegerArrayBlockByArray(arrayName, arrayElements[0])
+                if(getError != SUCCESS.id) return getError
+                newIntegerArrayBlock = resultingArray
+            }
+        }
+        else return INVALID_ASSIGNMENT_ARRAY.id
+
+        context.setVar(newIntegerArrayBlock.getName(), newIntegerArrayBlock)
+        newVarBlock = newIntegerArrayBlock.getCopy()
 
         return SUCCESS.id
     }
 
-    private fun assignmentArrayElement(varBlock: IntegerArrayBlock, valueVariable: String, arrayIndex: String) : Int {
+    private fun getIntegerArrayBlockByElement(arrayName: String, arrayIndex: String, arrayElementValue: String): Pair<IntegerArrayBlock, Int> {
+        val newIntegerArrayBlock = IntegerArrayBlock("", mutableListOf<Int>())
+
+        val name = arrayName.trim()
+        val validateNameError = validateNameVariable(name)
+        if(validateNameError != SUCCESS.id) return Pair(newIntegerArrayBlock, validateNameError)
+
+        val integerArrayBlock = context.getVar(name) ?: return Pair(newIntegerArrayBlock, VARIABLE_DOES_NOT_EXIST.id)
+        if(!(integerArrayBlock is IntegerArrayBlock)) return Pair(newIntegerArrayBlock, ASSIGNING_DIFFERENT_TYPES.id)
+
         val (index, calculationIndexError) = calculationArithmeticExpression(arrayIndex)
-        if(calculationIndexError != SUCCESS.id) return calculationIndexError
+        if(calculationIndexError != SUCCESS.id) return Pair(newIntegerArrayBlock, calculationIndexError)
+        else if((index < 0) || (index >= integerArrayBlock.getValue().size)) return Pair(newIntegerArrayBlock, INVALID_ARRAY_INDEX.id)
 
-        val (newValue, calculationValueError) = calculationArithmeticExpression(valueVariable)
-        if(calculationValueError != SUCCESS.id) return calculationValueError
+        val (elementValue, calculationElementValue) = calculationArithmeticExpression(arrayElementValue)
+        if(calculationElementValue != SUCCESS.id) return Pair(newIntegerArrayBlock, calculationElementValue)
 
-        val newIntegerArrayBlock = getCopyIntegerArrayBlock(varBlock)
-        (newIntegerArrayBlock.value as MutableList<Int>)[index] = newValue
+        val arrayValue = integerArrayBlock.getValue()
+        arrayValue[index] = elementValue
 
-        (varBlock.value as MutableList<Int>)[index] = newValue // Рвбота с контекстом проверить
+        newIntegerArrayBlock.setName(name)
+        newIntegerArrayBlock.setValue(arrayValue)
 
-        newVarBlock = newIntegerArrayBlock
+        return Pair(newIntegerArrayBlock, SUCCESS.id)
+    }
+
+    fun assignElementIntegerArrayBlock(arrayName:String, arrayIndex:String, arrayElementValue:String): Int {
+        val (newIntegerArrayBlock, getError) = getIntegerArrayBlockByElement(arrayName, arrayIndex, arrayElementValue)
+        if(getError != SUCCESS.id) return getError
+
+        context.setVar(newIntegerArrayBlock.getName(), newIntegerArrayBlock)
+        newVarBlock = newIntegerArrayBlock.getCopy()
 
         return SUCCESS.id
     }
 
-    private fun assignmentArray(varBlock: IntegerArrayBlock, valueVariable: String): Int {
-        val newIntegerArrayBlock = getCopyIntegerArrayBlock(varBlock)
-        var newValue = newIntegerArrayBlock.value as MutableList<Int>
-
-        val arifmeticExpressions = valueVariable.split(",")
-        if(arifmeticExpressions.size != newValue.size) return INVALID_ASSIGNMENT_ARRAY.id
-
-        var i = 0
-        for(arifmeticExpression in arifmeticExpressions) {
-            val (arifmeticResult, calculationError) = calculationArithmeticExpression(arifmeticExpression)
-            if(calculationError != SUCCESS.id) return calculationError
-
-            (varBlock.value as MutableList<Int>)[i] = arifmeticResult // Работа с контекстом проверить
-            newValue[i] = arifmeticResult
-
-            ++i
-        }
-
-        newVarBlock = newIntegerArrayBlock
-
-        return SUCCESS.id
-    }
-
-    private fun assignmentIntegerArrayBlock(varBlock: IntegerArrayBlock, valueVariable: String, arrayIndex: String): Int {
-        var assignmentError = SUCCESS.id
-
-        if(arrayIndex.isEmpty()) {
-            assignmentError = assignmentArray(varBlock, valueVariable)
-        }
-        else {
-            assignmentError = assignmentArrayElement(varBlock, valueVariable, arrayIndex)
-        }
-
-        if(assignmentError != SUCCESS.id) return assignmentError
-
-        return SUCCESS.id
-    }
-
-    private fun updateNewVarBlock(varBlock: VarBlock, valueVariable: String, arrayIndex: String): Int {
-        var assignmentError = SUCCESS.id
-
-        if(varBlock is IntegerBlock) {
-            assignmentError = assignmentIntegerBlock(varBlock, valueVariable)
-        }
-        else if(varBlock is IntegerArrayBlock) {
-            assignmentError = assignmentIntegerArrayBlock(varBlock, valueVariable, arrayIndex)
-        }
-        else return VARIABLE_DOES_NOT_EXIST.id
-
-        if(assignmentError != SUCCESS.id) return assignmentError
-
-        return SUCCESS.id
-    }
-
-    private fun removeContextChanges(varBlock: VarBlock) : Int {
-        if(oldVarBlock != null) mainContext.setVar(oldVarBlock!!.name, oldVarBlock!!)
-
-        return SUCCESS.id
-    }
-
-    fun processInput(nameVariable:String, valueVariable:String, arrayIndex:String = String()): Int {
-        if(mainContext == null) return CONTEXT_IS_NULL.id
-
-        if(nameVariable.isEmpty()) return EMPTY_NAME.id
-        else if(valueVariable.isEmpty()) return EMPTY_ARITHMETIC.id
-
-        var varBlock = mainContext.getVar(nameVariable) ?: return VARIABLE_DOES_NOT_EXIST.id
-
-        // откатываемся на прошлое сохранение при каждом изменении
-        removeContextChanges(varBlock)
-
-        // делаем сохранение
-        updateOldVarBlock(varBlock)
-
-        // Обновляем переменную которая будет присваиваться
-        val updateNewVarBlockError =  updateNewVarBlock(varBlock, valueVariable, arrayIndex)
-        if(updateNewVarBlockError != SUCCESS.id) return updateNewVarBlockError
-
-        return SUCCESS.id
-    }
-
+    
     override fun run(): Int {
         return SUCCESS.id
     }
