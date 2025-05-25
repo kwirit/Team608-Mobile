@@ -10,7 +10,9 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import android.util.Log;
+import androidx.compose.ui.Alignment
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -20,9 +22,8 @@ import com.example.scratchinterpretermobile.ui.theme.LightOrange
 
 @Composable
 fun InnerCreationButton(showState: MutableState<Boolean>,modifier: Modifier = Modifier){
-    Box(modifier = modifier){
-        Button(modifier = Modifier.padding(top = 18.dp, end = 20.dp).size(50.dp),onClick = {
-            Log.d("MyTag", "Это debug лог");
+    Box(modifier = modifier.fillMaxWidth()){
+        Button(modifier = Modifier.align(Alignment.TopEnd).padding(top = 18.dp, end = 20.dp).size(50.dp),onClick = {
             showState.value = true},
             colors = ButtonDefaults.buttonColors(
                 contentColor = Color.White),
