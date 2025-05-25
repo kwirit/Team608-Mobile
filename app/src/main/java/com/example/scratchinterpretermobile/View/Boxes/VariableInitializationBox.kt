@@ -24,7 +24,7 @@ class VariableInitializationBox : ProgramBox() {
     override fun render(){
         BaseBox(name = "Инициализация переменной", showState,
             onConfirmButton = {
-                code = this.value.processInput(text)
+                code = this.value.initIntegerBlock(text)
         },
             dialogContent = {
                 VariableTextField(onValueChange = { newText ->

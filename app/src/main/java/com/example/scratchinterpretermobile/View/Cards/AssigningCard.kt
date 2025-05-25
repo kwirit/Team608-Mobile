@@ -16,6 +16,5 @@ fun AssigningCard(onAdd: () -> Unit , showBoxesState: MutableState<Boolean> = mu
         onAdd()
         showBoxesState.value = false
     }) {
-        ListOfVar()
     }
 }

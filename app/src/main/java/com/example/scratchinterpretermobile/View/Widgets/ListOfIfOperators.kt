@@ -12,26 +12,26 @@ import com.example.scratchinterpretermobile.Model.VarBlock
 import com.example.scratchinterpretermobile.Model.mainContext
 
 @Composable
-fun ListOfVar(): MutableState<VarBlock<*>?> {
-    val variables = mainContext.GetListVarBlock()
-    val selectedVariable = remember { mutableStateOf<VarBlock<*>?>(null) }
+fun ListOfIfOperators(): String {
+    val operators = listOf<String>("==","!=","<",">","<=",">=",)
+    val selectedOperator = remember { mutableStateOf("Выберите оператор сравнения") }
     val expanded = remember { mutableStateOf(false) }
 
     TextButton(onClick = { expanded.value = true }) {
-        Text(text = selectedVariable.value?.getName() ?: "Выберите")
+        Text(text = selectedOperator.value)
     }
 
     DropdownMenu(expanded = expanded.value, onDismissRequest = { expanded.value = false }) {
-        variables.forEach { varBlock ->
+        operators.forEach { operator ->
             DropdownMenuItem(
                 onClick = {
-                    selectedVariable.value = varBlock
+                    selectedOperator.value = operator
                     expanded.value = false
                 },
-                text = { Text(varBlock.getName()) }
+                text = { Text(operator) }
             )
         }
     }
 
-    return selectedVariable
+    return selectedOperator.value
 }

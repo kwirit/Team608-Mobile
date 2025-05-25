@@ -9,6 +9,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -29,16 +30,33 @@ class AssigningBox: ProgramBox() {
     override val value = AssignmentBlock();
     val checkVariableState = mutableStateOf(true)
     val checkArrayState = mutableStateOf(false)
+    var arrayListField = mutableStateListOf<String>()
     var arithmeticField by mutableStateOf("")
     var arrayIndex by mutableStateOf("")
     var code by mutableIntStateOf(104)
-    var selectedVariable = mutableStateOf<VarBlock?>(null)
+    val isVar = mutableStateOf(false)
+    val isIndexArray = mutableStateOf(false)
+    val isArray = mutableStateOf(false)
+    var selectedVariable = mutableStateOf<VarBlock<*>?>(null)
     @Composable
     override fun render(){
         BaseBox(name = "Присваивание", showState,
             onConfirmButton = {
-                if(arithmeticField != ""){
-                    code = value.processInput(selectedVariable.value!!.name,arithmeticField)
+                if(isVar.value){
+                    value.assignIntegerBlock(selectedVariable.value!!.getName(),arithmeticField)
+                }
+                else if(isIndexArray.value){
+                    if(arrayIndex == ""){
+                        value.assignIntegerArrayBlock(selectedVariable.value!!.getName(),arithmeticField)
+                    }
+                    else{
+                        value.assignElementIntegerArrayBlock(selectedVariable.value!!.getName(),arrayIndex,arithmeticField)
+                    }
+                }
+                else if(isArray.value){
+                    for((index,field) in arrayListField.withIndex()){
+                        value.assignElementIntegerArrayBlock(selectedVariable.value!!.getName(),index.toString(),field)
+                    }
                 }
         },
             dialogContent = {
@@ -54,7 +72,6 @@ class AssigningBox: ProgramBox() {
                         ArrayAssignment(arrayBlock)
                     }
                 }
-//                Text(text = mainContext.getVar("hi")!!.value.toString())
         }) {
         }
     }
@@ -97,11 +114,25 @@ class AssigningBox: ProgramBox() {
         }, value = arithmeticField)
     }
     @Composable
-    fun AllElementsInput(arrayBlock: IntegerArrayBlock){
-        val arraySize = (arrayBlock.value as MutableList<Int>).size
+    fun AllElementsInput(arrayBlock: IntegerArrayBlock) {
+        val arraySize = arrayBlock.getValue().size
+
+        if (arrayListField.size != arraySize) {
+            arrayListField.clear()
+            repeat(arraySize) {
+                arrayListField.add("")
+            }
+        }
+
         Column {
             repeat(arraySize) { index ->
-                Text(text = index.toString())
+                Text(text = "Элемент $index")
+                VariableTextField(
+                    onValueChange = { newText ->
+                        arrayListField[index] = newText
+                    },
+                    value = arrayListField[index]
+                )
             }
         }
     }

@@ -21,9 +21,10 @@ class ArrayInitializationBox : ProgramBox() {
     override fun render(){
         BaseBox(name = "Инициализация массива", showState,
             onConfirmButton = {
-                code = this.value.processInput(arrayName, arraySize)
+                code = this.value.initIntegerArrayBlock(arrayName, arraySize)
             },
             dialogContent = {
+
                 VariableTextField(onValueChange = { newArrayName ->
                     arrayName = newArrayName
                 }, value = arrayName)
