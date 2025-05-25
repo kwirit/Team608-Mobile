@@ -14,7 +14,7 @@ fun test() {
 fun main() {
     val printBlock = PrintBlock();
     printBlock.processInput("x")
-    val scope = hashMapOf<String, VarBlock>()
+    val scope = hashMapOf<String, VarBlock<*>>()
 
     scope["x"] = IntegerBlock("x", 10)
     scope["y"] = IntegerBlock("y", 5)

@@ -3,19 +3,25 @@ package com.example.scratchinterpretermobile.Model
 import com.example.scratchinterpretermobile.Controller.calculationArithmeticExpression
 
 class LoopBlock(
-    private val leftPartCondition: String,
-    private val rightPartCondition: String,
-    private val operator: String = "=="
 ) : InstructionBlock() {
+    private var leftPartCondition: String = ""
+    private var rightPartCondition: String = ""
+    private var operator: String = "=="
 
     private var resultValue: Boolean = false
 
     private var blocksToRun: MutableList<InstructionBlock> = mutableListOf()
 
-    private var scope: HashMap<String, VarBlock> = hashMapOf();
+    private var scope: HashMap<String, VarBlock<*>> = hashMapOf();
 
     init {
-        mainContext.pushScope(scope)
+        context.pushScope(scope)
+    }
+
+    fun processInput(leftPartCondition: String, rightPartCondition: String, operator: String) {
+        this.leftPartCondition = leftPartCondition
+        this.rightPartCondition = rightPartCondition
+        this.operator = operator
     }
 
     /**
@@ -47,15 +53,12 @@ class LoopBlock(
         return 0
     }
 
-    fun addThenBlock(index: Int, block: InstructionBlock) {
-        blocksToRun.add(index, block)
-    }
 
     override fun run(): Int {
         var compareError = compare()
 
         if (compareError != 0){
-            mainContext.popScope();
+            context.popScope();
             return compareError
         }
 
@@ -63,17 +66,17 @@ class LoopBlock(
             for (block in blocksToRun) {
                 val result = block.run();
                 if (result != 0) {
-                    mainContext.popScope();
+                    context.popScope();
                     return result
                 }
             }
             compareError = compare()
             if (compareError != 0){
-                mainContext.popScope();
+                context.popScope();
                 return compareError
             }
         }
-        mainContext.popScope()
+        context.popScope()
         return 0;
     }
 }

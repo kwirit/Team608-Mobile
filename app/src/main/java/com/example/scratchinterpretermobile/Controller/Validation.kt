@@ -6,10 +6,12 @@ import com.example.scratchinterpretermobile.Controller.Error.ARRAY_EXPECTED
 import com.example.scratchinterpretermobile.Controller.Error.ARRAY_INVALID_ELEMENT
 import com.example.scratchinterpretermobile.Controller.Error.ARRAY_NOT_FOUND
 import com.example.scratchinterpretermobile.Controller.Error.DIVISION_BY_ZERO
+import com.example.scratchinterpretermobile.Controller.Error.EMPTY_ARITHMETIC
 import com.example.scratchinterpretermobile.Controller.Error.EMPTY_NAME
 import com.example.scratchinterpretermobile.Controller.Error.INCORRECT_ARRAY_ELEMENT_NAME
 import com.example.scratchinterpretermobile.Controller.Error.INVALID_ARRAY_ACCESS
 import com.example.scratchinterpretermobile.Controller.Error.INVALID_CHARACTERS
+import com.example.scratchinterpretermobile.Controller.Error.INVALID_CHARACTERS_IN_STRING
 import com.example.scratchinterpretermobile.Controller.Error.INVALID_VARIABLE_START
 import com.example.scratchinterpretermobile.Controller.Error.UNMATCHED_PARENTHESES
 import com.example.scratchinterpretermobile.Controller.Error.VARIABLE_HAS_SPACE
@@ -17,7 +19,7 @@ import com.example.scratchinterpretermobile.Model.Stack
 import com.example.scratchinterpretermobile.Model.mainContext
 import com.example.scratchinterpretermobile.Model.IntegerArrayBlock
 import com.example.scratchinterpretermobile.Model.IntegerBlock
-
+import com.example.scratchinterpretermobile.Model.StringBlock
 
 
 /**
@@ -57,6 +59,7 @@ fun validateNameVariable(input: String): Int {
  * @return Int - код ошибки (0 - в случае успеха)
  */
 fun validateSyntaxArrayName(input: String): Int {
+    if (input.trim().isEmpty()) return EMPTY_NAME.id
     val regex = Regex(
         """([a-zA-Z_]\w*)\[\s*([-+*\/%]?\s*(?:[a-zA-Z_]\w*|\d+|\([^()\r\n]*\))\s*(?:[-+*\/%]\s*(?:[a-zA-Z_]\w*|\d+|\([^()\r\n]*\))\s*)*)?\]"""
     )
@@ -79,6 +82,14 @@ fun validateConst(input: String): Int {
     var regex =  Regex("""\d+""")
     if (regex.matches(input.trim())) return 0
     else return INVALID_VARIABLE_START.id
+}
+
+fun validateString(input: String): Int {
+    val trimmedInput = input.trim()
+    if (trimmedInput.isEmpty()) return EMPTY_NAME.id
+    val regex = """(^["]*)""".toRegex()
+    if (regex.matches(input.trim())) return 0
+    return INVALID_CHARACTERS_IN_STRING.id
 }
 
 fun processArrayAccess(element: String): Int {
@@ -104,19 +115,21 @@ fun processArrayAccess(element: String): Int {
 
     if (arrayBlock !is IntegerArrayBlock) return ARRAY_EXPECTED.id
 
-    val array = arrayBlock.value as? MutableList<Int> ?: return ARRAY_INVALID_ELEMENT.id
+    val array = arrayBlock.getValue() ?: return ARRAY_INVALID_ELEMENT.id
 
     if (indexValue < 0 || indexValue >= array.size) return ARRAY_BOUNDS_ERROR.id
 
     return 0
 }
 
-fun getElementFromString(input: String): MutableList<String> {
+fun getElementFromString(
+    input: String,
+    operators: String = "+-*%/()",
+): MutableList<String> {
     val trimmedInput = input.trim()
 
-    val elements = mutableListOf<String>()
 
-    val operators = "+-*%/()"
+    val elements = mutableListOf<String>()
 
     var currentToken = StringBuilder()
 
@@ -200,12 +213,11 @@ fun transferPrefixToPostfix(elements: MutableList<String>): Pair<MutableList<Str
                     validateConst(element) == 0 -> postfix.add(element)
 
                     validateNameVariable(element) == 0 && mainContext.getVar(element) != null -> {
-                        val value = mainContext.getVar(element)
-                        if (value is IntegerBlock) {
-                            postfix.add(value.value.toString())
-                        }
-                        else {
-                            return Pair(mutableListOf(), ARRAY_EXPECTED.id)
+
+                        when (val value = mainContext.getVar(element)) {
+                            is IntegerBlock -> postfix.add(value.getValue().toString())
+                            is StringBlock -> postfix.add(value.getValue())
+                            else -> return Pair(mutableListOf(), ARRAY_EXPECTED.id)
                         }
                     }
 
@@ -216,6 +228,8 @@ fun transferPrefixToPostfix(elements: MutableList<String>): Pair<MutableList<Str
                         }
                         if (error != 0) return Pair(mutableListOf(), ARRAY_NOT_FOUND.id)
                     }
+
+                    validateString(element) == 0 -> {}
                     else -> return Pair(mutableListOf(), INVALID_VARIABLE_START.id)
                 }
             }
@@ -236,14 +250,17 @@ fun transferPrefixToPostfix(elements: MutableList<String>): Pair<MutableList<Str
  * @param postfix список токенов в постфиксной форме
  * @return Pair<Int, Int> - результат вычисления и код ошибки (0 - в случае успеха)
  */
-fun calculationPostfix(postfix: MutableList<String>): Pair<Int, Int> {
+fun calculationPostfix(
+    postfix: MutableList<String>,
+    operators: String = "+-*%/"
+    ): Pair<Int, Int> {
     val stack = Stack<Int>()
 
     for (element in postfix) {
-        if (element in "+-*%/") {
+        if (element in operators) {
             val first = stack.pop() ?: return Pair(-1, INVALID_ARRAY_ACCESS.id)
             val second = stack.pop() ?: return Pair(-1, INVALID_ARRAY_ACCESS.id)
-            if ((element == "/" || element == "%") && first == 0){
+            if ((element == "/" || element == "%") && element in operators && first == 0){
                 return Pair(-1, DIVISION_BY_ZERO.id)
             }
             val result = when (element) {
@@ -262,6 +279,9 @@ fun calculationPostfix(postfix: MutableList<String>): Pair<Int, Int> {
             stack.push(value!!)
         }
     }
+
+    if(stack.isEmpty()) return Pair(-1, EMPTY_ARITHMETIC.id)
+
     return Pair(stack.pop()!!, 0);
 }
 
@@ -279,3 +299,11 @@ fun calculationArithmeticExpression(input: String): Pair<Int, Int> {
     if (errorCalculation != 0) return Pair(-1, errorCalculation)
     return Pair(result, 0)
 }
+
+//fun calculationStringExpression(input: String): Pair<String, Int> {
+//    val (elements, error) = transferPrefixToPostfix(getElementFromString(input.trim(), "+*"))
+//    if (error != 0) return Pair("", error)
+//    val (result, errorCalculation) = calculationPostfix(elements)
+//    if (errorCalculation != 0) return Pair(-1, errorCalculation)
+//    return Pair(result, 0)
+//}
