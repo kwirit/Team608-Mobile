@@ -75,7 +75,7 @@ fun validateSyntaxArrayName(input: String): Int {
  * @return Int - код ошибки (0 - если строка корректна)
  */
 fun validateArrayName(input: String): Int {
-    return processArrayAccess(input)
+    return processArrayAccess(input).second
 }
 
 fun validateConst(input: String): Int {
@@ -92,34 +92,34 @@ fun validateString(input: String): Int {
     return INVALID_CHARACTERS_IN_STRING.id
 }
 
-fun processArrayAccess(element: String): Int {
+fun processArrayAccess(element: String): Pair<Int, Int> {
     val regexName = Regex("^([a-zA-Z_][a-zA-Z0-9_]*)")
     val regexIndex = Regex("\\[(.*?)\\]")
 
-    val matchName = regexName.find(element) ?: return INVALID_ARRAY_ACCESS.id
-    val matchIndex = regexIndex.find(element) ?:return INVALID_ARRAY_ACCESS.id
+    val matchName = regexName.find(element) ?: return Pair(-1, INVALID_ARRAY_ACCESS.id)
+    val matchIndex = regexIndex.find(element) ?:return Pair(-1, INVALID_ARRAY_ACCESS.id)
 
-    val arrayName = matchName.groups[1]?.value ?: return INVALID_ARRAY_ACCESS.id
-    val indexExpr = matchIndex.groups[1]?.value ?: return INVALID_ARRAY_ACCESS.id
+    val arrayName = matchName.groups[1]?.value ?: return Pair(-1, INVALID_ARRAY_ACCESS.id)
+    val indexExpr = matchIndex.groups[1]?.value ?: return Pair(-1, INVALID_ARRAY_ACCESS.id)
 
     if (validateNameVariable(arrayName) != 0) {
-        return validateNameVariable(arrayName)
+        return Pair(-1, validateNameVariable(arrayName))
     }
 
     val (indexValue, indexError) = calculationArithmeticExpression(indexExpr)
     if (indexError != 0) {
-        return indexError
+        return Pair(-1, indexError)
     }
 
-    val arrayBlock = mainContext.getVar(arrayName) ?: return ARRAY_NOT_FOUND.id
+    val arrayBlock = mainContext.getVar(arrayName) ?: return Pair(-1, ARRAY_NOT_FOUND.id)
 
-    if (arrayBlock !is IntegerArrayBlock) return ARRAY_EXPECTED.id
+    if (arrayBlock !is IntegerArrayBlock) return Pair(-1, ARRAY_EXPECTED.id)
 
-    val array = arrayBlock.getValue() ?: return ARRAY_INVALID_ELEMENT.id
+    val array = arrayBlock.getValue()
 
-    if (indexValue < 0 || indexValue >= array.size) return ARRAY_BOUNDS_ERROR.id
+    if (indexValue < 0 || indexValue >= array.size) return Pair(-1, ARRAY_BOUNDS_ERROR.id)
 
-    return 0
+    return Pair(array[indexValue], 0)
 }
 
 fun getElementFromString(
@@ -221,11 +221,9 @@ fun transferPrefixToPostfix(elements: MutableList<String>): Pair<MutableList<Str
                     }
 
                     validateSyntaxArrayName(element) == 0 -> {
-                        val error = processArrayAccess(element)
-                        if (error == 0) {
-                            postfix.add(element)
-                        }
+                        val (value, error) = processArrayAccess(element)
                         if (error != 0) return Pair(mutableListOf(), ARRAY_NOT_FOUND.id)
+                        postfix.add(value.toString())
                     }
 
                     validateString(element) == 0 -> {}
@@ -252,8 +250,10 @@ fun transferPrefixToPostfix(elements: MutableList<String>): Pair<MutableList<Str
 fun calculationPostfix(
     postfix: MutableList<String>,
     ): Pair<Int, Int> {
+
     val stack = Stack<Int>()
     val operators = "+-*%/()"
+
     for (element in postfix) {
         if (element in operators) {
             val first = stack.pop() ?: return Pair(-1, INVALID_ARRAY_ACCESS.id)
@@ -283,11 +283,129 @@ fun calculationPostfix(
     return Pair(stack.pop()!!, 0);
 }
 
-//fun calculationStringPostfix(
-//    postfix: MutableList<String>
-//): Pair<String, Int> {
-//
-//}
+
+fun transferStringPrefixToPostfix(elements: MutableList<String>): Pair<MutableList<Pair<String, String>>, Int> {
+    val postfix = mutableListOf<Pair<String, String>>()
+    val stack = Stack<String>()
+    val priority = mapOf(
+        "%" to 2,
+        "/" to 2,
+        "*" to 2,
+        "+" to 1,
+        "-" to 1,
+        "(" to 0
+    )
+    val operators = "+-*%/"
+
+    for (element in elements) {
+        when (element) {
+            in operators -> {
+                while (!stack.isEmpty() && stack.peek() != "(" && priority[element]!! <= priority[stack.peek()]!!) {
+                    postfix.add(Pair(stack.pop()!!, "Operator"))
+                }
+                stack.push(element)
+            }
+
+            "(" -> stack.push(element)
+
+            ")" -> {
+                while (!stack.isEmpty() && stack.peek() != "(") {
+                    postfix.add(Pair(stack.pop()!!, "Operator"))
+                }
+                if (stack.isEmpty()) return Pair(mutableListOf(), UNMATCHED_PARENTHESES.id)
+                stack.pop()
+            }
+
+            else -> {
+                when {
+                    validateConst(element) == 0 -> postfix.add(Pair(element, "Const"))
+                    validateString(element) == 0 -> postfix.add(Pair(element, "String"))
+
+                    validateNameVariable(element) == 0 && mainContext.getVar(element) != null -> {
+                        when (val value = mainContext.getVar(element)) {
+                            is IntegerBlock -> postfix.add(Pair(value.getValue().toString(), "Const"))
+                            is StringBlock -> postfix.add(Pair(value.getValue(), "String"))
+                            else -> return Pair(mutableListOf(), ARRAY_EXPECTED.id)
+                        }
+                    }
+                    validateSyntaxArrayName(element) == 0 -> {
+                        val (value, error) = processArrayAccess(element)
+                        if (error != 0) return Pair(mutableListOf(), ARRAY_NOT_FOUND.id)
+
+                        postfix.add(Pair(element, "Const"))
+                    }
+
+                    else -> return Pair(mutableListOf(), INVALID_VARIABLE_START.id)
+                }
+            }
+        }
+    }
+
+    while (!stack.isEmpty()) {
+        if (stack.peek() == "(") return Pair(mutableListOf(), UNMATCHED_PARENTHESES.id)
+        postfix.add(Pair(stack.pop()!!, "Operator"))
+    }
+
+    return Pair(postfix, 0)
+}
+fun calculationStringPostfix(
+    postfix: MutableList<Pair<String, String>>
+): Pair<String, Int> {
+
+    val stack = Stack<Pair<String, String>>()
+    val operators = "+*"
+
+    for (element in postfix) {
+        val (value, typeValue) = element
+
+        if (typeValue == "Operator") {
+            val firstOperand = stack.pop() ?: return Pair("", INVALID_ARRAY_ACCESS.id)
+            val secondOperand = stack.pop() ?: return Pair("", INVALID_ARRAY_ACCESS.id)
+
+            val (firstValue, firstType) = firstOperand
+            val (secondValue, secondType) = secondOperand
+            when {
+            firstType == "Const" && secondType == "String" && value == "*" ->  {
+                val intValue = firstValue.toIntOrNull() ?: return Pair("", INVALID_VARIABLE_START.id)
+                val result = secondValue.repeat(intValue)
+                stack.push(Pair(result.toString(), "String"))
+            }
+            firstType == "String" && secondType == "Const" && value == "*" -> {
+                val intValue = secondValue.toIntOrNull() ?: return Pair("", INVALID_VARIABLE_START.id)
+                val result = firstValue.repeat(intValue)
+                stack.push(Pair(result, "String"))
+            }
+            firstType == "Const" && secondType == "Const" -> {
+                val a = firstValue.toIntOrNull() ?: return Pair("", INVALID_VARIABLE_START.id)
+                val b = secondValue.toIntOrNull() ?: return Pair("", INVALID_VARIABLE_START.id)
+
+                val result = when (value) {
+                    "+" -> b + a
+                    "-" -> b - a
+                    "*" -> b * a
+                    "/" -> if (a != 0) b / a else return Pair("", DIVISION_BY_ZERO.id)
+                    "%" -> if (a != 0) b % a else return Pair("", DIVISION_BY_ZERO.id)
+                    else -> return Pair("", INVALID_CHARACTERS.id)
+                }
+
+                stack.push(Pair(result.toString(), "Const"))
+            }
+            else -> return Pair("", INVALID_CHARACTERS.id)
+            }
+
+
+        }
+        else {
+            stack.push(Pair(value, typeValue))
+        }
+    }
+
+    if(stack.isEmpty()) return Pair("", EMPTY_ARITHMETIC.id)
+
+    return Pair(stack.pop()!!.first, 0)
+}
+
+
 /**
  * Вычисляет значение арифметического выражения в инфиксной нотации.
  * Например: "a % b + 4 * (10 - 3 + arr[i + 2])".
@@ -302,10 +420,10 @@ fun calculationArithmeticExpression(input: String): Pair<Int, Int> {
     return Pair(result, 0)
 }
 
-//fun calculationStringExpression(input: String): Pair<String, Int> {
-//    val (elements, error) = transferPrefixToPostfix(getElementFromString(input.trim()))
-//    if (error != 0) return Pair("", error)
-//    val (result, errorCalculation) = calculationPostfix(elements)
-//    if (errorCalculation != 0) return Pair("", errorCalculation)
-//    return Pair(result, 0)
-//}
+fun calculationStringExpression(input: String): Pair<String, Int> {
+    val (elements, error) = transferStringPrefixToPostfix(getElementFromString(input.trim()))
+    if (error != 0) return Pair("", error)
+    val (result, errorCalculation) = calculationStringPostfix(elements)
+    if (errorCalculation != 0) return Pair("", errorCalculation)
+    return Pair(result, 0)
+}
