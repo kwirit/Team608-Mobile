@@ -13,7 +13,7 @@ class calculationUnitTest {
         scope["y"] = IntegerBlock("y", 5)
         scope["z"] = IntegerBlock("z", 1)
 
-        mainContext.pushScope(scope)
+        UIContext.pushScope(scope)
 
         val (result, error) = calculationArithmeticExpression("x + y - z")
 
@@ -27,7 +27,7 @@ class calculationUnitTest {
 
         scope["arr"] = IntegerArrayBlock("arr", mutableListOf(10, 20, 30, 40))
 
-        mainContext.pushScope(scope)
+        UIContext.pushScope(scope)
 
         val (result, error) = calculationArithmeticExpression("arr[i + 1]")
 
@@ -40,7 +40,7 @@ class calculationUnitTest {
         scope["a"] = IntegerBlock("a", 10)
         scope["b"] = IntegerBlock("b", 2)
         scope["c"] = IntegerBlock("c", 3)
-        mainContext.pushScope(scope)
+        UIContext.pushScope(scope)
 
 
         val (result, error) = calculationArithmeticExpression("a + b * (c - 1)")
@@ -55,7 +55,7 @@ class calculationUnitTest {
         scope["i"] = IntegerBlock("i", 2)
         scope["b"] = IntegerBlock("b", 2)
         scope["arr"] = IntegerArrayBlock("arr", mutableListOf(100, 23, 11, 105, 1, 1231, 1554, 5, 64))
-        mainContext.pushScope(scope)
+        UIContext.pushScope(scope)
 
 
         val (result, error) = calculationArithmeticExpression("arr[    1 + i    + a] + arr    [i +     b] * arr[i * i + b]")
@@ -71,7 +71,7 @@ class calculationUnitTest {
         scope["b"] = IntegerBlock("b", 2)
         scope["arr2"] = IntegerArrayBlock("arr2", mutableListOf(1, 2, 3))
         scope["arr"] = IntegerArrayBlock("arr", mutableListOf(100, 23, 11, 105, 1, 1231, 1554, 5, 64))
-        mainContext.pushScope(scope)
+        UIContext.pushScope(scope)
 
         val result = getElementFromString("asda[ 1 + (4 + 0) * 123 - (123 - 1000)]")
         assertEquals(listOf("asda[1+(4+0)*123 - (123-1000)"), result)
@@ -79,6 +79,6 @@ class calculationUnitTest {
 
     @After
     fun tearDown() {
-        mainContext.clear()
+        UIContext.clear()
     }
 }
