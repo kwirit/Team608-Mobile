@@ -31,7 +31,7 @@ class WhileBox: ProgramBox() {
     override val value = LoopBlock();
     @Composable
     override fun render(){
-        BaseBox(name = "Условие", showState,
+        BaseBox(name = "Цикл", showState,
             onConfirmButton = {
                 value.processInput(leftOperand,rightOperand,operator)
             },

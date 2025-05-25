@@ -31,8 +31,7 @@ import com.example.scratchinterpretermobile.ui.theme.Orange
 fun TopBar(viewModel: MainViewModel,modifier: Modifier = Modifier){
     Box(modifier = modifier.height(60.dp).background(color = Orange)){
         Row(modifier = Modifier.fillMaxSize().padding(end = 16.dp), horizontalArrangement = Arrangement.spacedBy(space = 16.dp, alignment = Alignment.End), verticalAlignment = Alignment.CenterVertically){
-            Button(modifier = Modifier.size(48.dp),onClick = {
-                viewModel.showBoxesState.value = true },
+            Button(modifier = Modifier.size(48.dp),onClick = {},
                 colors = ButtonDefaults.buttonColors(
                     containerColor = LightOrange,
                     contentColor = Color.Green),

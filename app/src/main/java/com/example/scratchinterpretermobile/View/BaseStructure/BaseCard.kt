@@ -4,6 +4,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -19,14 +20,11 @@ import com.example.scratchinterpretermobile.ui.theme.Blue
 
 @Composable
 fun BaseCard(name: String,onClick: () -> Unit = {},content:@Composable () -> Unit){
-    Card(Modifier.fillMaxWidth().height(100.dp).padding(10.dp).clickable(onClick = onClick),
+    Card(Modifier.fillMaxWidth().height(70.dp).padding(5.dp).clickable(onClick = onClick),
         colors = CardDefaults.cardColors(containerColor = Blue),
     ) {
-        Box(Modifier.fillMaxWidth(),contentAlignment = Alignment.Center){
+        Box(Modifier.fillMaxSize(),contentAlignment = Alignment.Center){
             Column {Text(text = name, textAlign = TextAlign.Center)
-                Row(Modifier.padding(10.dp)){
-                    content()
-                }
             }
         }
     }
