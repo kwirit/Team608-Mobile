@@ -9,11 +9,13 @@ import com.example.scratchinterpretermobile.View.Boxes.ConsoleBox
 import com.example.scratchinterpretermobile.View.Boxes.IfBox
 import com.example.scratchinterpretermobile.View.Boxes.ProgramBox
 import com.example.scratchinterpretermobile.View.Boxes.VariableInitializationBox
+import com.example.scratchinterpretermobile.View.Boxes.WhileBox
 import com.example.scratchinterpretermobile.View.Cards.ArrayInitializationCard
 import com.example.scratchinterpretermobile.View.Cards.AssigningCard
 import com.example.scratchinterpretermobile.View.Cards.ConsoleCard
 import com.example.scratchinterpretermobile.View.Cards.IfCard
 import com.example.scratchinterpretermobile.View.Cards.VariableInitializationCard
+import com.example.scratchinterpretermobile.View.Cards.WhileCard
 import com.example.scratchinterpretermobile.View.ViewModels.MainViewModel
 
 @Composable
@@ -22,6 +24,7 @@ fun CreateBoxesDialog(showBoxesState: MutableState<Boolean>,boxes: MutableList<P
         VariableInitializationCard(onAdd = { boxes.add(VariableInitializationBox()) }, showBoxesState)
         AssigningCard(onAdd = { boxes.add(AssigningBox()) }, showBoxesState)
         IfCard(onAdd = { boxes.add(IfBox()) }, showBoxesState)
+        WhileCard(onAdd = {boxes.add(WhileBox()) }, showBoxesState)
         ConsoleCard(onAdd = { boxes.add(ConsoleBox()) }, showBoxesState)
         ArrayInitializationCard(onAdd = { boxes.add(ArrayInitializationBox()) }, showBoxesState)
     }
