@@ -23,11 +23,11 @@ fun MainScreen(viewModel: MainViewModel) {
     }
     Box(modifier = Modifier.fillMaxSize()) {
 
-        TopBar(viewModel, modifier = Modifier.align(Alignment.TopStart))
-        BottomBar(viewModel,modifier = Modifier.align(Alignment.BottomStart))
+        TopBar(viewModel, modifier = Modifier.align(Alignment.TopCenter))
+        BottomBar(viewModel,modifier = Modifier.align(Alignment.BottomCenter))
         Box(
             modifier = Modifier
-                .padding(top = 100.dp, bottom = 100.dp)
+                .padding(top = 60.dp, bottom = 60.dp)
                 .fillMaxSize()
         ) {
             when (viewModel.screenState.intValue) {

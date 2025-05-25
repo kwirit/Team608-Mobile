@@ -16,9 +16,10 @@ fun ListOfVar(): MutableState<VarBlock<*>?> {
     val variables = mainContext.GetListVarBlock()
     val selectedVariable = remember { mutableStateOf<VarBlock<*>?>(null) }
     val expanded = remember { mutableStateOf(false) }
+    var name = remember { mutableStateOf("Выберите") }
 
     TextButton(onClick = { expanded.value = true }) {
-        Text(text = selectedVariable.value?.getName() ?: "Выберите")
+        Text(text = selectedVariable.value?.getName() ?: name.value)
     }
 
     DropdownMenu(expanded = expanded.value, onDismissRequest = { expanded.value = false }) {
@@ -26,6 +27,7 @@ fun ListOfVar(): MutableState<VarBlock<*>?> {
             DropdownMenuItem(
                 onClick = {
                     selectedVariable.value = varBlock
+                    name.value = selectedVariable.value!!.getName()
                     expanded.value = false
                 },
                 text = { Text(varBlock.getName()) }
