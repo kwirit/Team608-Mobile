@@ -20,10 +20,11 @@ class ConditionBlock(
         context.pushScope(scope)
     }
 
-    fun processInput(leftPartCondition: String, rightPartCondition: String, operator: String) {
+    fun processInput(leftPartCondition: String, rightPartCondition: String, operator: String, thenBlock: MutableList<InstructionBlock>) {
         this.leftPartCondition = leftPartCondition
         this.rightPartCondition = rightPartCondition
         this.operator = operator
+        this.thenBlock = thenBlock
     }
 
     /**

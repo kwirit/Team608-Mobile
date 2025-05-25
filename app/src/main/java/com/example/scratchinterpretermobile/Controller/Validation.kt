@@ -123,12 +123,11 @@ fun processArrayAccess(element: String): Int {
 }
 
 fun getElementFromString(
-    input: String,
-    operators: String = "+-*%/()",
+    input: String
 ): MutableList<String> {
     val trimmedInput = input.trim()
 
-
+    var operators = "+-*%/()"
     val elements = mutableListOf<String>()
 
     var currentToken = StringBuilder()
@@ -252,10 +251,9 @@ fun transferPrefixToPostfix(elements: MutableList<String>): Pair<MutableList<Str
  */
 fun calculationPostfix(
     postfix: MutableList<String>,
-    operators: String = "+-*%/"
     ): Pair<Int, Int> {
     val stack = Stack<Int>()
-
+    val operators = "+-*%/()"
     for (element in postfix) {
         if (element in operators) {
             val first = stack.pop() ?: return Pair(-1, INVALID_ARRAY_ACCESS.id)
@@ -285,7 +283,11 @@ fun calculationPostfix(
     return Pair(stack.pop()!!, 0);
 }
 
-
+//fun calculationStringPostfix(
+//    postfix: MutableList<String>
+//): Pair<String, Int> {
+//
+//}
 /**
  * Вычисляет значение арифметического выражения в инфиксной нотации.
  * Например: "a % b + 4 * (10 - 3 + arr[i + 2])".
@@ -301,9 +303,9 @@ fun calculationArithmeticExpression(input: String): Pair<Int, Int> {
 }
 
 //fun calculationStringExpression(input: String): Pair<String, Int> {
-//    val (elements, error) = transferPrefixToPostfix(getElementFromString(input.trim(), "+*"))
+//    val (elements, error) = transferPrefixToPostfix(getElementFromString(input.trim()))
 //    if (error != 0) return Pair("", error)
 //    val (result, errorCalculation) = calculationPostfix(elements)
-//    if (errorCalculation != 0) return Pair(-1, errorCalculation)
+//    if (errorCalculation != 0) return Pair("", errorCalculation)
 //    return Pair(result, 0)
 //}
