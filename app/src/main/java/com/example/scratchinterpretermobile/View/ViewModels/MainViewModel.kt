@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.lifecycle.ViewModel
+import com.example.scratchinterpretermobile.Controller.Utils.parseCardToInstructionBoxes
 import com.example.scratchinterpretermobile.Model.InstructionBlock
 import com.example.scratchinterpretermobile.Model.Interpreter
 import com.example.scratchinterpretermobile.View.Boxes.ArrayInitializationBox
@@ -20,18 +21,9 @@ class MainViewModel : ViewModel() {
 
     val boxes = mutableStateListOf<ProgramBox>()
 
-    fun parseCardToInstructionBoxes(list: MutableList<ProgramBox>): MutableList<InstructionBlock>{
-        var instructionList: MutableList<InstructionBlock> = mutableListOf()
-        for (card in list){
-            instructionList.add(card.value)
-        }
-        return instructionList
-    }
 
-    fun run(){
+    fun run() {
         val instructionList: MutableList<InstructionBlock> = parseCardToInstructionBoxes(boxes)
         val interpreter: Interpreter = Interpreter()
-//        interpreter.run(instructionList)
     }
-
 }

@@ -16,7 +16,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.scratchinterpretermobile.Model.ConditionsBlock
+import com.example.scratchinterpretermobile.Model.ConditionBlock
 import com.example.scratchinterpretermobile.View.BaseStructure.BaseBox
 import com.example.scratchinterpretermobile.View.Dialogs.CreateBoxesDialog
 import com.example.scratchinterpretermobile.View.Widgets.InnerCreationButton
@@ -25,16 +25,19 @@ import com.example.scratchinterpretermobile.View.Widgets.VariableTextField
 import com.example.scratchinterpretermobile.View.Widgets.VerticalReorderList
 
 class IfBox: ProgramBox() {
-    val boxes = mutableStateListOf<ProgramBox>()
-    override val value = ConditionsBlock();
+    val ifBoxes = mutableStateListOf<ProgramBox>()
+    val elseBoxes = mutableStateListOf<ProgramBox>()
+    override val value = ConditionBlock();
     val showInnerBoxesState = mutableStateOf(false)
     var leftOperand by mutableStateOf("")
     var rightOperand by mutableStateOf("")
+    var operator by mutableStateOf("")
 
     @Composable
     override fun render(){
         BaseBox(name = "Условие", showState,
             onConfirmButton = {
+                value.processInput(leftOperand, rightOperand, operator)
         },
             dialogContent = {
                 Column {
@@ -43,14 +46,14 @@ class IfBox: ProgramBox() {
                         VariableTextField(onValueChange = {newText->
                             leftOperand = newText
                         },value = leftOperand)
-                        ListOfIfOperators()
+                        operator = ListOfIfOperators()
                         VariableTextField(onValueChange = {newText->
                             rightOperand = newText
                         },value = rightOperand)
                     }
-                    VerticalReorderList(boxes)
+                    VerticalReorderList(ifBoxes)
                     if(showInnerBoxesState.value){
-                        CreateBoxesDialog(showInnerBoxesState,boxes)
+                        CreateBoxesDialog(showInnerBoxesState,ifBoxes)
                     }
                 }
         }) {
