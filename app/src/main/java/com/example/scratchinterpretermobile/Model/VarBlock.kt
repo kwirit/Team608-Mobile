@@ -5,4 +5,5 @@ interface VarBlock<T>{
     fun setName(newName: String)
     fun getValue(): T
     fun setValue(newValue: T)
+    fun getCopy(): VarBlock<T>
 }

@@ -11,7 +11,32 @@ import com.example.scratchinterpretermobile.Controller.validateNameVariable
 
 
 class AssignmentBlock:InstructionBlock() {
-    private var newVarBlock:VarBlock<*>? = null
+    private var originalVarBlock: VarBlock<*>? = null // предыдущее успешное присваивание
+    private var newVarBlock: VarBlock<*>? = null // новый блок
+
+
+
+
+
+
+    // <-------------------- Системный функционал -------------------->
+    private fun setOriginalBlock(newVarBlock: VarBlock<*>) {
+        originalVarBlock = newVarBlock.getCopy()
+
+        return;
+    }
+
+    private fun restoreOriginalBlockInContext() {
+        originalVarBlock ?: return
+
+        context.setVar(originalVarBlock!!.getName(), originalVarBlock!!.getCopy())
+
+        return
+    }
+
+
+
+    // <-------------------- Присваивание целочисленной переменной -------------------->
 
     private fun getIntegerBlock(integerName: String, integerValue: String): Pair<IntegerBlock, Int> {
         val newIntegerBlock = IntegerBlock("", 0)
@@ -33,9 +58,28 @@ class AssignmentBlock:InstructionBlock() {
         return Pair(newIntegerBlock, SUCCESS.id)
     }
 
+
+    /**
+     * Присваивает новое значение целочисленной переменной
+     * @param integerName имя переменной
+     * @param integerValue строковое выражение значения
+     * @return код ошибки
+     */
     fun assignIntegerBlock(integerName:String, integerValue:String):Int {
         val (newIntegerBlock, getError) = getIntegerBlock(integerName, integerValue)
-        if(getError != SUCCESS.id) return getError
+        if(getError != SUCCESS.id) {
+            originalVarBlock ?: return getError
+            restoreOriginalBlockInContext()
+            return getError
+        }
+
+        if((originalVarBlock == null) || (originalVarBlock!!.getName() != newIntegerBlock.getName())) {
+            if(originalVarBlock == null) setOriginalBlock(context.getVar(newIntegerBlock.getName())!!)
+            else {
+                restoreOriginalBlockInContext()
+                setOriginalBlock(context.getVar(newIntegerBlock.getName())!!)
+            }
+        }
 
         context.setVar(newIntegerBlock.getName(), newIntegerBlock)
         newVarBlock = newIntegerBlock.getCopy()
@@ -43,6 +87,13 @@ class AssignmentBlock:InstructionBlock() {
         return SUCCESS.id
     }
 
+
+
+
+
+    // <-------------------- Присваивание массива -------------------->
+
+    // Присваивание массива поэлементно
     private fun getIntegerArrayBlockByElements(arrayName: String, arrayElements: List<String>): Pair<IntegerArrayBlock, Int> {
         val newIntegerArrayBlock = IntegerArrayBlock(arrayName, mutableListOf<Int>())
 
@@ -70,6 +121,7 @@ class AssignmentBlock:InstructionBlock() {
         return Pair(newIntegerArrayBlock, SUCCESS.id)
     }
 
+    // Присваивание массива к другому массиву
     private fun getIntegerArrayBlockByArray(arrayName: String, anotherArrayName: String): Pair<IntegerArrayBlock, Int> {
         val newIntegerArrayBlock = IntegerArrayBlock("", mutableListOf<Int>())
 
@@ -96,6 +148,12 @@ class AssignmentBlock:InstructionBlock() {
     }
 
 
+    /**
+     * Присваивает новое значение массиву
+     * @param arrayName имя массива
+     * @param arrayValue строка значений(через запятую) || имя другого массива
+     * @return код ошибки
+     */
     fun assignIntegerArrayBlock(arrayName:String, arrayValue: String): Int {
         val arrayElements = arrayValue.split(",").map { it.trim() }
 
@@ -103,22 +161,44 @@ class AssignmentBlock:InstructionBlock() {
         if(arrayElements.size >= 1) {
             if(arrayElements.size > 1) {
                 val (resultingArray, getError) = getIntegerArrayBlockByElements(arrayName, arrayElements)
-                if(getError != SUCCESS.id) return getError
+                if(getError != SUCCESS.id) {
+                    originalVarBlock ?: return getError
+                    restoreOriginalBlockInContext()
+                    return getError
+                }
                 newIntegerArrayBlock = resultingArray
             }
             else {
                 val (resultingArray, getError) = getIntegerArrayBlockByArray(arrayName, arrayElements[0])
-                if(getError != SUCCESS.id) return getError
+                if(getError != SUCCESS.id) {
+                    originalVarBlock ?: return getError
+                    restoreOriginalBlockInContext()
+                    return getError
+                }
                 newIntegerArrayBlock = resultingArray
             }
         }
         else return INVALID_ASSIGNMENT_ARRAY.id
+
+        if((originalVarBlock == null) || (originalVarBlock!!.getName() != newIntegerArrayBlock.getName())) {
+            if(originalVarBlock == null) setOriginalBlock(context.getVar(newIntegerArrayBlock.getName())!!)
+            else {
+                restoreOriginalBlockInContext()
+                setOriginalBlock(context.getVar(newIntegerArrayBlock.getName())!!)
+            }
+        }
 
         context.setVar(newIntegerArrayBlock.getName(), newIntegerArrayBlock)
         newVarBlock = newIntegerArrayBlock.getCopy()
 
         return SUCCESS.id
     }
+
+
+
+
+
+    // <-------------------- Присваивание элемента массива -------------------->
 
     private fun getIntegerArrayBlockByElement(arrayName: String, arrayIndex: String, arrayElementValue: String): Pair<IntegerArrayBlock, Int> {
         val newIntegerArrayBlock = IntegerArrayBlock("", mutableListOf<Int>())
@@ -146,9 +226,29 @@ class AssignmentBlock:InstructionBlock() {
         return Pair(newIntegerArrayBlock, SUCCESS.id)
     }
 
+
+    /**
+     * Присваивает новое значение элементу массива
+     * @param arrayName имя массива
+     * @param arrayIndex индекс изменяемого элемента
+     * @param arrayElementValue новое значение элемента
+     * @return код ошибки
+     */
     fun assignElementIntegerArrayBlock(arrayName:String, arrayIndex:String, arrayElementValue:String): Int {
         val (newIntegerArrayBlock, getError) = getIntegerArrayBlockByElement(arrayName, arrayIndex, arrayElementValue)
-        if(getError != SUCCESS.id) return getError
+        if(getError != SUCCESS.id) {
+            originalVarBlock ?: return getError
+            restoreOriginalBlockInContext()
+            return getError
+        }
+
+        if((originalVarBlock == null) || (originalVarBlock!!.getName() != newIntegerArrayBlock.getName())) {
+            if(originalVarBlock == null) setOriginalBlock(context.getVar(newIntegerArrayBlock.getName())!!)
+            else {
+                restoreOriginalBlockInContext()
+                setOriginalBlock(context.getVar(newIntegerArrayBlock.getName())!!)
+            }
+        }
 
         context.setVar(newIntegerArrayBlock.getName(), newIntegerArrayBlock)
         newVarBlock = newIntegerArrayBlock.getCopy()
@@ -156,7 +256,10 @@ class AssignmentBlock:InstructionBlock() {
         return SUCCESS.id
     }
 
-    
+
+
+
+
     override fun run(): Int {
         return SUCCESS.id
     }

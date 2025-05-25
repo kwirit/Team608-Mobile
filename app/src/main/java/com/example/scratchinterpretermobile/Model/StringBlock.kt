@@ -20,7 +20,7 @@ class StringBlock(
         this.value = newValue
     }
 
-    fun getCopy(): StringBlock {
+    override fun getCopy(): StringBlock {
         val originalName = name
         val originalValue = value
 
