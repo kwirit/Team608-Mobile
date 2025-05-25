@@ -4,7 +4,9 @@ import com.example.scratchinterpretermobile.Controller.calculationArithmeticExpr
 import com.example.scratchinterpretermobile.Model.VarBlock
 
 class ConditionBlock(
-) : InstructionBlock() {
+) : InstructionBlock {
+    override var context: Context = UIContext
+
     private var operator: String = "=="
     private var leftPartCondition: String = ""
     private var rightPartCondition: String = ""
@@ -15,6 +17,7 @@ class ConditionBlock(
     private var elseBlock: MutableList<InstructionBlock> = mutableListOf()
 
     private var scope: HashMap<String, VarBlock<*>> = hashMapOf();
+
 
     init {
         context.pushScope(scope)

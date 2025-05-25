@@ -1,6 +1,7 @@
 package com.example.scratchinterpretermobile.Model
 
 import com.example.scratchinterpretermobile.Controller.Error.ASSIGNING_DIFFERENT_TYPES
+import com.example.scratchinterpretermobile.Controller.Error.ASSIGNMENT_ERROR
 import com.example.scratchinterpretermobile.Controller.Error.INVALID_ARRAY_ACCESS
 import com.example.scratchinterpretermobile.Controller.Error.INVALID_ARRAY_INDEX
 import com.example.scratchinterpretermobile.Controller.Error.INVALID_ASSIGNMENT_ARRAY
@@ -10,10 +11,10 @@ import com.example.scratchinterpretermobile.Controller.calculationArithmeticExpr
 import com.example.scratchinterpretermobile.Controller.validateNameVariable
 
 
-class AssignmentBlock:InstructionBlock() {
+class AssignmentBlock:InstructionBlock {
+    override var context: Context = UIContext
     private var originalVarBlock: VarBlock<*>? = null // предыдущее успешное присваивание
     private var newVarBlock: VarBlock<*>? = null // новый блок
-
 
 
 
@@ -260,7 +261,20 @@ class AssignmentBlock:InstructionBlock() {
 
 
 
+    fun removeBlock() {
+        originalVarBlock ?: return
+        context.setVar(originalVarBlock!!.getName(), originalVarBlock!!)
+
+        return
+    }
+
     override fun run(): Int {
+        if(newVarBlock == null) return ASSIGNMENT_ERROR.id
+        val originalBlock = context.getVar(newVarBlock!!.getName()) ?: return VARIABLE_DOES_NOT_EXIST.id
+        if(originalBlock::class != newVarBlock!!::class) return ASSIGNING_DIFFERENT_TYPES.id
+
+        context.setVar(newVarBlock!!.getName(), newVarBlock!!)
+
         return SUCCESS.id
     }
 

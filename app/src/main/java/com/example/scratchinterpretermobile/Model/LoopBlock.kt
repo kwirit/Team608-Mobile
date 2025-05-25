@@ -3,7 +3,9 @@ package com.example.scratchinterpretermobile.Model
 import com.example.scratchinterpretermobile.Controller.calculationArithmeticExpression
 
 class LoopBlock(
-) : InstructionBlock() {
+) : InstructionBlock {
+    override var context: Context = UIContext
+
     private var leftPartCondition: String = ""
     private var rightPartCondition: String = ""
     private var operator: String = "=="
