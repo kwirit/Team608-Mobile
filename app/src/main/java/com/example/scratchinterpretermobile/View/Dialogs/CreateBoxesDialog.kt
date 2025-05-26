@@ -1,6 +1,7 @@
 package com.example.scratchinterpretermobile.View.Dialogs
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import com.example.scratchinterpretermobile.Model.Variable
@@ -21,12 +22,12 @@ import com.example.scratchinterpretermobile.View.ViewModels.MainViewModel
 
 @Composable
 fun CreateBoxesDialog(showBoxesState: MutableState<Boolean>,boxes: MutableList<ProgramBox>){
-    CustomDialog(showBoxesState, Arrangement.SpaceEvenly) {
-        VariableInitializationCard(onAdd = { boxes.add(VariableInitializationBox()) }, showBoxesState)
-        AssigningCard(onAdd = { boxes.add(AssigningBox()) }, showBoxesState)
-        IfCard(onAdd = { boxes.add(IfBox()) }, showBoxesState)
-        WhileCard(onAdd = {boxes.add(WhileBox()) }, showBoxesState)
-        ConsoleCard(onAdd = { boxes.add(ConsoleBox()) }, showBoxesState)
-        ArrayInitializationCard(onAdd = { boxes.add(ArrayInitializationBox()) }, showBoxesState)
+    CustomDialog(showBoxesState) {
+        Column {VariableInitializationCard(onAdd = { boxes.add(VariableInitializationBox()) }, showBoxesState)
+            AssigningCard(onAdd = { boxes.add(AssigningBox()) }, showBoxesState)
+            IfCard(onAdd = { boxes.add(IfBox()) }, showBoxesState)
+            WhileCard(onAdd = {boxes.add(WhileBox()) }, showBoxesState)
+            ConsoleCard(onAdd = { boxes.add(ConsoleBox()) }, showBoxesState)
+            ArrayInitializationCard(onAdd = { boxes.add(ArrayInitializationBox()) }, showBoxesState)  }
     }
 }

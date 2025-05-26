@@ -44,14 +44,26 @@ class IfBox: ProgramBox() {
                 value.processInput(leftOperand, rightOperand,operator, parseCardToInstructionBoxes(ifBoxes),parseCardToInstructionBoxes(elseBoxes))
         },
             dialogContent = {
-                Column {
-                    InnerCreationButton(showInnerBoxesState, modifier = Modifier.fillMaxWidth())
-                    Button(onClick = {currentIsIf.value = true}) { Text(text = "if") }
-                    Button(onClick = {currentIsIf.value = false}) { Text(text = "else") }
-                    if(currentIsIf.value){
-                        IfScreen()
+                Column(modifier = Modifier.fillMaxSize()) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 0.dp, end = 20.dp, top = 10.dp),
+                        horizontalArrangement = Arrangement.End,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        InnerCreationButton(showInnerBoxesState, modifier = Modifier.padding(end = 8.dp))
+                        Button(onClick = { currentIsIf.value = true }) {
+                            Text(text = "if")
+                        }
+                        Button(onClick = { currentIsIf.value = false }, modifier = Modifier.padding(start = 8.dp)) {
+                            Text(text = "else")
+                        }
                     }
-                    else{
+
+                    if (currentIsIf.value) {
+                        IfScreen()
+                    } else {
                         ElseScreen()
                     }
                 }
