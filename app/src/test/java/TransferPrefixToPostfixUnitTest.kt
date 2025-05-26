@@ -7,7 +7,7 @@ import com.example.scratchinterpretermobile.Model.IntegerBlock
 import com.example.scratchinterpretermobile.Model.VarBlock
 import com.example.scratchinterpretermobile.Model.UIContext
 
-class transferPrefixToPostfixUnitTest {
+class TransferPrefixToPostfixUnitTest {
     @Test
     fun test() {
         val scope = hashMapOf<String, VarBlock<*>>()

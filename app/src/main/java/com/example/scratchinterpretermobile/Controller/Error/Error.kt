@@ -220,6 +220,12 @@ val INVALID_CHARACTERS_IN_STRING = Error(
     "The string contains disallowed or unsupported characters.",
     "string"
 )
+val INVALID_FORMAT = Error(
+    702,
+    "Invalid string format",
+    "The string is not enclosed in double quotes or has incorrect structure.",
+    "string"
+)
 
 object ErrorStore {
     private val errorMap = mapOf(
@@ -260,6 +266,7 @@ object ErrorStore {
         601 to VARIABLE_NOT_FOUND,
 
         701 to INVALID_CHARACTERS_IN_STRING,
+        702 to INVALID_FORMAT,
     )
 
     fun get(id: Int): Error? = errorMap[id]

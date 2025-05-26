@@ -11,6 +11,7 @@ import com.example.scratchinterpretermobile.Controller.Error.INCORRECT_ARRAY_ELE
 import com.example.scratchinterpretermobile.Controller.Error.INVALID_ARRAY_ACCESS
 import com.example.scratchinterpretermobile.Controller.Error.INVALID_CHARACTERS
 import com.example.scratchinterpretermobile.Controller.Error.INVALID_CHARACTERS_IN_STRING
+import com.example.scratchinterpretermobile.Controller.Error.INVALID_FORMAT
 import com.example.scratchinterpretermobile.Controller.Error.INVALID_VARIABLE_START
 import com.example.scratchinterpretermobile.Controller.Error.UNMATCHED_PARENTHESES
 import com.example.scratchinterpretermobile.Controller.Error.VARIABLE_HAS_SPACE
@@ -86,8 +87,17 @@ fun validateConst(input: String): Int {
 fun validateString(input: String): Int {
     val trimmedInput = input.trim()
     if (trimmedInput.isEmpty()) return EMPTY_NAME.id
-    val regex = """(^["]*)""".toRegex()
-    if (regex.matches(input.trim())) return 0
+    if (!trimmedInput.startsWith("\"") || !trimmedInput.endsWith("\"")) {
+        return INVALID_FORMAT.id
+    }
+
+    val contentInsideQuotes = trimmedInput.drop(1).dropLast(1)
+
+    val regex = """[^"]*""".toRegex()
+    if (regex.matches(contentInsideQuotes)) {
+        return 0
+    }
+
     return INVALID_CHARACTERS_IN_STRING.id
 }
 
@@ -132,10 +142,14 @@ fun getElementFromString(
     var currentToken = StringBuilder()
 
     var flagArray = false
-    for (symbol in trimmedInput) {
-        if (symbol == ' ') continue
+    var flagString = false
 
-        if (symbol == '[') flagArray = true;
+    for (symbol in trimmedInput) {
+        if (symbol == ' ' && !flagString) continue
+        if (symbol == '\"') flagString = !flagString;
+
+
+        if (symbol == '[') flagArray = true
         if (symbol == ']') {
             flagArray = false;
             currentToken.append(symbol)
@@ -144,21 +158,21 @@ fun getElementFromString(
             continue
         }
 
-        if (flagArray) {
+        if (flagArray || flagString) {
             currentToken.append(symbol)
             continue;
         }
 
-        if (currentToken.isNotEmpty() && (symbol.isDigit() || symbol.isLetter() || symbol == '_')) {
-            currentToken.append(symbol)
-        } else if (currentToken.isEmpty() && (symbol.isDigit() || symbol.isLetter() || symbol == '_')) {
-            currentToken = StringBuilder().append(symbol)
-        } else if (symbol in operators) {
+        if (symbol in operators) {
             if (currentToken.isNotEmpty()) {
                 elements.add(currentToken.toString())
                 currentToken.clear()
             }
             elements.add(symbol.toString())
+        } else if (currentToken.isNotEmpty()) {
+            currentToken.append(symbol)
+        } else {
+            currentToken = StringBuilder().append(symbol)
         }
     }
 
@@ -318,7 +332,7 @@ fun transferStringPrefixToPostfix(elements: MutableList<String>): Pair<MutableLi
             else -> {
                 when {
                     validateConst(element) == 0 -> postfix.add(Pair(element, "Const"))
-                    validateString(element) == 0 -> postfix.add(Pair(element, "String"))
+                    validateString(element) == 0 -> postfix.add(Pair(element.substring(1, element.length - 1), "String"))
 
                     validateNameVariable(element) == 0 && UIContext.getVar(element) != null -> {
                         when (val value = UIContext.getVar(element)) {
@@ -331,7 +345,7 @@ fun transferStringPrefixToPostfix(elements: MutableList<String>): Pair<MutableLi
                         val (value, error) = processArrayAccess(element)
                         if (error != 0) return Pair(mutableListOf(), ARRAY_NOT_FOUND.id)
 
-                        postfix.add(Pair(element, "Const"))
+                        postfix.add(Pair(value.toString(), "Const"))
                     }
 
                     else -> return Pair(mutableListOf(), INVALID_VARIABLE_START.id)
@@ -388,6 +402,11 @@ fun calculationStringPostfix(
 
                 stack.push(Pair(result.toString(), "Const"))
             }
+            firstType == "String" && secondType == "String" && value == "+" -> {
+                val result = secondValue + firstValue
+                stack.push(Pair(result, "String"))
+            }
+
             else -> return Pair("", INVALID_CHARACTERS.id)
             }
 
