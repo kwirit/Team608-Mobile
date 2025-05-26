@@ -46,7 +46,7 @@ fun BaseBox(name: String, showState: MutableState<Boolean>, dialogModifier: Modi
             Button(onClick = {
                 showState.value = true
             }, modifier = Modifier.size(60.dp).align(Alignment.CenterEnd), shape = RoundedCornerShape(16.dp),
-                contentPadding = PaddingValues(0.dp)
+                contentPadding = PaddingValues(0.dp),
             ) {
                 Icon(painter = painterResource(R.drawable.settings_icon), contentDescription = null,modifier = Modifier.size(35.dp))
             }
