@@ -22,6 +22,7 @@ class MainViewModel : ViewModel() {
     val boxes = mutableStateListOf<ProgramBox>()
 
 
+
     fun run() {
         val instructionList: MutableList<InstructionBlock> = parseCardToInstructionBoxes(boxes)
         val interpreter: Interpreter = Interpreter()

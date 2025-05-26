@@ -61,7 +61,9 @@ fun BaseBox(name: String,showState: MutableState<Boolean>,onConfirmButton:() -> 
     }
     if(showState.value){
         BoxDialog(showState,onConfirmButton){
-            dialogContent()
+            Box(modifier = Modifier.fillMaxSize()){
+                dialogContent()
+            }
         }
     }
 }

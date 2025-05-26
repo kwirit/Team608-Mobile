@@ -21,6 +21,7 @@ import androidx.compose.ui.zIndex
 import com.example.scratchinterpretermobile.R
 import com.example.scratchinterpretermobile.View.Bars.BottomBar
 import com.example.scratchinterpretermobile.View.Bars.TopBar
+import com.example.scratchinterpretermobile.View.Boxes.ArrayInitializationBox
 import com.example.scratchinterpretermobile.View.Dialogs.CreateBoxesDialog
 import com.example.scratchinterpretermobile.View.ViewModels.MainViewModel
 import com.example.scratchinterpretermobile.View.Widgets.VerticalReorderList
@@ -52,7 +53,7 @@ fun MainScreen(viewModel: MainViewModel) {
 fun CodeBlocksScreen(viewModel: MainViewModel){
     VerticalReorderList(viewModel.boxes)
     Box(modifier = Modifier.fillMaxSize().graphicsLayer(alpha = 0.7f)){
-        Button(modifier = Modifier.align(Alignment.BottomCenter).padding(12.dp).size(48.dp),onClick = {
+        Button(modifier = Modifier.align(Alignment.BottomCenter).padding(12.dp).size(54.dp),onClick = {
             viewModel.showBoxesState.value = true },
             colors = ButtonDefaults.buttonColors(
                 containerColor = LightOrange,
