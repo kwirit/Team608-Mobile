@@ -261,9 +261,11 @@ class AssignmentBlock:InstructionBlock {
 
 
 
-    fun removeBlock() {
+    override fun removeBlock() {
         originalVarBlock ?: return
+
         context.setVar(originalVarBlock!!.getName(), originalVarBlock!!)
+        originalVarBlock = originalVarBlock!!.getCopy()
 
         return
     }
@@ -273,7 +275,7 @@ class AssignmentBlock:InstructionBlock {
         val originalBlock = context.getVar(newVarBlock!!.getName()) ?: return VARIABLE_DOES_NOT_EXIST.id
         if(originalBlock::class != newVarBlock!!::class) return ASSIGNING_DIFFERENT_TYPES.id
 
-        context.setVar(newVarBlock!!.getName(), newVarBlock!!)
+        context.setVar(newVarBlock!!.getName(), newVarBlock!!.getCopy())
 
         return SUCCESS.id
     }
