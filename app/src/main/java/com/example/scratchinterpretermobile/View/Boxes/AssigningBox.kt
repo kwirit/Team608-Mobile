@@ -37,31 +37,27 @@ class AssigningBox: ProgramBox() {
     var arithmeticField by mutableStateOf("")
     var arrayIndex by mutableStateOf("")
     var code by mutableIntStateOf(104)
-    val isVar = mutableStateOf(false)
-    val isIndexArray = mutableStateOf(false)
-    val isArray = mutableStateOf(false)
+    val state = mutableIntStateOf(-1)
     var selectedVariable = mutableStateOf<VarBlock<*>?>(null)
 
     @Composable
     override fun render(){
         BaseBox(name = "Присваивание", showState,
             onConfirmButton = {
-                if(selectedVariable.value != null){
-                    if(isVar.value){
-                        value.assignIntegerBlock(selectedVariable.value!!.getName(),arithmeticField)
+                if(state.value == 0){
+                    code = value.assignIntegerBlock(selectedVariable.value!!.getName(),arithmeticField)
+                }
+                else if(state.value == 1){
+                    if(arrayIndex == ""){
+                        code = value.assignIntegerArrayBlock(selectedVariable.value!!.getName(),arithmeticField)
                     }
-                    else if(isIndexArray.value){
-                        if(arrayIndex == ""){
-                            value.assignIntegerArrayBlock(selectedVariable.value!!.getName(),arithmeticField)
-                        }
-                        else{
-                            value.assignElementIntegerArrayBlock(selectedVariable.value!!.getName(),arrayIndex,arithmeticField)
-                        }
+                    else{
+                        code = value.assignElementIntegerArrayBlock(selectedVariable.value!!.getName(),arrayIndex,arithmeticField)
                     }
-                    else if(isArray.value){
-                        for((index,field) in arrayListField.withIndex()){
-                            value.assignElementIntegerArrayBlock(selectedVariable.value!!.getName(),index.toString(),field)
-                        }
+                }
+                else if(state.value == 2){
+                    for((index,field) in arrayListField.withIndex()){
+                        code = value.assignElementIntegerArrayBlock(selectedVariable.value!!.getName(),index.toString(),field)
                     }
                 }
         },
@@ -87,17 +83,20 @@ class AssigningBox: ProgramBox() {
 
                         when {
                             selectedVariable.value is IntegerBlock -> {
+                                state.value = 0
                                 Text("Значение:")
                                 VariableTextField(onValueChange = { arithmeticField = it }, value = arithmeticField)
                             }
 
                             selectedVariable.value is IntegerArrayBlock -> {
                                 if (checkVariableState.value) {
+                                    state.value = 1
                                     Text("Индекс:")
                                     VariableTextField(onValueChange = { arrayIndex = it }, value = arrayIndex)
                                     Text("Значение:")
                                     VariableTextField(onValueChange = { arithmeticField = it }, value = arithmeticField)
                                 } else {
+                                    state.value = 2;
                                     val arraySize = (selectedVariable.value as? IntegerArrayBlock)?.getValue()?.size ?: 0
 
                                     if (arrayListField.size != arraySize) {

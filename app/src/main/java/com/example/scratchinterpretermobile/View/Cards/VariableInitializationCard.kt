@@ -14,8 +14,8 @@ import com.example.scratchinterpretermobile.View.Boxes.ProgramBox
 @Composable
 fun VariableInitializationCard(onAdd: () -> Unit, showBoxesState: MutableState<Boolean> = mutableStateOf(false)){
     BaseCard(name = "Инициализация переменной", onClick = {
-        onAdd()
         showBoxesState.value = false
+        onAdd()
     }) {
     }
 }
