@@ -12,13 +12,12 @@ import com.example.scratchinterpretermobile.Model.VarBlock
 import com.example.scratchinterpretermobile.Model.UIContext
 
 @Composable
-fun ListOfVar(previousVar: MutableState<VarBlock<*>?>): MutableState<VarBlock<*>?> {
+fun ListOfVar(selectedVariable: MutableState<VarBlock<*>?>): MutableState<VarBlock<*>?> {
     val variables = UIContext.GetListVarBlock()
-    val selectedVariable = remember { mutableStateOf<VarBlock<*>?>(null) }
     val expanded = remember { mutableStateOf(false) }
 
     TextButton(onClick = { expanded.value = true }) {
-        Text(text = previousVar.value?.getName() ?: "Выберите")
+        Text(text = selectedVariable.value?.getName() ?: "Выберите переменную")
     }
 
     DropdownMenu(expanded = expanded.value, onDismissRequest = { expanded.value = false }) {

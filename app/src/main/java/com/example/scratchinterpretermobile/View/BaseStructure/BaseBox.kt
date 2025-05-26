@@ -6,12 +6,17 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -34,11 +39,10 @@ import com.example.scratchinterpretermobile.ui.theme.Blue
 
 @Composable
 fun BaseBox(name: String,showState: MutableState<Boolean>,onConfirmButton:() -> Unit,dialogContent:@Composable () -> Unit,boxContent:@Composable () -> Unit){
-    Card(Modifier.fillMaxWidth().height(120.dp).padding(10.dp),
+    Card(Modifier.fillMaxWidth().heightIn(min = 80.dp).padding(10.dp),
         colors = CardDefaults.cardColors(containerColor = Blue),
     ) {
-        Box(Modifier.fillMaxSize().padding(end = 20.dp)){
-            Text(modifier = Modifier.align(Alignment.TopStart).padding(15.dp), text = name)
+        Box(Modifier.heightIn(min = 80.dp).fillMaxWidth().padding(end = 10.dp)){
             Button(onClick = {
                 showState.value = true
             }, modifier = Modifier.size(60.dp).align(Alignment.CenterEnd), shape = RoundedCornerShape(16.dp),
@@ -46,14 +50,20 @@ fun BaseBox(name: String,showState: MutableState<Boolean>,onConfirmButton:() -> 
             ) {
                 Icon(painter = painterResource(R.drawable.settings_icon), contentDescription = null,modifier = Modifier.size(35.dp))
             }
-            Box (modifier = Modifier.fillMaxHeight().padding(start = 15.dp, top = 40.dp)){
-                boxContent()
+            Column(modifier = Modifier.padding(7.dp)) {
+                Text(text = name)
+                Box (modifier = Modifier.fillMaxHeight()){
+                    boxContent()
+                }
+                Spacer(modifier = Modifier.width(10.dp))
             }
         }
     }
     if(showState.value){
         BoxDialog(showState,onConfirmButton){
-            dialogContent()
+            Box(modifier = Modifier.fillMaxSize()){
+                dialogContent()
+            }
         }
     }
 }

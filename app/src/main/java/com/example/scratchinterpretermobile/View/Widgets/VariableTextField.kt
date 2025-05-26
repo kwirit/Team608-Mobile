@@ -9,6 +9,6 @@ import com.example.scratchinterpretermobile.Model.Variable
 
 
 @Composable
-fun VariableTextField(onValueChange: (String) -> Unit, value: String){
-    TextField(modifier = Modifier.size(80.dp), onValueChange = onValueChange, value = value)
+fun VariableTextField(onValueChange: (String) -> Unit, value: String, modifier: Modifier = Modifier){
+    TextField(modifier = modifier, onValueChange = onValueChange, value = value)
 }

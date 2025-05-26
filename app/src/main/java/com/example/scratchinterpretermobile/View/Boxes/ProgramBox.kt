@@ -6,7 +6,7 @@ import com.example.scratchinterpretermobile.Model.InstructionBlock
 import java.util.UUID
 
 abstract class ProgramBox() {
-    val showState = mutableStateOf(false)
+    val showState = mutableStateOf(true)
     val id: String = UUID.randomUUID().toString()
     abstract val value: InstructionBlock
     override fun equals(other: Any?): Boolean {

@@ -20,7 +20,7 @@ import com.example.scratchinterpretermobile.ui.theme.Blue
 
 @Composable
 fun BaseCard(name: String,onClick: () -> Unit = {},content:@Composable () -> Unit){
-    Card(Modifier.fillMaxWidth().height(70.dp).padding(5.dp).clickable(onClick = onClick),
+    Card(Modifier.fillMaxWidth().height(90.dp).padding(5.dp).clickable(onClick = onClick),
         colors = CardDefaults.cardColors(containerColor = Blue),
     ) {
         Box(Modifier.fillMaxSize(),contentAlignment = Alignment.Center){
