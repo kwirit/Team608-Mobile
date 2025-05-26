@@ -1,5 +1,6 @@
 package com.example.scratchinterpretermobile.View.Boxes
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,6 +18,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.scratchinterpretermobile.Controller.Utils.parseCardToInstructionBoxes
 import com.example.scratchinterpretermobile.Model.ConditionBlock
@@ -46,19 +48,15 @@ class IfBox: ProgramBox() {
             dialogContent = {
                 Column(modifier = Modifier.fillMaxSize()) {
                     Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 0.dp, end = 20.dp, top = 10.dp),
-                        horizontalArrangement = Arrangement.End,
-                        verticalAlignment = Alignment.CenterVertically
+                        modifier = Modifier.align(Alignment.End).padding(20.dp), horizontalArrangement = Arrangement.End
                     ) {
-                        InnerCreationButton(showInnerBoxesState, modifier = Modifier.padding(end = 8.dp))
                         Button(onClick = { currentIsIf.value = true }) {
                             Text(text = "if")
                         }
-                        Button(onClick = { currentIsIf.value = false }, modifier = Modifier.padding(start = 8.dp)) {
+                        Button(onClick = { currentIsIf.value = false }) {
                             Text(text = "else")
                         }
+                        InnerCreationButton(showInnerBoxesState)
                     }
 
                     if (currentIsIf.value) {
