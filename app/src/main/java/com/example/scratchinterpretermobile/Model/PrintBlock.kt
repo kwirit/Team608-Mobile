@@ -19,6 +19,8 @@ class PrintBlock(
         updateOutput(input);
     }
 
+    override fun removeBlock() {}
+
     override fun run(): Int {
         consoleOutput = ""
         if (output == "") return 0

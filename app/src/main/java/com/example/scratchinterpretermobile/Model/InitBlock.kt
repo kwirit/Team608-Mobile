@@ -80,7 +80,7 @@ class InitBlock : InstructionBlock {
 
 
     
-    fun removeBlock(){
+    override  fun removeBlock(){
         for(varBlock in newVarBlocks) {
             context.removeVar(varBlock.getName())
         }
@@ -91,7 +91,7 @@ class InitBlock : InstructionBlock {
     override fun run(): Int {
         for(varBlock in newVarBlocks) {
             if(context.getVar(varBlock.getName()) != null) return REDECLARING_A_VARIABLE.id
-            context.peekScope()!!.put(varBlock.getName(), varBlock)
+            context.peekScope()!!.put(varBlock.getName(), varBlock.getCopy())
         }
 
         return 0
