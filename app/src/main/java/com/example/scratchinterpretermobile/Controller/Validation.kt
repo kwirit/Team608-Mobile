@@ -353,7 +353,6 @@ fun calculationStringPostfix(
 ): Pair<String, Int> {
 
     val stack = Stack<Pair<String, String>>()
-    val operators = "+*"
 
     for (element in postfix) {
         val (value, typeValue) = element

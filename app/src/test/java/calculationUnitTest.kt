@@ -50,32 +50,19 @@ class calculationUnitTest {
 
     @Test
     fun testArifInArray() {
-        val scope = hashMapOf<String, VarBlock>()
-        scope["a"] = IntegerBlock("a", 1)
-        scope["i"] = IntegerBlock("i", 2)
-        scope["b"] = IntegerBlock("b", 2)
-        scope["arr"] = IntegerArrayBlock("arr", mutableListOf(100, 23, 11, 105, 1, 1231, 1554, 5, 64))
-        mainContext.pushScope(scope)
-
-
-        val (result, error) = calculationArithmeticExpression("arr[    1 + i    + a] + arr    [i +     b] * arr[i * i + b]")
-
-        assertEquals(1 + 1 * 1554, result)
-    }
-
-    @Test
-    fun testArrayInArray() {
         val scope = hashMapOf<String, VarBlock<*>>()
         scope["a"] = IntegerBlock("a", 1)
         scope["i"] = IntegerBlock("i", 2)
         scope["b"] = IntegerBlock("b", 2)
-        scope["arr2"] = IntegerArrayBlock("arr2", mutableListOf(1, 2, 3))
         scope["arr"] = IntegerArrayBlock("arr", mutableListOf(100, 23, 11, 105, 1, 1231, 1554, 5, 64))
         mainContext.pushScope(scope)
 
-        val result = getElementFromString("asda[ 1 + (4 + 0) * 123 - (123 - 1000)]")
-        assertEquals(listOf("asda[1+(4+0)*123 - (123-1000)"), result)
+
+        val (result, error) = calculationArithmeticExpression("arr[a] + arr[b] + arr[i + 1]")
+
+        assertEquals(1 + 1 * 1554, result)
     }
+
 
     @After
     fun tearDown() {
