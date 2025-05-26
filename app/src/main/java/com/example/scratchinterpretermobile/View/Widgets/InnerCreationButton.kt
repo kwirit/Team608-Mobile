@@ -1,5 +1,6 @@
 package com.example.scratchinterpretermobile.View.Widgets
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
@@ -18,12 +19,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.scratchinterpretermobile.R
-import com.example.scratchinterpretermobile.ui.theme.LightOrange
 
 @Composable
 fun InnerCreationButton(showState: MutableState<Boolean>,modifier: Modifier = Modifier){
-    Box(modifier = modifier.fillMaxWidth()){
-        Button(modifier = Modifier.align(Alignment.TopEnd).padding(top = 18.dp, end = 20.dp).size(50.dp),onClick = {
+    Box(modifier = modifier){
+        Button(modifier = Modifier.align(Alignment.TopEnd).size(50.dp),onClick = {
             showState.value = true},
             colors = ButtonDefaults.buttonColors(
                 contentColor = Color.White),

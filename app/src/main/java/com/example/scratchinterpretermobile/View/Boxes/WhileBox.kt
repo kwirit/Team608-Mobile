@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -11,7 +12,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import com.example.scratchinterpretermobile.Controller.Utils.parseCardToInstructionBoxes
 import com.example.scratchinterpretermobile.Model.ConditionBlock
 import com.example.scratchinterpretermobile.Model.LoopBlock
@@ -33,19 +36,23 @@ class WhileBox: ProgramBox() {
     override fun render(){
         BaseBox(name = "Цикл", showState,
             onConfirmButton = {
-                value.processInput(leftOperand,rightOperand,operator)
+                value.processInput(leftOperand,rightOperand,operator,parseCardToInstructionBoxes(boxes))
             },
             dialogContent = {
                 Column {
-                    InnerCreationButton(showInnerBoxesState, modifier = Modifier.fillMaxWidth())
-                    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly){
+                    Row(
+                        modifier = Modifier.fillMaxWidth().align(Alignment.End).padding(20.dp), horizontalArrangement = Arrangement.End
+                    ) {
+                        InnerCreationButton(showInnerBoxesState, modifier = Modifier.fillMaxWidth())
+                    }
+                    Row(modifier = Modifier.fillMaxWidth()){
                         VariableTextField(onValueChange = {newText->
                             leftOperand = newText
-                        },value = leftOperand)
+                        },value = leftOperand,modifier = Modifier.weight(1f))
                         operator = ListOfIfOperators()
                         VariableTextField(onValueChange = {newText->
                             rightOperand = newText
-                        },value = rightOperand)
+                        },value = rightOperand,modifier = Modifier.weight(1f))
                     }
                     VerticalReorderList(boxes)
                     if(showInnerBoxesState.value){

@@ -20,10 +20,11 @@ class LoopBlock(
         context.pushScope(scope)
     }
 
-    fun processInput(leftPartCondition: String, rightPartCondition: String, operator: String) {
+    fun processInput(leftPartCondition: String, rightPartCondition: String, operator: String, blocksToRun: MutableList<InstructionBlock>) {
         this.leftPartCondition = leftPartCondition
         this.rightPartCondition = rightPartCondition
         this.operator = operator
+        this.blocksToRun = blocksToRun
     }
 
     /**

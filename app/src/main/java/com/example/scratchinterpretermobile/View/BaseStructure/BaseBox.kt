@@ -22,6 +22,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -35,12 +36,11 @@ import com.example.scratchinterpretermobile.R
 import com.example.scratchinterpretermobile.View.Dialogs.BoxDialog
 import com.example.scratchinterpretermobile.View.Dialogs.CreateBoxesDialog
 import com.example.scratchinterpretermobile.View.Dialogs.CustomDialog
-import com.example.scratchinterpretermobile.ui.theme.Blue
 
 @Composable
-fun BaseBox(name: String,showState: MutableState<Boolean>,onConfirmButton:() -> Unit,dialogContent:@Composable () -> Unit,boxContent:@Composable () -> Unit){
+fun BaseBox(name: String, showState: MutableState<Boolean>, dialogModifier: Modifier = Modifier, onConfirmButton:() -> Unit, dialogContent:@Composable () -> Unit, boxContent:@Composable () -> Unit){
     Card(Modifier.fillMaxWidth().heightIn(min = 80.dp).padding(10.dp),
-        colors = CardDefaults.cardColors(containerColor = Blue),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
     ) {
         Box(Modifier.heightIn(min = 80.dp).fillMaxWidth().padding(end = 10.dp)){
             Button(onClick = {
@@ -60,7 +60,7 @@ fun BaseBox(name: String,showState: MutableState<Boolean>,onConfirmButton:() -> 
         }
     }
     if(showState.value){
-        BoxDialog(showState,onConfirmButton){
+        BoxDialog(showState, modifier = dialogModifier,onConfirmButton){
             Box(modifier = Modifier.fillMaxSize()){
                 dialogContent()
             }
