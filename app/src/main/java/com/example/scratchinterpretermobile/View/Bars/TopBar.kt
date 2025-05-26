@@ -27,7 +27,6 @@ import androidx.compose.ui.unit.dp
 import com.example.scratchinterpretermobile.R
 import com.example.scratchinterpretermobile.View.ViewModels.MainViewModel
 
-
 @Composable
 fun TopBar(viewModel: MainViewModel,modifier: Modifier = Modifier){
     Box(modifier = modifier.height(60.dp).background(color = MaterialTheme.colorScheme.primaryContainer)){

@@ -56,7 +56,7 @@ fun CodeBlocksScreen(viewModel: MainViewModel){
         Button(modifier = Modifier.align(Alignment.BottomCenter).padding(12.dp).size(54.dp),onClick = {
             viewModel.showBoxesState.value = true },
             colors = ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.secondary,
+                containerColor = MaterialTheme.colorScheme.secondaryContainer,
                 contentColor = Color.White),
             shape = RoundedCornerShape(16.dp),
             contentPadding = PaddingValues(0.dp)
