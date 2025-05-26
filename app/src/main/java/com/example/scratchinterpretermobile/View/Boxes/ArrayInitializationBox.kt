@@ -15,6 +15,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.scratchinterpretermobile.Controller.Error.ErrorStore
 import com.example.scratchinterpretermobile.Model.InitBlock
 import com.example.scratchinterpretermobile.View.BaseStructure.BaseBox
@@ -49,6 +50,16 @@ class ArrayInitializationBox : ProgramBox() {
                     }
                 }
             }) {
+            if(code == 0){
+                Text(text = arrayName)
+            }
+            else{
+                Column {
+                    Text(text = ErrorStore.get(code)!!.description, lineHeight = 12.sp, fontSize = 8.sp)
+                    Text(text = ErrorStore.get(code)!!.category, lineHeight = 12.sp, fontSize = 8.sp)
+                    Text(text = ErrorStore.get(code)!!.title, lineHeight = 12.sp, fontSize = 8.sp)
+                }
+            }
         }
     }
 }

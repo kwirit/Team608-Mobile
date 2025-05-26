@@ -19,7 +19,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.scratchinterpretermobile.R
-import com.example.scratchinterpretermobile.ui.theme.LightOrange
 
 @Composable
 fun InnerCreationButton(showState: MutableState<Boolean>,modifier: Modifier = Modifier){

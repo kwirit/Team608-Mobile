@@ -14,6 +14,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
@@ -23,18 +24,17 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.scratchinterpretermobile.R
 import com.example.scratchinterpretermobile.View.ViewModels.MainViewModel
-import com.example.scratchinterpretermobile.ui.theme.LightOrange
-import com.example.scratchinterpretermobile.ui.theme.Orange
+
 
 @Composable
 fun BottomBar(viewModel: MainViewModel,modifier: Modifier = Modifier){
-    Box(modifier = modifier.height(60.dp).background(color = Orange)){
-        Row(Modifier.fillMaxSize().background(color = Orange), horizontalArrangement = Arrangement.SpaceAround, verticalAlignment = Alignment.CenterVertically){
+    Box(modifier = modifier.height(60.dp).background(color = MaterialTheme.colorScheme.primaryContainer)){
+        Row(Modifier.fillMaxSize().background(color = MaterialTheme.colorScheme.primaryContainer), horizontalArrangement = Arrangement.SpaceAround, verticalAlignment = Alignment.CenterVertically){
             Button(modifier = Modifier.size(48.dp),onClick = {
                 viewModel.screenState.value=0
             },
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = LightOrange,
+                    containerColor = MaterialTheme.colorScheme.secondaryContainer,
                     contentColor = Color.White),
                 shape = RoundedCornerShape(16.dp),
                 contentPadding = PaddingValues(0.dp)
@@ -45,7 +45,7 @@ fun BottomBar(viewModel: MainViewModel,modifier: Modifier = Modifier){
                 viewModel.screenState.value=0
             },
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = LightOrange,
+                    containerColor = MaterialTheme.colorScheme.secondaryContainer,
                     contentColor = Color.White),
                 shape = RoundedCornerShape(16.dp),
                 contentPadding = PaddingValues(0.dp)
@@ -56,7 +56,7 @@ fun BottomBar(viewModel: MainViewModel,modifier: Modifier = Modifier){
                 viewModel.screenState.value=0
             },
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = LightOrange,
+                    containerColor = MaterialTheme.colorScheme.secondaryContainer,
                     contentColor = Color.White),
                 shape = RoundedCornerShape(16.dp),
                 contentPadding = PaddingValues(0.dp)
@@ -67,7 +67,7 @@ fun BottomBar(viewModel: MainViewModel,modifier: Modifier = Modifier){
                 viewModel.screenState.value=1
             },
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = LightOrange,
+                    containerColor = MaterialTheme.colorScheme.secondaryContainer,
                     contentColor = Color.White),
                 shape = RoundedCornerShape(16.dp),
                 contentPadding = PaddingValues(0.dp)

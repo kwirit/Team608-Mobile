@@ -12,6 +12,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
@@ -25,7 +26,6 @@ import com.example.scratchinterpretermobile.View.Boxes.ArrayInitializationBox
 import com.example.scratchinterpretermobile.View.Dialogs.CreateBoxesDialog
 import com.example.scratchinterpretermobile.View.ViewModels.MainViewModel
 import com.example.scratchinterpretermobile.View.Widgets.VerticalReorderList
-import com.example.scratchinterpretermobile.ui.theme.LightOrange
 
 @Composable
 fun MainScreen(viewModel: MainViewModel) {
@@ -56,7 +56,7 @@ fun CodeBlocksScreen(viewModel: MainViewModel){
         Button(modifier = Modifier.align(Alignment.BottomCenter).padding(12.dp).size(54.dp),onClick = {
             viewModel.showBoxesState.value = true },
             colors = ButtonDefaults.buttonColors(
-                containerColor = LightOrange,
+                containerColor = MaterialTheme.colorScheme.secondary,
                 contentColor = Color.White),
             shape = RoundedCornerShape(16.dp),
             contentPadding = PaddingValues(0.dp)

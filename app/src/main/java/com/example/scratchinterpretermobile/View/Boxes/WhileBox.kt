@@ -36,7 +36,7 @@ class WhileBox: ProgramBox() {
     override fun render(){
         BaseBox(name = "Цикл", showState,
             onConfirmButton = {
-                value.processInput(leftOperand,rightOperand,operator)
+                value.processInput(leftOperand,rightOperand,operator,parseCardToInstructionBoxes(boxes))
             },
             dialogContent = {
                 Column {

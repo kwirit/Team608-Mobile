@@ -15,6 +15,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
@@ -24,16 +25,15 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.scratchinterpretermobile.R
 import com.example.scratchinterpretermobile.View.ViewModels.MainViewModel
-import com.example.scratchinterpretermobile.ui.theme.LightOrange
-import com.example.scratchinterpretermobile.ui.theme.Orange
+
 
 @Composable
 fun TopBar(viewModel: MainViewModel,modifier: Modifier = Modifier){
-    Box(modifier = modifier.height(60.dp).background(color = Orange)){
+    Box(modifier = modifier.height(60.dp).background(color = MaterialTheme.colorScheme.primaryContainer)){
         Row(modifier = Modifier.fillMaxSize().padding(end = 16.dp), horizontalArrangement = Arrangement.spacedBy(space = 16.dp, alignment = Alignment.End), verticalAlignment = Alignment.CenterVertically){
             Button(modifier = Modifier.size(48.dp),onClick = {},
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = LightOrange,
+                    containerColor = MaterialTheme.colorScheme.secondaryContainer,
                     contentColor = Color.Green),
                 shape = RoundedCornerShape(16.dp),
                 contentPadding = PaddingValues(0.dp)
@@ -44,7 +44,7 @@ fun TopBar(viewModel: MainViewModel,modifier: Modifier = Modifier){
                 viewModel.run()
             },
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = LightOrange,
+                    containerColor = MaterialTheme.colorScheme.secondaryContainer,
                     contentColor = Color.Green),
                 shape = RoundedCornerShape(16.dp),
                 contentPadding = PaddingValues(0.dp)
