@@ -19,13 +19,13 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 
 @Composable
-fun CustomDialog(showState: MutableState<Boolean>, arrangement: Arrangement.Vertical = Arrangement.Top, content:@Composable () -> Unit){
+fun CustomDialog(showState: MutableState<Boolean>, arrangement: Arrangement.Vertical = Arrangement.Top, modifier: Modifier = Modifier, content:@Composable () -> Unit){
     Dialog(
         properties = DialogProperties(
             usePlatformDefaultWidth = false),
         onDismissRequest = {showState.value = false},
     ) {
-        Box(Modifier.fillMaxWidth().height(600.dp).padding(20.dp).background(color = Color.White, shape = RoundedCornerShape(20.dp))) {
+        Box(modifier.fillMaxWidth().height(600.dp).padding(20.dp).background(color = Color.White, shape = RoundedCornerShape(20.dp))) {
             content()
         }
     }

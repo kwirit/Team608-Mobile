@@ -23,8 +23,8 @@ import com.example.scratchinterpretermobile.R
 
 
 @Composable
-fun BoxDialog(showState: MutableState<Boolean>,onConfirmDialog: () -> Unit,content:@Composable () -> Unit){
-    CustomDialog(showState){
+fun BoxDialog(showState: MutableState<Boolean>,modifier: Modifier,onConfirmDialog: () -> Unit,content:@Composable () -> Unit){
+    CustomDialog(showState, modifier = modifier){
         Box(modifier = Modifier.fillMaxSize()){
             Button(modifier = Modifier.align(Alignment.TopStart).padding(20.dp).size(50.dp),onClick = {
                 showState.value = false},

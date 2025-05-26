@@ -23,7 +23,7 @@ import com.example.scratchinterpretermobile.ui.theme.LightOrange
 
 @Composable
 fun InnerCreationButton(showState: MutableState<Boolean>,modifier: Modifier = Modifier){
-    Box(modifier = modifier.background(color = Color.Black)){
+    Box(modifier = modifier){
         Button(modifier = Modifier.align(Alignment.TopEnd).size(50.dp),onClick = {
             showState.value = true},
             colors = ButtonDefaults.buttonColors(
