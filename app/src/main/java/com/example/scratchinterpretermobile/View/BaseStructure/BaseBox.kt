@@ -39,10 +39,10 @@ import com.example.scratchinterpretermobile.ui.theme.Blue
 
 @Composable
 fun BaseBox(name: String,showState: MutableState<Boolean>,onConfirmButton:() -> Unit,dialogContent:@Composable () -> Unit,boxContent:@Composable () -> Unit){
-    Card(Modifier.fillMaxWidth().heightIn(min = 100.dp).padding(10.dp),
+    Card(Modifier.fillMaxWidth().heightIn(min = 80.dp).padding(10.dp),
         colors = CardDefaults.cardColors(containerColor = Blue),
     ) {
-        Box(Modifier.fillMaxSize().padding(end = 10.dp)){
+        Box(Modifier.heightIn(min = 80.dp).fillMaxWidth().padding(end = 10.dp)){
             Button(onClick = {
                 showState.value = true
             }, modifier = Modifier.size(60.dp).align(Alignment.CenterEnd), shape = RoundedCornerShape(16.dp),
