@@ -1,5 +1,10 @@
 package com.example.scratchinterpretermobile.View.Boxes
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -10,6 +15,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.scratchinterpretermobile.Controller.Error.ErrorStore
 import com.example.scratchinterpretermobile.Model.InitBlock
 import com.example.scratchinterpretermobile.View.BaseStructure.BaseBox
@@ -32,6 +38,11 @@ class VariableInitializationBox : ProgramBox() {
             }, value = text)
             Text(text = ErrorStore.get(code)!!.title)
         }) {
+            Column(Modifier.fillMaxHeight()){
+                Text(text = ErrorStore.get(code)!!.description, lineHeight = 12.sp, fontSize = 8.sp)
+                Text(text = ErrorStore.get(code)!!.category, lineHeight = 12.sp, fontSize = 8.sp)
+                Text(text = ErrorStore.get(code)!!.title, lineHeight = 12.sp, fontSize = 8.sp)
+            }
         }
     }
 }

@@ -6,8 +6,10 @@ import com.example.scratchinterpretermobile.Controller.validateNameVariable
 
 class PrintBlock(
     var output: String = "",
-    var consoleOutput: String = ""
-) : InstructionBlock() {
+    var consoleOutput: String = "",
+
+) : InstructionBlock {
+    override var context: Context = UIContext
 
     fun updateOutput(newOutput: String) {
         output = newOutput.trim();

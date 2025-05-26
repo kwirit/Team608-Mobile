@@ -21,7 +21,7 @@ class IntegerBlock(
         value = newValue
     }
 
-    fun getCopy(): IntegerBlock {
+    override fun getCopy(): IntegerBlock {
         val originalName = name
         val originalValue = value
 

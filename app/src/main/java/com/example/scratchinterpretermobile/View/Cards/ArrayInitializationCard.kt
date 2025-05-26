@@ -17,6 +17,5 @@ fun ArrayInitializationCard(onAdd: () -> Unit, showBoxesState: MutableState<Bool
         onAdd()
         showBoxesState.value = false
     }) {
-        TextField(modifier =  Modifier.size(80.dp),onValueChange = {}, value = "text")
     }
 }

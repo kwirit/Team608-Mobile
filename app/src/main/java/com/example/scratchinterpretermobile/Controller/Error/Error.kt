@@ -199,6 +199,13 @@ val INVALID_ARRAY_INDEX = Error(
     "assignment"
 )
 
+val ASSIGNMENT_ERROR = Error(
+    505,
+    "Assignment error",
+    "The block does not assign anything",
+    "assignment"
+)
+
 // 600
 val VARIABLE_NOT_FOUND = Error(
     601,
@@ -248,6 +255,8 @@ object ErrorStore {
         502 to INVALID_ASSIGNMENT_ARRAY,
 //        503 to INVALID_ARRAY_ELEMENT_ASSIGNMENT
         504 to INVALID_ARRAY_INDEX,
+        505 to ASSIGNMENT_ERROR,
+
         601 to VARIABLE_NOT_FOUND,
 
         701 to INVALID_CHARACTERS_IN_STRING,

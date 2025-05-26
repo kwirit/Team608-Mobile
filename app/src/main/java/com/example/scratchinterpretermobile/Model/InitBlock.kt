@@ -8,7 +8,8 @@ import com.example.scratchinterpretermobile.Controller.Error.SUCCESS
 import com.example.scratchinterpretermobile.Controller.calculationArithmeticExpression
 import com.example.scratchinterpretermobile.Controller.validateNameVariable
 
-class InitBlock : InstructionBlock() {
+class InitBlock : InstructionBlock {
+    override var context = UIContext
     private val newVarBlocks:MutableList<VarBlock<*>> = mutableListOf()
 
     private fun fillNames(variableNames: MutableList<String>, input: String): Int {
@@ -75,7 +76,23 @@ class InitBlock : InstructionBlock() {
     }
 
 
+
+
+
+    
+    fun removeBlock(){
+        for(varBlock in newVarBlocks) {
+            context.removeVar(varBlock.getName())
+        }
+
+        return;
+    }
+
     override fun run(): Int {
+        for(varBlock in newVarBlocks) {
+            if(context.getVar(varBlock.getName()) != null) return REDECLARING_A_VARIABLE.id
+            context.peekScope()!!.put(varBlock.getName(), varBlock)
+        }
 
         return 0
     }

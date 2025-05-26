@@ -1,5 +1,6 @@
 package com.example.scratchinterpretermobile.View.Boxes
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -24,14 +25,15 @@ class ArrayInitializationBox : ProgramBox() {
                 code = this.value.initIntegerArrayBlock(arrayName, arraySize)
             },
             dialogContent = {
-
-                VariableTextField(onValueChange = { newArrayName ->
-                    arrayName = newArrayName
-                }, value = arrayName)
-                VariableTextField(onValueChange = { newArraySize ->
-                    arraySize = newArraySize
-                }, value = arraySize)
-                Text(text = ErrorStore.get(code)!!.title)
+                Column {
+                    VariableTextField(onValueChange = { newArrayName ->
+                        arrayName = newArrayName
+                    }, value = arrayName)
+                    VariableTextField(onValueChange = { newArraySize ->
+                        arraySize = newArraySize
+                    }, value = arraySize)
+                    Text(text = ErrorStore.get(code)!!.title)
+                }
             }) {
         }
     }

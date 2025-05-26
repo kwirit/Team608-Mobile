@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -15,6 +17,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -26,19 +29,18 @@ import com.example.scratchinterpretermobile.ui.theme.Orange
 
 @Composable
 fun TopBar(viewModel: MainViewModel,modifier: Modifier = Modifier){
-    Box(modifier = modifier){
-        Row(modifier = Modifier.fillMaxWidth().height(100.dp).background(color = Orange), horizontalArrangement = Arrangement.End){
-            Button(modifier = Modifier.padding(top = 18.dp, end = 20.dp).size(60.dp),onClick = {
-                viewModel.showBoxesState.value = true },
+    Box(modifier = modifier.height(60.dp).background(color = Orange)){
+        Row(modifier = Modifier.fillMaxSize().padding(end = 16.dp), horizontalArrangement = Arrangement.spacedBy(space = 16.dp, alignment = Alignment.End), verticalAlignment = Alignment.CenterVertically){
+            Button(modifier = Modifier.size(48.dp),onClick = {},
                 colors = ButtonDefaults.buttonColors(
                     containerColor = LightOrange,
-                    contentColor = Color.White),
+                    contentColor = Color.Green),
                 shape = RoundedCornerShape(16.dp),
                 contentPadding = PaddingValues(0.dp)
             ) {
-                Icon(painter = painterResource(R.drawable.baseline_add), contentDescription = null, modifier = Modifier.size(50.dp))
+                Icon(painter = painterResource(R.drawable.baseline_bug_report_24), contentDescription = null,modifier = Modifier.size(40.dp))
             }
-            Button(modifier = Modifier.padding(top = 18.dp, end = 20.dp).size(60.dp),onClick = {
+            Button(modifier = Modifier.size(48.dp),onClick = {
                 viewModel.run()
             },
                 colors = ButtonDefaults.buttonColors(
@@ -47,7 +49,7 @@ fun TopBar(viewModel: MainViewModel,modifier: Modifier = Modifier){
                 shape = RoundedCornerShape(16.dp),
                 contentPadding = PaddingValues(0.dp)
             ) {
-                Icon(painter = painterResource(R.drawable.play_button), contentDescription = null, modifier = Modifier.size(32.dp))
+                Icon(painter = painterResource(R.drawable.play_button), contentDescription = null,modifier = Modifier.size(26.dp))
             }
         }
     }
