@@ -62,14 +62,18 @@ class IfBox: ProgramBox() {
                     }
 
                     if (currentIsIf.value) {
+                        value.setElseBlock(parseCardToInstructionBoxes(elseBoxes))
+                        value.rollbackElseBlock()
+                        value.rollThenBlock()
                         IfScreen()
                     } else {
+                        value.setThenBlock(parseCardToInstructionBoxes(ifBoxes))
+                        value.rollbackThenBlock()
+                        value.rollElseBlock()
                         ElseScreen()
                     }
                 }
         }, dialogModifier = Modifier.height(800.dp)) {
-            LazyColumn {
-            }
         }
     }
     @Composable

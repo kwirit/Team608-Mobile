@@ -30,6 +30,7 @@ class ConsoleBox: ProgramBox() {
                 }, value = arithmeticField)
                 Text(text = result)
         }) {
+            Text(text = result)
         }
     }
 }
