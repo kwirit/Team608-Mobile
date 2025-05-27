@@ -21,6 +21,38 @@ import com.example.scratchinterpretermobile.Model.IntegerArrayBlock
 import com.example.scratchinterpretermobile.Model.IntegerBlock
 import com.example.scratchinterpretermobile.Model.StringBlock
 
+/**
+ * Разделяет строку на элементы по указанному разделителю, игнорируя разделители внутри строк (в кавычках).
+ *
+ * @param input исходная строка для разбиения
+ * @param separator символ-разделитель (по умолчанию — запятая)
+ * @return MutableList<String> список обработанных и разбитых элементов
+ */
+fun parserSplit(input: String, separator: Char = ',') : MutableList<String> {
+    val trimmedInput = input.trim()
+
+    val elements = mutableListOf<String>()
+
+    var currentToken = StringBuilder()
+
+    var flagString = false
+
+    for (symbol in trimmedInput) {
+        if (symbol == separator && !flagString) {
+            elements.add(currentToken.toString().trim())
+            currentToken.clear()
+            continue
+        }
+        if (symbol == '\"') flagString = !flagString
+        currentToken.append(symbol)
+    }
+
+    if (currentToken.toString().trim().isNotEmpty()) {
+        elements.add(currentToken.toString())
+    }
+
+    return elements
+}
 
 /**
  * Проверяет корректность имени переменной.
@@ -52,7 +84,6 @@ fun validateNameVariable(input: String): Int {
     return 0
 }
 
-
 /**
  * Проверяет, синтаксическую корректность элемента массива
  * @param input строка, которую проверяем
@@ -78,12 +109,24 @@ fun validateArrayName(input: String): Int {
     return processArrayAccess(input).second
 }
 
+/**
+ * Проверяет, является ли строка целочисленной константой.
+ *
+ * @param input строка для проверки
+ * @return Int код ошибки (0 — если число корректно)
+ */
 fun validateConst(input: String): Int {
     var regex =  Regex("""\d+""")
     if (regex.matches(input.trim())) return 0
     else return INVALID_VARIABLE_START.id
 }
 
+/**
+ * Проверяет, является ли строка корректной строкой в двойных кавычках.
+ *
+ * @param input строка для проверки
+ * @return Int код ошибки (0 — если строка корректна)
+ */
 fun validateString(input: String): Int {
     val trimmedInput = input.trim()
     if (trimmedInput.isEmpty()) return EMPTY_NAME.id
@@ -101,6 +144,14 @@ fun validateString(input: String): Int {
     return INVALID_CHARACTERS_IN_STRING.id
 }
 
+/**
+ * Обрабатывает обращение к элементу массива и возвращает его значение и возможную ошибку.
+ *
+ * Например: "arr[2]" → значение 3, если arr = [1, 2, 3]
+ *
+ * @param element строка с обращением к элементу массива
+ * @return Pair<Int, Int> пара: значение элемента и код ошибки
+ */
 fun processArrayAccess(element: String): Pair<Int, Int> {
     val regexName = Regex("^([a-zA-Z_][a-zA-Z0-9_]*)")
     val regexIndex = Regex("\\[(.*?)\\]")
@@ -131,6 +182,13 @@ fun processArrayAccess(element: String): Pair<Int, Int> {
     return Pair(array[indexValue], 0)
 }
 
+/**
+ * Разбивает арифметическое/строковое выражение на токены, сохраняя структуру.
+ * Учитывает строки, операторы и доступ к массивам.
+ *
+ * @param input исходное выражение
+ * @return MutableList<String> список токенов
+ */
 fun getElementFromString(
     input: String
 ): MutableList<String> {
@@ -296,7 +354,12 @@ fun calculationPostfix(
     return Pair(stack.pop()!!, 0);
 }
 
-
+/**
+ * Преобразует инфиксное строковое выражение в постфиксную нотацию.
+ *
+ * @param elements список токенов исходного выражения
+ * @return Pair<MutableList<Pair<String, String>>, Int> постфиксное выражение и код ошибки
+ */
 fun transferStringPrefixToPostfix(elements: MutableList<String>): Pair<MutableList<Pair<String, String>>, Int> {
     val postfix = mutableListOf<Pair<String, String>>()
     val stack = Stack<String>()
@@ -361,6 +424,15 @@ fun transferStringPrefixToPostfix(elements: MutableList<String>): Pair<MutableLi
 
     return Pair(postfix, 0)
 }
+
+/**
+ * Вычисляет значение строкового выражения в постфиксной нотации.
+ *
+ * Поддерживает операции над строками и числами, такие как конкатенация и повторение.
+ *
+ * @param postfix список токенов в постфиксной форме
+ * @return Pair<String, Int> результат вычисления и код ошибки
+ */
 fun calculationStringPostfix(
     postfix: MutableList<Pair<String, String>>
 ): Pair<String, Int> {
@@ -437,6 +509,13 @@ fun calculationArithmeticExpression(input: String): Pair<Int, Int> {
     return Pair(result, 0)
 }
 
+/**
+ * Вычисляет значение строкового выражения в инфиксной нотации.
+ * Например: "\"Hello \" + name"
+ *
+ * @param input строка со строковым выражением
+ * @return Pair<String, Int> результат и код ошибки
+ */
 fun calculationStringExpression(input: String): Pair<String, Int> {
     val (elements, error) = transferStringPrefixToPostfix(getElementFromString(input.trim()))
     if (error != 0) return Pair("", error)
