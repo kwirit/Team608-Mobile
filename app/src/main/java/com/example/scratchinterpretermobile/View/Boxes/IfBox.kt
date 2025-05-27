@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -61,8 +62,14 @@ class IfBox: ProgramBox() {
                     }
 
                     if (currentIsIf.value) {
+                        value.setElseBlock(parseCardToInstructionBoxes(elseBoxes))
+                        value.rollbackElseBlock()
+                        value.rollThenBlock()
                         IfScreen()
                     } else {
+                        value.setThenBlock(parseCardToInstructionBoxes(ifBoxes))
+                        value.rollbackThenBlock()
+                        value.rollElseBlock()
                         ElseScreen()
                     }
                 }

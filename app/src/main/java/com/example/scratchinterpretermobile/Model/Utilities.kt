@@ -28,4 +28,18 @@ class Stack<T> : Iterable<T> {
     fun toReversedList(): List<T> = elements.asReversed()
 }
 
+fun rollbackActions(instructionBlocks:MutableList<InstructionBlock>) {
+    for(instructionBlock in instructionBlocks) {
+        instructionBlock.removeBlock()
+    }
 
+    return
+}
+
+fun rollActions(instructionBlocks: MutableList<InstructionBlock>) {
+    for(instructionBlock in instructionBlocks) {
+        instructionBlock.run()
+    }
+
+    return
+}

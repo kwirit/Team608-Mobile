@@ -16,6 +16,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
@@ -26,10 +27,10 @@ import androidx.compose.ui.unit.dp
 import com.example.scratchinterpretermobile.R
 import com.example.scratchinterpretermobile.View.ViewModels.MainViewModel
 
-
 @Composable
 fun TopBar(viewModel: MainViewModel,modifier: Modifier = Modifier){
     Box(modifier = modifier.height(60.dp).background(color = MaterialTheme.colorScheme.primaryContainer)){
+        Text(text = "Pick me", style = MaterialTheme.typography.headlineLarge, modifier = Modifier.padding(top = 10.dp, start = 25.dp), color = Color.White)
         Row(modifier = Modifier.fillMaxSize().padding(end = 16.dp), horizontalArrangement = Arrangement.spacedBy(space = 16.dp, alignment = Alignment.End), verticalAlignment = Alignment.CenterVertically){
             Button(modifier = Modifier.size(48.dp),onClick = {},
                 colors = ButtonDefaults.buttonColors(

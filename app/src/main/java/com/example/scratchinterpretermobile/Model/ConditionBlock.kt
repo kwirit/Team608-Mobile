@@ -1,5 +1,6 @@
 package com.example.scratchinterpretermobile.Model
 
+import com.example.scratchinterpretermobile.Controller.Error.SUCCESS
 import com.example.scratchinterpretermobile.Controller.calculationArithmeticExpression
 import com.example.scratchinterpretermobile.Model.VarBlock
 
@@ -23,12 +24,31 @@ class ConditionBlock(
         context.pushScope(scope)
     }
 
-    fun processInput(leftPartCondition: String, rightPartCondition: String, operator: String, thenBlock: MutableList<InstructionBlock>, elseBlock: MutableList<InstructionBlock>) {
+
+    fun processInput(leftPartCondition: String, rightPartCondition: String, operator: String, thenBlock: MutableList<InstructionBlock>, elseBlock: MutableList<InstructionBlock>): Int {
         this.leftPartCondition = leftPartCondition
         this.rightPartCondition = rightPartCondition
         this.operator = operator
         this.thenBlock = thenBlock
         this.elseBlock = elseBlock
+
+        val errorCpompare =  compare()
+        if(errorCpompare != SUCCESS.id) {
+            rollbackThenBlock()
+            rollbackElseBlock()
+            return errorCpompare
+        }
+
+        if(resultValue) {
+            rollbackElseBlock()
+            rollThenBlock()
+        }
+        else {
+            rollbackThenBlock()
+            rollElseBlock()
+        }
+
+        return SUCCESS.id
     }
 
     /**
@@ -38,12 +58,12 @@ class ConditionBlock(
      */
     private fun compare(): Int {
         val (valueLeftPart, errorLeft) = calculationArithmeticExpression(leftPartCondition)
-        if (errorLeft != 0) {
+        if (errorLeft != SUCCESS.id) {
             return errorLeft;
         }
 
         val (valueRightPart, errorRight) = calculationArithmeticExpression(rightPartCondition)
-        if (errorRight != 0) {
+        if (errorRight != SUCCESS.id) {
             return errorRight
         }
 
@@ -57,15 +77,46 @@ class ConditionBlock(
             else -> false
         }
 
-        return 0
+        return SUCCESS.id
     }
 
-    fun addThenBlock(index: Int, block: InstructionBlock) {
-        thenBlock.add(index, block)
+    fun setThenBlock(thenBlocks:MutableList<InstructionBlock>) {
+        this.thenBlock = thenBlocks
+
+        return
     }
-    fun addElseBlock(index: Int, block: InstructionBlock) {
-        elseBlock.add(index, block)
+
+    fun setElseBlock(elseBlocks: MutableList<InstructionBlock>) {
+        this.elseBlock = elseBlocks
+
+        return
     }
+
+    fun rollbackThenBlock() {
+        rollbackActions(thenBlock)
+
+        return
+    }
+
+    fun rollbackElseBlock() {
+        rollbackActions(elseBlock)
+
+        return
+    }
+
+    fun rollThenBlock() {
+        rollActions(thenBlock)
+
+        return
+    }
+
+    fun rollElseBlock() {
+        rollActions(elseBlock)
+
+        return
+    }
+
+    override fun removeBlock() {}
 
     override fun run(): Int {
         val compareError = compare()
