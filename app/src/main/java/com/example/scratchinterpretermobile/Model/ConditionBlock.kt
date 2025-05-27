@@ -25,14 +25,20 @@ class ConditionBlock(
     }
 
 
-    fun processInput(leftPartCondition: String, rightPartCondition: String, operator: String, thenBlock: MutableList<InstructionBlock>, elseBlock: MutableList<InstructionBlock>) {
+    fun processInput(leftPartCondition: String, rightPartCondition: String, operator: String, thenBlock: MutableList<InstructionBlock>, elseBlock: MutableList<InstructionBlock>): Int {
         this.leftPartCondition = leftPartCondition
         this.rightPartCondition = rightPartCondition
         this.operator = operator
         this.thenBlock = thenBlock
         this.elseBlock = elseBlock
 
-        compare()
+        val errorCpompare =  compare()
+        if(errorCpompare != SUCCESS.id) {
+            rollbackThenBlock()
+            rollbackElseBlock()
+            return errorCpompare
+        }
+
         if(resultValue) {
             rollbackElseBlock()
             rollThenBlock()
@@ -41,6 +47,8 @@ class ConditionBlock(
             rollbackThenBlock()
             rollElseBlock()
         }
+
+        return SUCCESS.id
     }
 
     /**
