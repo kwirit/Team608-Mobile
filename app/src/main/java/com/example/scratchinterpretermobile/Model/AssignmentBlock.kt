@@ -218,7 +218,7 @@ class AssignmentBlock:InstructionBlock {
         val (elementValue, calculationElementValue) = calculationArithmeticExpression(arrayElementValue)
         if(calculationElementValue != SUCCESS.id) return Pair(newIntegerArrayBlock, calculationElementValue)
 
-        val arrayValue = integerArrayBlock.getValue()
+        val arrayValue = integerArrayBlock.getValue().toMutableList()
         arrayValue[index] = elementValue
 
         newIntegerArrayBlock.setName(name)
