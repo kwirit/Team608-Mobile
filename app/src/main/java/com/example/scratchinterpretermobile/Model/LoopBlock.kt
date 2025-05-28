@@ -1,5 +1,6 @@
 package com.example.scratchinterpretermobile.Model
 
+import com.example.scratchinterpretermobile.Controller.Error.SUCCESS
 import com.example.scratchinterpretermobile.Controller.calculationArithmeticExpression
 
 class LoopBlock(
@@ -20,12 +21,33 @@ class LoopBlock(
         context.pushScope(scope)
     }
 
-    fun processInput(leftPartCondition: String, rightPartCondition: String, operator: String, blocksToRun: MutableList<InstructionBlock>) {
+    fun processInput(leftPartCondition: String, rightPartCondition: String, operator: String, blocksToRun: MutableList<InstructionBlock>): Int {
         this.leftPartCondition = leftPartCondition
         this.rightPartCondition = rightPartCondition
         this.operator = operator
+        setBlocksToRun(blocksToRun)
+
+        var errorCompare = compare()
+        rollbackBlocksToRun()
+
+        while (errorCompare == SUCCESS.id && resultValue) {
+            rollBlocksToRun()
+            errorCompare = compare()
+        }
+
+        return SUCCESS.id
+    }
+
+    fun setBlocksToRun(blocksToRun: MutableList<InstructionBlock>) {
         this.blocksToRun = blocksToRun
     }
+    fun rollbackBlocksToRun() {
+        rollbackActions(blocksToRun)
+    }
+    fun rollBlocksToRun() {
+        rollActions(blocksToRun)
+    }
+
 
     /**
      * Выполняет сравнение двух арифметических выражений на основе заданного оператора.
