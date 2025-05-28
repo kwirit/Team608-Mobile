@@ -129,6 +129,7 @@ class AssigningBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(external
                     }
                 }
             }, onDelete = {
+                value.removeBlock()
                 externalBoxes.removeAll { it.id == id }
             }) {
         }

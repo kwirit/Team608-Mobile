@@ -31,6 +31,7 @@ class ConsoleBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(externalBo
                 Text(text = result)
         },
             onDelete = {
+                value.removeBlock()
                 externalBoxes.removeAll { it.id == id }
             }) {
             Text(text = result)

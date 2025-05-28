@@ -49,7 +49,10 @@ class VariableInitializationBox(externalBoxes: MutableList<ProgramBox>) : Progra
                         }, value = text)
                     }
                 }
-        }, onDelete = {externalBoxes.removeAll { it.id == id }}) {
+        }, onDelete = {
+            value.removeBlock()
+            externalBoxes.removeAll { it.id == id }
+        }) {
             Column(Modifier.fillMaxHeight().width(230.dp)){
                 if(code == 0){
                     Text(text = text)

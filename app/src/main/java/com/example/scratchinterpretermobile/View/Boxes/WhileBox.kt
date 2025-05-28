@@ -59,7 +59,10 @@ class WhileBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(externalBoxe
                         CreateBoxesDialog(showInnerBoxesState,boxes)
                     }
                 }
-            }, onDelete = {externalBoxes.removeAll { it.id == id }}) {
+            }, onDelete = {
+                value.removeBlock()
+                externalBoxes.removeAll { it.id == id }
+            }) {
         }
     }
 }

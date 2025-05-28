@@ -51,6 +51,7 @@ class ArrayInitializationBox(externalBoxes: MutableList<ProgramBox>) : ProgramBo
                 }
             },
             onDelete = {
+                value.removeBlock()
                 externalBoxes.removeAll { it.id == id }
             }) {
             if(code == 0){

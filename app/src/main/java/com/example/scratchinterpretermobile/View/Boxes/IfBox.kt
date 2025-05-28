@@ -73,7 +73,9 @@ class IfBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(externalBoxes) 
                         ElseScreen()
                     }
                 }
-        }, onDelete = {externalBoxes.removeAll { it.id == id }}, dialogModifier = Modifier.height(800.dp)) {}
+        }, onDelete = {
+            value.removeBlock()
+            externalBoxes.removeAll { it.id == id }}, dialogModifier = Modifier.height(800.dp)) {}
     }
     @Composable
     fun IfScreen(){
