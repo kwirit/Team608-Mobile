@@ -78,7 +78,9 @@ class LoopBlock(
         return 0
     }
 
-    override fun removeBlock() {}
+    override fun removeBlock() {
+        rollbackBlocksToRun()
+    }
 
     override fun run(): Int {
         var compareError = compare()

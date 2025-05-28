@@ -207,7 +207,7 @@ class AssignmentBlock:InstructionBlock {
         context.setVar(newIntegerArrayBlock.getName(), newIntegerArrayBlock)
         newVarBlock = newIntegerArrayBlock.getCopy()
 
-        assignmentType = 2
+        assignmentType = 1
         nameVarBlock = arrayName
         valueVarBlock = arrayValue
 
@@ -273,6 +273,7 @@ class AssignmentBlock:InstructionBlock {
         context.setVar(newIntegerArrayBlock.getName(), newIntegerArrayBlock)
         newVarBlock = newIntegerArrayBlock.getCopy()
 
+        assignmentType = 2
         nameVarBlock = arrayName
         index = arrayIndex
         valueVarBlock = arrayElementValue
