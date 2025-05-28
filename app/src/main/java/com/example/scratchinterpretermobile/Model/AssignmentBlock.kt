@@ -16,6 +16,15 @@ class AssignmentBlock:InstructionBlock {
     private var originalVarBlock: VarBlock<*>? = null // предыдущее успешное присваивание
     private var newVarBlock: VarBlock<*>? = null // новый блок
 
+    // 0 - Присваивание Целочисленной переменной
+    // 1 - Присваивание массива
+    // 2 - Присваивание Элемента массива
+    private var assignmentType:Int = 0
+
+    private var nameVarBlock:String = String()
+    private var valueVarBlock:String = String()
+    private var index:String = String()
+
 
 
 
@@ -67,6 +76,7 @@ class AssignmentBlock:InstructionBlock {
      * @return код ошибки
      */
     fun assignIntegerBlock(integerName:String, integerValue:String):Int {
+
         val (newIntegerBlock, getError) = getIntegerBlock(integerName, integerValue)
         if(getError != SUCCESS.id) {
             originalVarBlock ?: return getError
@@ -84,6 +94,10 @@ class AssignmentBlock:InstructionBlock {
 
         context.setVar(newIntegerBlock.getName(), newIntegerBlock)
         newVarBlock = newIntegerBlock.getCopy()
+
+        assignmentType = 0
+        nameVarBlock = integerName
+        valueVarBlock = integerValue
 
         return SUCCESS.id
     }
@@ -156,6 +170,7 @@ class AssignmentBlock:InstructionBlock {
      * @return код ошибки
      */
     fun assignIntegerArrayBlock(arrayName:String, arrayValue: String): Int {
+
         val arrayElements = arrayValue.split(",").map { it.trim() }
 
         var newIntegerArrayBlock: IntegerArrayBlock? = null
@@ -191,6 +206,10 @@ class AssignmentBlock:InstructionBlock {
 
         context.setVar(newIntegerArrayBlock.getName(), newIntegerArrayBlock)
         newVarBlock = newIntegerArrayBlock.getCopy()
+
+        assignmentType = 2
+        nameVarBlock = arrayName
+        valueVarBlock = arrayValue
 
         return SUCCESS.id
     }
@@ -254,6 +273,10 @@ class AssignmentBlock:InstructionBlock {
         context.setVar(newIntegerArrayBlock.getName(), newIntegerArrayBlock)
         newVarBlock = newIntegerArrayBlock.getCopy()
 
+        nameVarBlock = arrayName
+        index = arrayIndex
+        valueVarBlock = arrayElementValue
+
         return SUCCESS.id
     }
 
@@ -271,11 +294,14 @@ class AssignmentBlock:InstructionBlock {
     }
 
     override fun run(): Int {
-        if(newVarBlock == null) return ASSIGNMENT_ERROR.id
-        val originalBlock = context.getVar(newVarBlock!!.getName()) ?: return VARIABLE_DOES_NOT_EXIST.id
-        if(originalBlock::class != newVarBlock!!::class) return ASSIGNING_DIFFERENT_TYPES.id
+//        if(newVarBlock == null) return ASSIGNMENT_ERROR.id
+//        val originalBlock = context.getVar(newVarBlock!!.getName()) ?: return VARIABLE_DOES_NOT_EXIST.id
+//        if(originalBlock::class != newVarBlock!!::class) return ASSIGNING_DIFFERENT_TYPES.id
+        if(assignmentType == 0) assignIntegerBlock(nameVarBlock, valueVarBlock)
+        else if(assignmentType == 1) assignIntegerArrayBlock(nameVarBlock, valueVarBlock)
+        else if(assignmentType == 2) assignElementIntegerArrayBlock(nameVarBlock, index, valueVarBlock)
 
-        context.setVar(newVarBlock!!.getName(), newVarBlock!!.getCopy())
+//        context.setVar(newVarBlock!!.getName(), newVarBlock!!.getCopy())
 
         return SUCCESS.id
     }
