@@ -10,6 +10,7 @@ class LoopBlock(
     private var leftPartCondition: String = ""
     private var rightPartCondition: String = ""
     private var operator: String = "=="
+    private var iterations = 0
 
     private var resultValue: Boolean = false
 
@@ -17,11 +18,13 @@ class LoopBlock(
 
     private var scope: HashMap<String, VarBlock<*>> = hashMapOf();
 
-    init {
-        context.pushScope(scope)
-    }
+//    init {
+//        context.pushScope(scope)
+//    }
 
     fun processInput(leftPartCondition: String, rightPartCondition: String, operator: String, blocksToRun: MutableList<InstructionBlock>): Int {
+        context.pushScope(scope)
+
         this.leftPartCondition = leftPartCondition
         this.rightPartCondition = rightPartCondition
         this.operator = operator
@@ -30,11 +33,13 @@ class LoopBlock(
         var errorCompare = compare()
         rollbackBlocksToRun()
 
-        while (errorCompare == SUCCESS.id && resultValue) {
-            rollBlocksToRun()
-            errorCompare = compare()
-        }
+//        while (errorCompare == SUCCESS.id && resultValue) {
+//            rollBlocksToRun()
+//            errorCompare = compare()
+//            ++iterations
+//        }
 
+        context.popScope()
         return SUCCESS.id
     }
 
@@ -83,6 +88,7 @@ class LoopBlock(
     }
 
     override fun run(): Int {
+        context.pushScope(scope)
         var compareError = compare()
 
         if (compareError != 0){

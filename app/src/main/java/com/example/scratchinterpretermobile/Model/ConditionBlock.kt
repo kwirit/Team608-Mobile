@@ -19,9 +19,7 @@ class ConditionBlock(
     private var scope: HashMap<String, VarBlock<*>> = hashMapOf();
 
 
-    init {
-        context.pushScope(scope)
-    }
+
 
 
     fun processInput(leftPartCondition: String, rightPartCondition: String, operator: String, thenBlock: MutableList<InstructionBlock>, elseBlock: MutableList<InstructionBlock>): Int {
@@ -115,9 +113,13 @@ class ConditionBlock(
         return
     }
 
-    override fun removeBlock() {}
+    override fun removeBlock() {
+        rollbackThenBlock()
+        rollbackElseBlock()
+    }
 
     override fun run(): Int {
+        context.pushScope(scope)
         val compareError = compare()
         if (compareError != 0){
             context.popScope();
