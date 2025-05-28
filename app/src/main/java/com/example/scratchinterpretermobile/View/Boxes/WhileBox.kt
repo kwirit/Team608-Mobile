@@ -30,13 +30,13 @@ class WhileBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(externalBoxe
     val showInnerBoxesState = mutableStateOf(false)
     var leftOperand by mutableStateOf("")
     var rightOperand by mutableStateOf("")
-    var operator by mutableStateOf("")
+    var operator = mutableStateOf("Выбрать оператор")
     override val value = LoopBlock();
     @Composable
     override fun render(){
         BaseBox(name = "Цикл", showState,
             onConfirmButton = {
-                value.processInput(leftOperand,rightOperand,operator,parseCardToInstructionBoxes(boxes))
+                value.processInput(leftOperand,rightOperand,operator.value,parseCardToInstructionBoxes(boxes))
             },
             dialogContent = {
                 Column {
@@ -49,7 +49,7 @@ class WhileBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(externalBoxe
                         VariableTextField(onValueChange = {newText->
                             leftOperand = newText
                         },value = leftOperand,modifier = Modifier.weight(1f))
-                        operator = ListOfIfOperators()
+                        ListOfIfOperators(operator)
                         VariableTextField(onValueChange = {newText->
                             rightOperand = newText
                         },value = rightOperand,modifier = Modifier.weight(1f))
@@ -63,6 +63,7 @@ class WhileBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(externalBoxe
                 value.removeBlock()
                 externalBoxes.removeAll { it.id == id }
             }) {
+
         }
     }
 }

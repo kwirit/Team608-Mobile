@@ -30,7 +30,6 @@ import com.example.scratchinterpretermobile.View.Widgets.VariableTextField
 class VariableInitializationBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(externalBoxes) {
     override val value = InitBlock();
     var text by mutableStateOf("")
-    var code by mutableIntStateOf(104)
     val name = "Объявление переменной"
 
     @Composable

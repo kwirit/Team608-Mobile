@@ -25,7 +25,6 @@ class ArrayInitializationBox(externalBoxes: MutableList<ProgramBox>) : ProgramBo
     override val value = InitBlock()
     var arrayName by mutableStateOf("")
     var arraySize by mutableStateOf("")
-    var code by mutableIntStateOf(104)
 
     @Composable
     override fun render(){

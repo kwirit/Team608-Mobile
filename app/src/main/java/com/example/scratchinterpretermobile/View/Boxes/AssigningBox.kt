@@ -36,7 +36,6 @@ class AssigningBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(external
     var arrayListField = mutableStateListOf<String>()
     var arithmeticField by mutableStateOf("")
     var arrayIndex by mutableStateOf("")
-    var code by mutableIntStateOf(104)
     val state = mutableIntStateOf(-1)
     var selectedVariable = mutableStateOf<VarBlock<*>?>(null)
 
