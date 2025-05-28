@@ -33,11 +33,11 @@ class LoopBlock(
         var errorCompare = compare()
         rollbackBlocksToRun()
 
-//        while (errorCompare == SUCCESS.id && resultValue) {
-//            rollBlocksToRun()
-//            errorCompare = compare()
-//            ++iterations
-//        }
+        while (errorCompare == SUCCESS.id && resultValue) {
+            rollBlocksToRun()
+            errorCompare = compare()
+            ++iterations
+        }
 
         context.popScope()
         return SUCCESS.id
