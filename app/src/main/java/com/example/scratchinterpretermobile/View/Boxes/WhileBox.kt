@@ -25,7 +25,7 @@ import com.example.scratchinterpretermobile.View.Widgets.ListOfIfOperators
 import com.example.scratchinterpretermobile.View.Widgets.VariableTextField
 import com.example.scratchinterpretermobile.View.Widgets.VerticalReorderList
 
-class WhileBox: ProgramBox() {
+class WhileBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(externalBoxes) {
     val boxes = mutableStateListOf<ProgramBox>()
     val showInnerBoxesState = mutableStateOf(false)
     var leftOperand by mutableStateOf("")
@@ -59,7 +59,7 @@ class WhileBox: ProgramBox() {
                         CreateBoxesDialog(showInnerBoxesState,boxes)
                     }
                 }
-            }) {
+            }, onDelete = {externalBoxes.removeAll { it.id == id }}) {
         }
     }
 }

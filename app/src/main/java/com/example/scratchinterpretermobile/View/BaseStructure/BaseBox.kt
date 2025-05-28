@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -38,17 +39,26 @@ import com.example.scratchinterpretermobile.View.Dialogs.CreateBoxesDialog
 import com.example.scratchinterpretermobile.View.Dialogs.CustomDialog
 
 @Composable
-fun BaseBox(name: String, showState: MutableState<Boolean>, dialogModifier: Modifier = Modifier, onConfirmButton:() -> Unit, dialogContent:@Composable () -> Unit, boxContent:@Composable () -> Unit){
+fun BaseBox(name: String, showState: MutableState<Boolean>, dialogModifier: Modifier = Modifier, onConfirmButton:() -> Unit, dialogContent:@Composable () -> Unit,onDelete:() -> Unit, boxContent:@Composable () -> Unit){
     Card(Modifier.fillMaxWidth().heightIn(min = 80.dp).padding(10.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
     ) {
         Box(Modifier.heightIn(min = 80.dp).fillMaxWidth().padding(end = 10.dp)){
-            Button(onClick = {
-                showState.value = true
-            }, modifier = Modifier.size(60.dp).align(Alignment.CenterEnd), shape = RoundedCornerShape(16.dp),
-                contentPadding = PaddingValues(0.dp),
-            ) {
-                Icon(painter = painterResource(R.drawable.settings_icon), contentDescription = null,modifier = Modifier.size(35.dp))
+            Row(modifier = Modifier.align(Alignment.CenterEnd)){
+                Button(onClick = {
+                    onDelete()
+                }, modifier = Modifier.size(60.dp), shape = RoundedCornerShape(16.dp),
+                    contentPadding = PaddingValues(0.dp),colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent)
+                ) {
+                    Icon(painter = painterResource(R.drawable.baseline_delete_outline_24), contentDescription = null,modifier = Modifier.size(35.dp))
+                }
+                Button(onClick = {
+                    showState.value = true
+                }, modifier = Modifier.size(60.dp), shape = RoundedCornerShape(16.dp),
+                    contentPadding = PaddingValues(0.dp),
+                ) {
+                    Icon(painter = painterResource(R.drawable.settings_icon), contentDescription = null,modifier = Modifier.size(35.dp))
+                }
             }
             Column(modifier = Modifier.padding(7.dp)) {
                 Text(text = name)

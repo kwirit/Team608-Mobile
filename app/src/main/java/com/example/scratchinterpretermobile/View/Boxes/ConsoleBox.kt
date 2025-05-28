@@ -12,7 +12,7 @@ import com.example.scratchinterpretermobile.View.BaseStructure.BaseBox
 import com.example.scratchinterpretermobile.View.Boxes.ProgramBox
 import com.example.scratchinterpretermobile.View.Widgets.VariableTextField
 
-class ConsoleBox: ProgramBox() {
+class ConsoleBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(externalBoxes) {
     override val value = PrintBlock();
     var arithmeticField by mutableStateOf("")
     var result by mutableStateOf("");
@@ -29,7 +29,10 @@ class ConsoleBox: ProgramBox() {
                     arithmeticField = newText;
                 }, value = arithmeticField)
                 Text(text = result)
-        }) {
+        },
+            onDelete = {
+                externalBoxes.removeAll { it.id == id }
+            }) {
             Text(text = result)
         }
     }

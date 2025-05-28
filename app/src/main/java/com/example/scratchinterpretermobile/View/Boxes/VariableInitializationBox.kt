@@ -27,7 +27,7 @@ import com.example.scratchinterpretermobile.Model.InitBlock
 import com.example.scratchinterpretermobile.View.BaseStructure.BaseBox
 import com.example.scratchinterpretermobile.View.Widgets.VariableTextField
 
-class VariableInitializationBox : ProgramBox() {
+class VariableInitializationBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(externalBoxes) {
     override val value = InitBlock();
     var text by mutableStateOf("")
     var code by mutableIntStateOf(104)
@@ -49,7 +49,7 @@ class VariableInitializationBox : ProgramBox() {
                         }, value = text)
                     }
                 }
-        }) {
+        }, onDelete = {externalBoxes.removeAll { it.id == id }}) {
             Column(Modifier.fillMaxHeight().width(230.dp)){
                 if(code == 0){
                     Text(text = text)

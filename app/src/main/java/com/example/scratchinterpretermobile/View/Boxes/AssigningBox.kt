@@ -29,7 +29,7 @@ import com.example.scratchinterpretermobile.View.BaseStructure.BaseBox
 import com.example.scratchinterpretermobile.View.Widgets.ListOfVar
 import com.example.scratchinterpretermobile.View.Widgets.VariableTextField
 
-class AssigningBox: ProgramBox() {
+class AssigningBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(externalBoxes) {
     override val value = AssignmentBlock();
     val checkVariableState = mutableStateOf(true)
     val checkArrayState = mutableStateOf(false)
@@ -128,6 +128,8 @@ class AssigningBox: ProgramBox() {
                         }
                     }
                 }
+            }, onDelete = {
+                externalBoxes.removeAll { it.id == id }
             }) {
         }
     }

@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import com.example.scratchinterpretermobile.Model.InstructionBlock
 import java.util.UUID
 
-abstract class ProgramBox() {
+abstract class ProgramBox(var externalBoxes: MutableList<ProgramBox>) {
     val showState = mutableStateOf(true)
     val id: String = UUID.randomUUID().toString()
     abstract val value: InstructionBlock

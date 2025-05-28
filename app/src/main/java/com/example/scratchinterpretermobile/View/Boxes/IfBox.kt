@@ -31,7 +31,7 @@ import com.example.scratchinterpretermobile.View.Widgets.ListOfIfOperators
 import com.example.scratchinterpretermobile.View.Widgets.VariableTextField
 import com.example.scratchinterpretermobile.View.Widgets.VerticalReorderList
 
-class IfBox: ProgramBox() {
+class IfBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(externalBoxes) {
     val ifBoxes = mutableStateListOf<ProgramBox>()
     val elseBoxes = mutableStateListOf<ProgramBox>()
     override val value = ConditionBlock();
@@ -73,8 +73,7 @@ class IfBox: ProgramBox() {
                         ElseScreen()
                     }
                 }
-        }, dialogModifier = Modifier.height(800.dp)) {
-        }
+        }, onDelete = {externalBoxes.removeAll { it.id == id }}, dialogModifier = Modifier.height(800.dp)) {}
     }
     @Composable
     fun IfScreen(){
