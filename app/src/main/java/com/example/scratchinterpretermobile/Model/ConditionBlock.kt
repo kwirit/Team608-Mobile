@@ -2,7 +2,6 @@ package com.example.scratchinterpretermobile.Model
 
 import com.example.scratchinterpretermobile.Controller.Error.SUCCESS
 import com.example.scratchinterpretermobile.Controller.calculationArithmeticExpression
-import com.example.scratchinterpretermobile.Model.VarBlock
 
 class ConditionBlock(
 ) : InstructionBlock {
@@ -32,11 +31,11 @@ class ConditionBlock(
         this.thenBlock = thenBlock
         this.elseBlock = elseBlock
 
-        val errorCpompare =  compare()
-        if(errorCpompare != SUCCESS.id) {
+        val errorCompare =  compare()
+        if(errorCompare != SUCCESS.id) {
             rollbackThenBlock()
             rollbackElseBlock()
-            return errorCpompare
+            return errorCompare
         }
 
         if(resultValue) {

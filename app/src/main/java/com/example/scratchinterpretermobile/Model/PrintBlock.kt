@@ -27,6 +27,7 @@ class PrintBlock(
     override fun removeBlock() {
         return
     }
+
     fun printElement(input: String) : Pair<String, Int> {
         val trimmedInput = input.trim()
         when {

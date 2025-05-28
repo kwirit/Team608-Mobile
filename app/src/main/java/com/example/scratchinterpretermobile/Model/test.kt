@@ -3,14 +3,14 @@ package com.example.scratchinterpretermobile.Model
 fun main() {
     val scope = UIContext.peekScope()
 
-    val initBlock = InitBlock()
+
+    val initBlock1 = InitBlock()
     val assignmentBlock = AssignmentBlock()
+    val loopBlock = LoopBlock()
 
-    initBlock.initIntegerBlock("var")
-    assignmentBlock.assignIntegerBlock("var", "var + 1")
+    initBlock1.initIntegerBlock("a")
+    assignmentBlock.assignIntegerBlock("a", "a+1")
 
-    assignmentBlock.removeBlock()
+    loopBlock.processInput("a", "10", "<", mutableListOf(assignmentBlock))
 
-    assignmentBlock.run()
-    assignmentBlock.run()
 }

@@ -494,7 +494,6 @@ fun calculationStringPostfix(
     return Pair(stack.pop()!!.first, 0)
 }
 
-
 /**
  * Вычисляет значение арифметического выражения в инфиксной нотации.
  * Например: "a % b + 4 * (10 - 3 + arr[i + 2])".
