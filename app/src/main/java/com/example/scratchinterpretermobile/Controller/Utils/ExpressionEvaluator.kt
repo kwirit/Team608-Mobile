@@ -92,10 +92,7 @@ fun transferPrefixToPostfix(elements: MutableList<String>): Pair<MutableList<Str
  * @param postfix список токенов в постфиксной форме
  * @return Pair<Int, Int> - результат вычисления и код ошибки (0 - в случае успеха)
  */
-fun calculationPostfix(
-    postfix: MutableList<String>,
-    ): Pair<Int, Int> {
-
+fun calculationPostfix(postfix: MutableList<String>): Pair<Int, Int> {
     val stack = Stack<Int>()
     val operators = "+-*%/()"
 

@@ -50,45 +50,49 @@ fun getElementFromString(
 
     var currentToken = StringBuilder()
 
-    var flagArray = false
     var flagString = false
+    var pendingCloseParenthesis = false
+
     var arrayNestingLevel = 0
+    var lastElement: String? = null
 
     for (symbol in trimmedInput) {
-        if (symbol == ' ' && !flagString && arrayNestingLevel == 0 && !flagString) continue
-
-        if (symbol == '\"') {
-            flagString = !flagString
+        when {
+            symbol == ' ' && !flagString -> continue
+            symbol == '\"' -> flagString = !flagString
+            symbol == '[' && !flagString -> arrayNestingLevel++
+            symbol == ']' && !flagString -> arrayNestingLevel--
         }
-
-        if (!flagString && symbol == '[') {
-            arrayNestingLevel++
-        }
-
-        if (!flagString && symbol == ']') {
-            arrayNestingLevel--
-        }
-
         if (flagString || arrayNestingLevel > 0) {
             currentToken.append(symbol)
-            continue
         }
-
-        if (symbol in operators) {
+        else if (symbol == '-' && (lastElement == null || lastElement in operators)) {
+            elements += listOf("(", "0", "-")
+            lastElement = "-"
+            pendingCloseParenthesis = true
+        }
+        else if (symbol in operators) {
             if (currentToken.isNotEmpty()) {
                 elements.add(currentToken.toString())
+                if (pendingCloseParenthesis){
+                    elements.add(")")
+                    pendingCloseParenthesis = false
+                }
                 currentToken.clear()
             }
             elements.add(symbol.toString())
-        } else if (currentToken.isNotEmpty()) {
-            currentToken.append(symbol)
+            lastElement = symbol.toString()
         } else {
-            currentToken = StringBuilder().append(symbol)
+            currentToken.append(symbol)
+            lastElement = currentToken.toString()
         }
     }
 
     if (currentToken.isNotEmpty()) {
         elements.add(currentToken.toString())
+    }
+    if (pendingCloseParenthesis) {
+        elements.add(")")
     }
 
     return elements

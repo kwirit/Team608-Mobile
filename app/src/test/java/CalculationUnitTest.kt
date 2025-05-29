@@ -96,12 +96,10 @@ class CalculationUnitTest {
         UIContext.pushScope(scope)
         val (result, error) = calculationArithmeticExpression("arr[(((i + j) * k) / (a + b + c + d))]")
 
-        // ((2 + 3) * 4) / (0 + 1 + 5 + 2) = (5*4)/8 = 20/8 = 2 → arr[2] = 30
         assertEquals(30, result)
         assertEquals(0, error)
     }
 
-    // ———————————————————————— Операторы и скобки ——————————————————————————————
 
     @Test
     fun testMultipleOperatorsAndBrackets() {
@@ -119,12 +117,24 @@ class CalculationUnitTest {
         UIContext.pushScope(scope)
         val (result, error) = calculationArithmeticExpression("arr[(a + b) * (1 + (0 + 0)) * (c - d)]")
 
-        // (0+1)*(5-2) = 1*3 = 3 → arr[3] = 40
         assertEquals(40, result)
         assertEquals(0, error)
     }
+    @Test
+    fun testUnMinus() {
 
+        val (result, error) = calculationArithmeticExpression("-3")
+        assertEquals(-3, result)
+        assertEquals(0, error)
+    }
 
+    @Test
+    fun testMinusBeforeBracketsCircle() {
+
+        val (result, error) = calculationArithmeticExpression("10 / -5")
+        assertEquals(-2, result)
+        assertEquals(0, error)
+    }
 
     @After
     fun tearDown() {
