@@ -82,7 +82,7 @@ class IfBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(externalBoxes) 
             externalBoxes.removeAll { it.id == id }}, dialogModifier = Modifier.height(800.dp)) {
             Column(Modifier.fillMaxHeight().width(230.dp)){
                 if(code == 0){
-                    Text(text = operator.value)
+                    Text(text = rightOperand + " " + operator.value + " " + leftOperand)
                 }
                 else{
                     Text(text = ErrorStore.get(code)!!.description, lineHeight = 12.sp, fontSize = 8.sp)

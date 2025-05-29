@@ -4,6 +4,7 @@ import android.text.Layout
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -21,6 +22,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.example.scratchinterpretermobile.Controller.Error.ErrorStore
 import com.example.scratchinterpretermobile.Model.AssignmentBlock
 import com.example.scratchinterpretermobile.Model.IntegerArrayBlock
 import com.example.scratchinterpretermobile.Model.IntegerBlock
@@ -131,6 +134,16 @@ class AssigningBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(external
                 value.removeBlock()
                 externalBoxes.removeAll { it.id == id }
             }) {
+            Column(Modifier.fillMaxHeight().width(230.dp)){
+                if(code == 0){
+                    Text(text = "123")
+                }
+                else{
+                    Text(text = ErrorStore.get(code)!!.description, lineHeight = 12.sp, fontSize = 8.sp)
+                    Text(text = ErrorStore.get(code)!!.category, lineHeight = 12.sp, fontSize = 8.sp)
+                    Text(text = ErrorStore.get(code)!!.title, lineHeight = 12.sp, fontSize = 8.sp)
+                }
+            }
         }
     }
     @Composable
