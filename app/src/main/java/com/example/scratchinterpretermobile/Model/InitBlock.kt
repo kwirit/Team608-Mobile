@@ -4,12 +4,13 @@ import com.example.scratchinterpretermobile.Controller.Error.CONTEXT_IS_NULL
 import com.example.scratchinterpretermobile.Controller.Error.INVALID_ARRAY_LENGTH
 import com.example.scratchinterpretermobile.Controller.Error.MULTIPLE_INITIALIZATION
 import com.example.scratchinterpretermobile.Controller.Error.REDECLARING_A_VARIABLE
+import com.example.scratchinterpretermobile.Controller.Error.RUNTIME_ERROR
 import com.example.scratchinterpretermobile.Controller.Error.SUCCESS
 import com.example.scratchinterpretermobile.Controller.Utils.calculationArithmeticExpression
 import com.example.scratchinterpretermobile.Controller.Utils.validateNameVariable
 
 class InitBlock : InstructionBlock {
-    override var runResult: Int = SUCCESS.id
+    override var runResult: Int = RUNTIME_ERROR.id
     override var context = UIContext
     private val newVarBlocks:MutableList<VarBlock<*>> = mutableListOf()
 
@@ -74,6 +75,8 @@ class InitBlock : InstructionBlock {
     }
 
     override fun removeBlock(){
+        runResult = RUNTIME_ERROR.id
+
         for(varBlock in newVarBlocks) {
             context.removeVar(varBlock.getName())
         }

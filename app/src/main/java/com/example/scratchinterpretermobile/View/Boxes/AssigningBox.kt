@@ -1,6 +1,5 @@
 package com.example.scratchinterpretermobile.View.Boxes
 
-import android.text.Layout
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -20,7 +19,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.scratchinterpretermobile.Controller.Error.ErrorStore
@@ -47,19 +45,19 @@ class AssigningBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(external
         BaseBox(name = "Присваивание", showState,
             onConfirmButton = {
                 if(state.value == 0){
-                    code = value.assignIntegerBlock(selectedVariable.value!!.getName(),arithmeticField)
+                    code = value.assembleIntegerBlock(selectedVariable.value!!.getName(),arithmeticField)
                 }
                 else if(state.value == 1){
                     if(arrayIndex == ""){
-                        code = value.assignIntegerArrayBlock(selectedVariable.value!!.getName(),arithmeticField)
+                        code = value.assembleIntegerArrayBlock(selectedVariable.value!!.getName(),arithmeticField)
                     }
                     else{
-                        code = value.assignElementIntegerArrayBlock(selectedVariable.value!!.getName(),arrayIndex,arithmeticField)
+                        code = value.assembleElementIntegerArrayBlock(selectedVariable.value!!.getName(),arrayIndex,arithmeticField)
                     }
                 }
                 else if(state.value == 2){
                     for((index,field) in arrayListField.withIndex()){
-                        code = value.assignElementIntegerArrayBlock(selectedVariable.value!!.getName(),index.toString(),field)
+                        code = value.assembleElementIntegerArrayBlock(selectedVariable.value!!.getName(),index.toString(),field)
                     }
                 }
         },

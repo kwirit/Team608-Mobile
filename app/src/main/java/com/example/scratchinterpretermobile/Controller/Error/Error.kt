@@ -29,6 +29,13 @@ val CLASS_DOESNT_NOT_EXIST = Error(
     "systemic"
 )
 
+val RUNTIME_ERROR = Error(
+    3,
+    "Runtime error",
+    "The instruction block does nothing",
+    "systemic"
+)
+
 //100
 val INVALID_VARIABLE_START = Error(
     101,
@@ -239,6 +246,7 @@ object ErrorStore {
         0 to SUCCESS,
         1 to CONTEXT_IS_NULL,
 //        2 to CLASS_DOESNT_NOT_EXIST,
+        3 to RUNTIME_ERROR,
 
         101 to INVALID_VARIABLE_START,
         102 to VARIABLE_HAS_SPACE,
