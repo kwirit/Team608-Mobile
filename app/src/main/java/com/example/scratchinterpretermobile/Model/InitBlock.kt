@@ -5,8 +5,8 @@ import com.example.scratchinterpretermobile.Controller.Error.INVALID_ARRAY_LENGT
 import com.example.scratchinterpretermobile.Controller.Error.MULTIPLE_INITIALIZATION
 import com.example.scratchinterpretermobile.Controller.Error.REDECLARING_A_VARIABLE
 import com.example.scratchinterpretermobile.Controller.Error.SUCCESS
-import com.example.scratchinterpretermobile.Controller.calculationArithmeticExpression
-import com.example.scratchinterpretermobile.Controller.validateNameVariable
+import com.example.scratchinterpretermobile.Controller.Utils.calculationArithmeticExpression
+import com.example.scratchinterpretermobile.Controller.Utils.validateNameVariable
 
 class InitBlock : InstructionBlock {
     override var runResult: Int = SUCCESS.id

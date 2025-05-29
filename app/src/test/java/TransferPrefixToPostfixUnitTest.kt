@@ -1,7 +1,7 @@
 import org.junit.Test
 import org.junit.After
 import org.junit.Assert.*
-import com.example.scratchinterpretermobile.Controller.transferPrefixToPostfix
+import com.example.scratchinterpretermobile.Controller.Utils.transferPrefixToPostfix
 import com.example.scratchinterpretermobile.Model.IntegerArrayBlock
 import com.example.scratchinterpretermobile.Model.IntegerBlock
 import com.example.scratchinterpretermobile.Model.VarBlock

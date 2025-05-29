@@ -2,7 +2,7 @@ package com.example.scratchinterpretermobile.Model
 
 import com.example.scratchinterpretermobile.Controller.Error.NO_COMPARISON_OPERATOR_SELECTED
 import com.example.scratchinterpretermobile.Controller.Error.SUCCESS
-import com.example.scratchinterpretermobile.Controller.calculationArithmeticExpression
+import com.example.scratchinterpretermobile.Controller.Utils.calculationArithmeticExpression
 
 class LoopBlock(
 ) : InstructionBlock {

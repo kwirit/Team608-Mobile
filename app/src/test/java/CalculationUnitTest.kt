@@ -1,6 +1,6 @@
 import org.junit.Test
 import com.example.scratchinterpretermobile.Model.*
-import com.example.scratchinterpretermobile.Controller.*
+import com.example.scratchinterpretermobile.Controller.Utils.calculationArithmeticExpression
 import org.junit.After
 import org.junit.Assert.*
 
