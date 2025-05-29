@@ -16,7 +16,7 @@ class CalculationUnitTest {
 
         UIContext.pushScope(scope)
 
-        val (result, error) = calculationArithmeticExpression("x + y - z")
+        val (result, error) = calculationArithmeticExpression("x + y - z", UIContext)
 
         assertEquals(14, result)
     }
@@ -30,7 +30,7 @@ class CalculationUnitTest {
 
         UIContext.pushScope(scope)
 
-        val (result, error) = calculationArithmeticExpression("arr[i + 1]")
+        val (result, error) = calculationArithmeticExpression("arr[i + 1]", UIContext)
 
         assertEquals(40, result)
     }
@@ -44,7 +44,7 @@ class CalculationUnitTest {
         UIContext.pushScope(scope)
 
 
-        val (result, error) = calculationArithmeticExpression("a + b * (c - 1)")
+        val (result, error) = calculationArithmeticExpression("a + b * (c - 1)", UIContext)
 
         assertEquals(14, result)
     }
@@ -59,7 +59,7 @@ class CalculationUnitTest {
         UIContext.pushScope(scope)
 
 
-        val (result, error) = calculationArithmeticExpression("arr[    1 + i    + a] + arr    [i +     b] * arr[i * i + b]")
+        val (result, error) = calculationArithmeticExpression("arr[    1 + i    + a] + arr    [i +     b] * arr[i * i + b]", UIContext)
 
         assertEquals(1 + 1 * 1554, result)
     }
@@ -74,7 +74,7 @@ class CalculationUnitTest {
 
         UIContext.pushScope(scope)
 
-        val (result, error) = calculationArithmeticExpression("arr[arr2[arr2[i + 1] + 0 * (100 - 1232131)]]")
+        val (result, error) = calculationArithmeticExpression("arr[arr2[arr2[i + 1] + 0 * (100 - 1232131)]]", UIContext)
         assertEquals(0, error)
         assertEquals(400, result)
 
@@ -94,7 +94,7 @@ class CalculationUnitTest {
             this["arr2"] = IntegerArrayBlock("arr2", mutableListOf(0, 1, 2, 3, 4))
         }
         UIContext.pushScope(scope)
-        val (result, error) = calculationArithmeticExpression("arr[(((i + j) * k) / (a + b + c + d))]")
+        val (result, error) = calculationArithmeticExpression("arr[(((i + j) * k) / (a + b + c + d))]", UIContext)
 
         assertEquals(30, result)
         assertEquals(0, error)
@@ -115,7 +115,7 @@ class CalculationUnitTest {
             this["arr2"] = IntegerArrayBlock("arr2", mutableListOf(0, 1, 2, 3, 4))
         }
         UIContext.pushScope(scope)
-        val (result, error) = calculationArithmeticExpression("arr[(a + b) * (1 + (0 + 0)) * (c - d)]")
+        val (result, error) = calculationArithmeticExpression("arr[(a + b) * (1 + (0 + 0)) * (c - d)]", UIContext)
 
         assertEquals(40, result)
         assertEquals(0, error)
@@ -123,7 +123,7 @@ class CalculationUnitTest {
     @Test
     fun testUnMinus() {
 
-        val (result, error) = calculationArithmeticExpression("-3")
+        val (result, error) = calculationArithmeticExpression("-3", UIContext)
         assertEquals(-3, result)
         assertEquals(0, error)
     }
@@ -131,7 +131,7 @@ class CalculationUnitTest {
     @Test
     fun testMinusBeforeBracketsCircle() {
 
-        val (result, error) = calculationArithmeticExpression("10 / -5")
+        val (result, error) = calculationArithmeticExpression("10 / -5", UIContext)
         assertEquals(-2, result)
         assertEquals(0, error)
     }

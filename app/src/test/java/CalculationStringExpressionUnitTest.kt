@@ -20,7 +20,7 @@ class CalculationStringExpressionUnitTest {
 
         UIContext.pushScope(scope)
 
-        val (result, error) = calculationStringExpression("s * (y + z)")
+        val (result, error) = calculationStringExpression("s * (y + z)", context = UIContext)
 
         assertEquals(0, error)
         assertEquals("huyhuyhuyhuyhuyhuy", result)
@@ -36,7 +36,7 @@ class CalculationStringExpressionUnitTest {
 
         UIContext.pushScope(scope)
 
-        val (result, error) = calculationStringExpression("arr[i + 1] * str + \" \" + \"bubu\"")
+        val (result, error) = calculationStringExpression("arr[i + 1] * str + \" \" + \"bubu\"", UIContext)
 
         assertEquals(0, error)
         assertEquals("pupupupupupupupupupupupu bubu", result)

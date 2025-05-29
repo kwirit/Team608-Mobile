@@ -1,6 +1,7 @@
 package com.example.scratchinterpretermobile.Model
 
 import com.example.scratchinterpretermobile.Controller.Error.NO_COMPARISON_OPERATOR_SELECTED
+import com.example.scratchinterpretermobile.Controller.Error.RUNTIME_ERROR
 import com.example.scratchinterpretermobile.Controller.Error.SUCCESS
 import com.example.scratchinterpretermobile.Controller.Utils.calculationArithmeticExpression
 
@@ -47,7 +48,6 @@ class ConditionBlock(
         context.pushScope(thenScope)
         thenScopeInContext = true
     }
-
     /**
      * Обрабатывает входные данные условия, проверяет оператор сравнения и выполняет сравнение.
      * Удаляет scope из context по
@@ -88,12 +88,12 @@ class ConditionBlock(
      * В случае успеха изменяет resultValue.
      */
     private fun compare(): Int {
-        val (valueLeftPart, errorLeft) = calculationArithmeticExpression(leftPartCondition)
+        val (valueLeftPart, errorLeft) = calculationArithmeticExpression(leftPartCondition, context)
         if (errorLeft != SUCCESS.id) {
             return errorLeft;
         }
 
-        val (valueRightPart, errorRight) = calculationArithmeticExpression(rightPartCondition)
+        val (valueRightPart, errorRight) = calculationArithmeticExpression(rightPartCondition, context)
         if (errorRight != SUCCESS.id) {
             return errorRight
         }
@@ -126,7 +126,12 @@ class ConditionBlock(
         val blocksToRun = if (resultValue) thenBlock else elseBlock
 
         for (block in blocksToRun) {
+            val contextOFBlock = block.context
+
+            block.context = this.context
             val result = block.run();
+
+            block.context = this.context
             if (result != 0) {
                 context.popScope();
                 return result

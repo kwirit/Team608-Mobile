@@ -44,11 +44,11 @@ class PrintBlock(
             }
             validateString(trimmedInput) == 0 -> return Pair(trimmedInput.substring(1, trimmedInput.length - 1), SUCCESS.id)
             else -> {
-                val (resultArithmeticCalculation, errorArithmeticCalculation) = calculationArithmeticExpression(trimmedInput)
+                val (resultArithmeticCalculation, errorArithmeticCalculation) = calculationArithmeticExpression(trimmedInput, context)
                 if (errorArithmeticCalculation == 0) {
                     return Pair(resultArithmeticCalculation.toString(), SUCCESS.id)
                 }
-                val (resultStringCalculation, errorStringCalculation) = calculationStringExpression(trimmedInput)
+                val (resultStringCalculation, errorStringCalculation) = calculationStringExpression(trimmedInput, context)
                 if (errorStringCalculation == 0) return Pair(resultStringCalculation, SUCCESS.id)
                 else return Pair("", INVALID_FORMAT.id)
             }

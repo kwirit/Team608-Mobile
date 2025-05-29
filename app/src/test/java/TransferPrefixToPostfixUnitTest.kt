@@ -17,7 +17,7 @@ class TransferPrefixToPostfixUnitTest {
 
         UIContext.pushScope(scope)
 
-        val (result, error) = transferPrefixToPostfix(mutableListOf("arr[i+1]"))
+        val (result, error) = transferPrefixToPostfix(mutableListOf("arr[i+1]"), UIContext)
         assertEquals(0, error)
         assertEquals(mutableListOf("40"), result)
     }
