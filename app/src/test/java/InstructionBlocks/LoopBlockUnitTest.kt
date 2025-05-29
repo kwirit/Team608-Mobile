@@ -11,7 +11,7 @@ import org.junit.Test
 class LoopBlockUnitTest {
     @Test
     fun test1() {
-        val scope = HashMap<String, InstructionBlock>()
+//        val scope = HashMap<String, InstructionBlock>()
 
         val initBlockAr = InitBlock()
         initBlockAr.assembleIntegerArrayBlock("ar", "5")
@@ -41,7 +41,7 @@ class LoopBlockUnitTest {
 
     @Test
     fun test2() {
-        val scope = UIContext.peekScope()
+//        val scope = UIContext.peekScope()
 
         val initArBlock = InitBlock()
         initArBlock.assembleIntegerArrayBlock("ar", "5")
@@ -101,6 +101,86 @@ class LoopBlockUnitTest {
         blockToInterpreter.add(loopBlock)
         interpreter.setBlocksToRun(blockToInterpreter)
 
+        val error = interpreter.run()
+    }
+
+    @Test
+    fun bubbleSort() {
+        val initArrayBlock = InitBlock()
+        initArrayBlock.assembleIntegerArrayBlock("ar", "10")
+        initArrayBlock.run()
+
+        val fillArray = AssignmentBlock()
+        fillArray.assembleIntegerArrayBlock("ar", "10,9,8,7,6,5,4,3,2,1")
+
+        val initIndex_i = InitBlock()
+        initIndex_i.assembleIntegerBlock("i")
+
+        val loopFirst = LoopBlock()
+        //------------------------------
+        val initIndex_j = InitBlock()
+        initIndex_j.assembleIntegerBlock("j")
+        initIndex_j.run()
+
+        val loopSecond = LoopBlock()
+        //------------------------------
+        val conditionBlock = ConditionBlock()
+        //------------------------------
+        val initBuffer = InitBlock()
+        initBuffer.assembleIntegerBlock("buffer")
+        initBuffer.run()
+
+        val assignmentBuffer = AssignmentBlock()
+        assignmentBuffer.assembleIntegerBlock("ar", "ar[i]")
+
+        val updateArrayElement_i = AssignmentBlock()
+        updateArrayElement_i.assembleElementIntegerArrayBlock("ar", "j","ar[i]")
+
+        val updateArrayElement_j = AssignmentBlock()
+        updateArrayElement_j.assembleElementIntegerArrayBlock("ar", "j", "buffer")
+
+        val blocsToCondition = mutableListOf<InstructionBlock>()
+        blocsToCondition.add(initBuffer)
+        blocsToCondition.add(assignmentBuffer)
+        blocsToCondition.add(updateArrayElement_i)
+        blocsToCondition.add(updateArrayElement_j)
+
+        conditionBlock.addThenScopeInContext()
+        conditionBlock.processInput("ar[i]", "ar[j]", ">", blocsToCondition, mutableListOf())
+        //------------------------------
+
+        val updateIndex_j = AssignmentBlock()
+        updateIndex_j.assembleIntegerBlock("j", "j+1")
+
+        val blocksToSecondLoop = mutableListOf<InstructionBlock>()
+        blocksToSecondLoop.add(conditionBlock)
+        blocksToSecondLoop.add(updateIndex_j)
+
+        loopSecond.addScopeToContext()
+        loopSecond.processInput("j", "10","<", blocksToSecondLoop)
+        //------------------------------
+
+        val updateIndex_i = AssignmentBlock()
+        updateIndex_i.assembleIntegerBlock("i", "i+1")
+
+        val blocksToFirstLoop = mutableListOf<InstructionBlock>()
+        blocksToFirstLoop.add(initIndex_j)
+        blocksToFirstLoop.add(loopSecond)
+        blocksToFirstLoop.add(updateIndex_i)
+
+        loopFirst.addScopeToContext()
+        loopFirst.processInput("i","10", "<",blocksToFirstLoop)
+        //------------------------------
+
+        val interpreter = Interpreter()
+
+        val blocksToRun = mutableListOf<InstructionBlock>()
+        blocksToRun.add(initArrayBlock)
+        blocksToRun.add(fillArray)
+        blocksToRun.add(initIndex_i)
+        blocksToRun.add(loopFirst)
+
+        interpreter.setBlocksToRun(blocksToRun)
         val error = interpreter.run()
     }
 }

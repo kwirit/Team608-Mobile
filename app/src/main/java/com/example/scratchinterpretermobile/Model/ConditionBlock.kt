@@ -131,7 +131,7 @@ class ConditionBlock(
             block.context = this.context
             val result = block.run();
 
-            block.context = this.context
+            block.context = contextOFBlock
             if (result != 0) {
                 context.popScope();
                 return result

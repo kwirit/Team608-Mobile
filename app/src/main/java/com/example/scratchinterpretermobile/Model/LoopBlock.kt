@@ -95,7 +95,7 @@ class LoopBlock(
     }
 
     override fun run(): Int {
-        context.pushScope(hashMapOf())
+//        context.pushScope(hashMapOf())
         var compareError = compare()
 
         if (compareError != 0){
@@ -104,6 +104,7 @@ class LoopBlock(
         }
 
         while (resultValue) {
+            context.pushScope(hashMapOf())
             for (block in blocksToRun) {
                 val contextOfBlock = block.context
 
@@ -121,8 +122,10 @@ class LoopBlock(
                 context.popScope();
                 return compareError
             }
+
+            context.popScope()
         }
-        context.popScope()
+//        context.popScope()
         return 0;
     }
 }
