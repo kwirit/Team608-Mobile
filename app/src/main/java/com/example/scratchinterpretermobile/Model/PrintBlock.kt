@@ -3,11 +3,12 @@ package com.example.scratchinterpretermobile.Model
 import com.example.scratchinterpretermobile.Controller.Error.INVALID_FORMAT
 import com.example.scratchinterpretermobile.Controller.Error.SUCCESS
 import com.example.scratchinterpretermobile.Controller.Error.VARIABLE_NOT_FOUND
-import com.example.scratchinterpretermobile.Controller.calculationArithmeticExpression
-import com.example.scratchinterpretermobile.Controller.calculationStringExpression
-import com.example.scratchinterpretermobile.Controller.parserSplit
-import com.example.scratchinterpretermobile.Controller.validateNameVariable
-import com.example.scratchinterpretermobile.Controller.validateString
+import com.example.scratchinterpretermobile.Controller.Utils.calculationArithmeticExpression
+import com.example.scratchinterpretermobile.Controller.Utils.calculationStringExpression
+import com.example.scratchinterpretermobile.Controller.Utils.parserSplit
+import com.example.scratchinterpretermobile.Controller.Utils.validateNameVariable
+import com.example.scratchinterpretermobile.Controller.Utils.validateString
+
 
 class PrintBlock(
     var output: String = "",

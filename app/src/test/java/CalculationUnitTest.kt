@@ -1,8 +1,9 @@
 import org.junit.Test
 import com.example.scratchinterpretermobile.Model.*
-import com.example.scratchinterpretermobile.Controller.*
+import com.example.scratchinterpretermobile.Controller.Utils.calculationArithmeticExpression
 import org.junit.After
 import org.junit.Assert.*
+import org.junit.Before
 
 class CalculationUnitTest {
     @Test
@@ -62,6 +63,67 @@ class CalculationUnitTest {
 
         assertEquals(1 + 1 * 1554, result)
     }
+    @Test
+    fun testArrayInIndexArray() {
+        val scope = hashMapOf<String, VarBlock<*>>()
+        scope["a"] = IntegerBlock("a", 1)
+        scope["i"] = IntegerBlock("i", 2)
+        scope["b"] = IntegerBlock("b", 2)
+        scope["arr"] = IntegerArrayBlock("arr", mutableListOf(100, 200, 300, 400, 500, 600, 700, 800, 900))
+        scope["arr2"] = IntegerArrayBlock("arr2", mutableListOf(0, 1, 2, 3, 4, 5, 6, 7, 8))
+
+        UIContext.pushScope(scope)
+
+        val (result, error) = calculationArithmeticExpression("arr[arr2[arr2[i + 1] + 0 * (100 - 1232131)]]")
+        assertEquals(0, error)
+        assertEquals(400, result)
+
+    }
+
+    @Test
+    fun testDeeplyNestedIndex() {
+        val scope = hashMapOf<String, VarBlock<*>>().apply {
+            this["i"] = IntegerBlock("i", 2)
+            this["j"] = IntegerBlock("j", 3)
+            this["k"] = IntegerBlock("k", 4)
+            this["a"] = IntegerBlock("a", 0)
+            this["b"] = IntegerBlock("b", 1)
+            this["c"] = IntegerBlock("c", 5)
+            this["d"] = IntegerBlock("d", 2)
+            this["arr"] = IntegerArrayBlock("arr", mutableListOf(10, 20, 30, 40, 50))
+            this["arr2"] = IntegerArrayBlock("arr2", mutableListOf(0, 1, 2, 3, 4))
+        }
+        UIContext.pushScope(scope)
+        val (result, error) = calculationArithmeticExpression("arr[(((i + j) * k) / (a + b + c + d))]")
+
+        // ((2 + 3) * 4) / (0 + 1 + 5 + 2) = (5*4)/8 = 20/8 = 2 → arr[2] = 30
+        assertEquals(30, result)
+        assertEquals(0, error)
+    }
+
+    // ———————————————————————— Операторы и скобки ——————————————————————————————
+
+    @Test
+    fun testMultipleOperatorsAndBrackets() {
+        val scope = hashMapOf<String, VarBlock<*>>().apply {
+            this["i"] = IntegerBlock("i", 2)
+            this["j"] = IntegerBlock("j", 3)
+            this["k"] = IntegerBlock("k", 4)
+            this["a"] = IntegerBlock("a", 0)
+            this["b"] = IntegerBlock("b", 1)
+            this["c"] = IntegerBlock("c", 5)
+            this["d"] = IntegerBlock("d", 2)
+            this["arr"] = IntegerArrayBlock("arr", mutableListOf(10, 20, 30, 40, 50))
+            this["arr2"] = IntegerArrayBlock("arr2", mutableListOf(0, 1, 2, 3, 4))
+        }
+        UIContext.pushScope(scope)
+        val (result, error) = calculationArithmeticExpression("arr[(a + b) * (1 + (0 + 0)) * (c - d)]")
+
+        // (0+1)*(5-2) = 1*3 = 3 → arr[3] = 40
+        assertEquals(40, result)
+        assertEquals(0, error)
+    }
+
 
 
     @After

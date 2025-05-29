@@ -1,5 +1,4 @@
-import com.example.scratchinterpretermobile.Controller.calculationArithmeticExpression
-import com.example.scratchinterpretermobile.Controller.calculationStringExpression
+import com.example.scratchinterpretermobile.Controller.Utils.calculationStringExpression
 import com.example.scratchinterpretermobile.Model.IntegerArrayBlock
 import com.example.scratchinterpretermobile.Model.IntegerBlock
 import com.example.scratchinterpretermobile.Model.StringBlock
