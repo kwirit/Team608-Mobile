@@ -226,6 +226,13 @@ val INVALID_FORMAT = Error(
     "The string is not enclosed in double quotes or has incorrect structure.",
     "string"
 )
+val NO_COMPARISON_OPERATOR_SELECTED = Error(
+    801,
+    "No comparison operator selected",
+    "A comparison operator must be selected for this operation.",
+    "comparison"
+)
+
 
 object ErrorStore {
     private val errorMap = mapOf(
@@ -267,6 +274,8 @@ object ErrorStore {
 
         701 to INVALID_CHARACTERS_IN_STRING,
         702 to INVALID_FORMAT,
+
+        801 to NO_COMPARISON_OPERATOR_SELECTED,
     )
 
     fun get(id: Int): Error? = errorMap[id]

@@ -36,7 +36,6 @@ class Context {
         }
         return null
     }
-
     fun setVar(key: String, varBlock: VarBlock<*>) {
         for (scope in context) {
             if (scope.containsKey(key)) {
@@ -62,6 +61,14 @@ class Context {
     fun pushScope(scope: HashMap<String, VarBlock<*>> = HashMap()) = context.push(scope)
     fun popScope(): HashMap<String, VarBlock<*>>? = context.pop()
     fun peekScope(): HashMap<String, VarBlock<*>>? = context.peek()
+    fun removeScope(scope: HashMap<String, VarBlock<*>>) {
+        for (item in context.toReversedList()) {
+            context.pop()
+            if (item == scope) {
+                break
+            }
+        }
+    }
 
     fun clear() = context.clear()
 

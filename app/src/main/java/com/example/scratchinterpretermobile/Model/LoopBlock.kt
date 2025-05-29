@@ -1,5 +1,6 @@
 package com.example.scratchinterpretermobile.Model
 
+import com.example.scratchinterpretermobile.Controller.Error.NO_COMPARISON_OPERATOR_SELECTED
 import com.example.scratchinterpretermobile.Controller.Error.SUCCESS
 import com.example.scratchinterpretermobile.Controller.calculationArithmeticExpression
 
@@ -19,37 +20,46 @@ class LoopBlock(
 
     private var scope: HashMap<String, VarBlock<*>> = hashMapOf()
 
-    fun processInput(leftPartCondition: String, rightPartCondition: String, operator: String, blocksToRun: MutableList<InstructionBlock>): Int {
-        context.pushScope(scope)
 
+    /**
+     * Добавление scope в context
+     * Обязательная функция при заходе в карточку
+     */
+    fun addScopeToContext() {
+        context.pushScope(scope)
+    }
+
+    /**
+     * Обрабатывает входные данные условия, проверяет оператор сравнения и выполняет сравнение.
+     * Удаляет scope из context по
+     * @param leftPartCondition Левая часть условия (например, строка или значение для сравнения).
+     * @param rightPartCondition Правая часть условия (например, строка или значение для сравнения).
+     * @param operator Оператор сравнения (например, ">", "<", "==", "!=" и т.д.).
+     * @param blocksToRun Список блоков инструкций, которые будут выполнены при успешной проверке условия.
+     *
+     * @return Код результата выполнения:
+     *   - [SUCCESS.id] — успешное выполнение.
+     *   - [NO_COMPARISON_OPERATOR_SELECTED.id] — не выбран оператор сравнения.
+     *   - Код ошибки из метода [compare], если сравнение частей условия завершилось с ошибкой.
+     */
+    fun processInput(leftPartCondition: String, rightPartCondition: String, operator: String, blocksToRun: MutableList<InstructionBlock>): Int {
         this.leftPartCondition = leftPartCondition
         this.rightPartCondition = rightPartCondition
         this.operator = operator
-        setBlocksToRun(blocksToRun)
+        this.blocksToRun = blocksToRun
+
+        if (this.operator == "Выбрать оператор") return NO_COMPARISON_OPERATOR_SELECTED.id
 
         var errorCompare = compare()
-        rollbackBlocksToRun()
 
-        while (errorCompare == SUCCESS.id && resultValue) {
-            rollBlocksToRun()
-            errorCompare = compare()
-            ++iterations
+        if (errorCompare != SUCCESS.id) {
+            context.popScope()
+            return errorCompare
         }
 
         context.popScope()
         return SUCCESS.id
     }
-
-    fun setBlocksToRun(blocksToRun: MutableList<InstructionBlock>) {
-        this.blocksToRun = blocksToRun
-    }
-    fun rollbackBlocksToRun() {
-        rollbackActions(blocksToRun)
-    }
-    fun rollBlocksToRun() {
-        rollActions(blocksToRun)
-    }
-
 
     /**
      * Выполняет сравнение двух арифметических выражений на основе заданного оператора.
@@ -81,7 +91,7 @@ class LoopBlock(
     }
 
     override fun removeBlock() {
-        rollbackBlocksToRun()
+        return
     }
 
     override fun run(): Int {
