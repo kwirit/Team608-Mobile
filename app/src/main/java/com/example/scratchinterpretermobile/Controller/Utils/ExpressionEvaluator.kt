@@ -9,6 +9,7 @@ import com.example.scratchinterpretermobile.Controller.Error.INVALID_ARRAY_ACCES
 import com.example.scratchinterpretermobile.Controller.Error.INVALID_CHARACTERS
 import com.example.scratchinterpretermobile.Controller.Error.INVALID_VARIABLE_START
 import com.example.scratchinterpretermobile.Controller.Error.UNMATCHED_PARENTHESES
+import com.example.scratchinterpretermobile.Model.Context
 import com.example.scratchinterpretermobile.Model.Stack
 import com.example.scratchinterpretermobile.Model.UIContext
 import com.example.scratchinterpretermobile.Model.IntegerBlock
@@ -20,7 +21,7 @@ import kotlin.collections.get
  * @param elements список токенов исходного выражения
  * @return Pair<MutableList<String>, Int> - постфиксное выражение и код ошибки (0 - в случае успеха)
  */
-fun transferPrefixToPostfix(elements: MutableList<String>): Pair<MutableList<String>, Int> {
+fun transferPrefixToPostfix(elements: MutableList<String>, context: Context = UIContext): Pair<MutableList<String>, Int> {
     val postfix = mutableListOf<String>()
     val stack = Stack<String>()
     val priority = mapOf(
@@ -56,22 +57,19 @@ fun transferPrefixToPostfix(elements: MutableList<String>): Pair<MutableList<Str
                 when {
                     validateConst(element) == 0 -> postfix.add(element)
 
-                    validateNameVariable(element) == 0 && UIContext.getVar(element) != null -> {
+                    validateNameVariable(element) == 0 && context.getVar(element) != null -> {
 
-                        when (val value = UIContext.getVar(element)) {
+                        when (val value = context.getVar(element)) {
                             is IntegerBlock -> postfix.add(value.getValue().toString())
-                            is StringBlock -> postfix.add(value.getValue())
                             else -> return Pair(mutableListOf(), ARRAY_EXPECTED.id)
                         }
                     }
 
                     validateSyntaxArrayName(element) == 0 -> {
-                        val (value, error) = processArrayAccess(element)
+                        val (value, error) = processArrayAccess(element, context)
                         if (error != 0) return Pair(mutableListOf(), ARRAY_NOT_FOUND.id)
                         postfix.add(value.toString())
                     }
-
-                    validateString(element) == 0 -> {}
                     else -> return Pair(mutableListOf(), INVALID_VARIABLE_START.id)
                 }
             }
@@ -131,15 +129,13 @@ fun calculationPostfix(postfix: MutableList<String>): Pair<Int, Int> {
  * @param input строка с арифметическим выражением
  * @return Pair<Int, Int> - результат и код ошибки (0 - в случае успеха)
  */
-fun calculationArithmeticExpression(input: String): Pair<Int, Int> {
-    val (elements, error) = transferPrefixToPostfix(getElementFromString(input))
+fun calculationArithmeticExpression(input: String, context: Context = UIContext): Pair<Int, Int> {
+    val (elements, error) = transferPrefixToPostfix(getElementFromString(input), context)
     if (error != 0) return Pair(-1, error)
     val (result, errorCalculation) = calculationPostfix(elements)
     if (errorCalculation != 0) return Pair(-1, errorCalculation)
     return Pair(result, 0)
 }
-
-
 
 /**
  * Преобразует инфиксное строковое выражение в постфиксную нотацию.
@@ -147,7 +143,7 @@ fun calculationArithmeticExpression(input: String): Pair<Int, Int> {
  * @param elements список токенов исходного выражения
  * @return Pair<MutableList<Pair<String, String>>, Int> постфиксное выражение и код ошибки
  */
-fun transferStringPrefixToPostfix(elements: MutableList<String>): Pair<MutableList<Pair<String, String>>, Int>  {
+fun transferStringPrefixToPostfix(elements: MutableList<String>, context: Context = UIContext): Pair<MutableList<Pair<String, String>>, Int>  {
     val postfix = mutableListOf<Pair<String, String>>()
     val stack = Stack<String>()
     val priority = mapOf(
@@ -184,15 +180,15 @@ fun transferStringPrefixToPostfix(elements: MutableList<String>): Pair<MutableLi
                     validateConst(element) == 0 -> postfix.add(Pair(element, "Const"))
                     validateString(element) == 0 -> postfix.add(Pair(element.substring(1, element.length - 1), "String"))
 
-                    validateNameVariable(element) == 0 && UIContext.getVar(element) != null -> {
-                        when (val value = UIContext.getVar(element)) {
+                    validateNameVariable(element) == 0 && context.getVar(element) != null -> {
+                        when (val value = context.getVar(element)) {
                             is IntegerBlock -> postfix.add(Pair(value.getValue().toString(), "Const"))
                             is StringBlock -> postfix.add(Pair(value.getValue(), "String"))
                             else -> return Pair(mutableListOf(), ARRAY_EXPECTED.id)
                         }
                     }
                     validateSyntaxArrayName(element) == 0 -> {
-                        val (value, error) = processArrayAccess(element)
+                        val (value, error) = processArrayAccess(element, context)
                         if (error != 0) return Pair(mutableListOf(), ARRAY_NOT_FOUND.id)
 
                         postfix.add(Pair(value.toString(), "Const"))
@@ -288,8 +284,8 @@ fun calculationStringPostfix(
  * @param input строка со строковым выражением
  * @return Pair<String, Int> результат и код ошибки
  */
-fun calculationStringExpression(input: String): Pair<String, Int> {
-    val (elements, error) = transferStringPrefixToPostfix(getElementFromString(input.trim()))
+fun calculationStringExpression(input: String, context: Context = UIContext): Pair<String, Int> {
+    val (elements, error) = transferStringPrefixToPostfix(getElementFromString(input.trim()), context)
     if (error != 0) return Pair("", error)
     val (result, errorCalculation) = calculationStringPostfix(elements)
     if (errorCalculation != 0) return Pair("", errorCalculation)

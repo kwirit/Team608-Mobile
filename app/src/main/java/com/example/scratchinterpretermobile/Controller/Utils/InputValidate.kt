@@ -13,6 +13,7 @@ import com.example.scratchinterpretermobile.Controller.Error.INVALID_VARIABLE_ST
 import com.example.scratchinterpretermobile.Controller.Error.SUCCESS
 import com.example.scratchinterpretermobile.Controller.Error.UNMATCHED_PARENTHESES
 import com.example.scratchinterpretermobile.Controller.Error.VARIABLE_HAS_SPACE
+import com.example.scratchinterpretermobile.Model.Context
 import com.example.scratchinterpretermobile.Model.Stack
 import com.example.scratchinterpretermobile.Model.IntegerArrayBlock
 import com.example.scratchinterpretermobile.Model.UIContext
@@ -139,7 +140,7 @@ fun validateString(input: String): Int {
  * @param element строка с обращением к элементу массива
  * @return Pair<Int, Int> пара: значение элемента и код ошибки
  */
-fun processArrayAccess(input: String): Pair<Int, Int> {
+fun processArrayAccess(input: String, context: Context = UIContext): Pair<Int, Int> {
     val element = input.trim()
     if (input.isEmpty()) return Pair(-1, EMPTY_NAME.id)
 
@@ -159,7 +160,7 @@ fun processArrayAccess(input: String): Pair<Int, Int> {
         return Pair(-1, indexError)
     }
 
-    val arrayBlock = UIContext.getVar(arrayName) ?: return Pair(-1, ARRAY_NOT_FOUND.id)
+    val arrayBlock = context.getVar(arrayName) ?: return Pair(-1, ARRAY_NOT_FOUND.id)
 
     if (arrayBlock !is IntegerArrayBlock) return Pair(-1, ARRAY_EXPECTED.id)
 
