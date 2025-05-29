@@ -15,6 +15,7 @@ class PrintBlock(
 
 ) : InstructionBlock {
     override var context: Context = UIContext
+    override var runResult: Int = SUCCESS.id
 
     fun updateOutput(newOutput: String) {
         output = newOutput.trim();

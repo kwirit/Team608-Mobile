@@ -6,6 +6,7 @@ import com.example.scratchinterpretermobile.Controller.calculationArithmeticExpr
 class LoopBlock(
 ) : InstructionBlock {
     override var context: Context = UIContext
+    override var runResult: Int = SUCCESS.id
 
     private var leftPartCondition: String = ""
     private var rightPartCondition: String = ""
@@ -16,11 +17,7 @@ class LoopBlock(
 
     private var blocksToRun: MutableList<InstructionBlock> = mutableListOf()
 
-    private var scope: HashMap<String, VarBlock<*>> = hashMapOf();
-
-//    init {
-//        context.pushScope(scope)
-//    }
+    private var scope: HashMap<String, VarBlock<*>> = hashMapOf()
 
     fun processInput(leftPartCondition: String, rightPartCondition: String, operator: String, blocksToRun: MutableList<InstructionBlock>): Int {
         context.pushScope(scope)

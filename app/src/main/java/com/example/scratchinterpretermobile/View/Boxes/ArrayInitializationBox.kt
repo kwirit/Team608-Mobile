@@ -5,11 +5,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -30,7 +28,7 @@ class ArrayInitializationBox(externalBoxes: MutableList<ProgramBox>) : ProgramBo
     override fun render(){
         BaseBox(name = "Инициализация массива", showState,
             onConfirmButton = {
-                code = this.value.initIntegerArrayBlock(arrayName, arraySize)
+                code = this.value.assembleIntegerArrayBlock(arrayName, arraySize)
             },
             dialogContent = {
                 Box(modifier = Modifier.fillMaxSize()) {

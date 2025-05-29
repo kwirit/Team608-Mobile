@@ -12,6 +12,8 @@ import com.example.scratchinterpretermobile.Controller.validateNameVariable
 
 
 class AssignmentBlock:InstructionBlock {
+    override var runResult: Int = SUCCESS.id
+
     override var context: Context = UIContext
     private var originalVarBlock: VarBlock<*>? = null // предыдущее успешное присваивание
     private var newVarBlock: VarBlock<*>? = null // новый блок

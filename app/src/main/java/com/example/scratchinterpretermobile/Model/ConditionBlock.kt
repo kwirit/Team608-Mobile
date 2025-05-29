@@ -6,6 +6,7 @@ import com.example.scratchinterpretermobile.Controller.calculationArithmeticExpr
 class ConditionBlock(
 ) : InstructionBlock {
     override var context: Context = UIContext
+    override var runResult: Int = SUCCESS.id
 
     private var operator: String = "=="
     private var leftPartCondition: String = ""
