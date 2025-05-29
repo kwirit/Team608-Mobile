@@ -52,24 +52,26 @@ fun getElementFromString(
 
     var flagArray = false
     var flagString = false
+    var arrayNestingLevel = 0
 
     for (symbol in trimmedInput) {
-        if (symbol == ' ' && !flagString) continue
-        if (symbol == '\"') flagString = !flagString;
+        if (symbol == ' ' && !flagString && arrayNestingLevel == 0 && !flagString) continue
 
-
-        if (symbol == '[') flagArray = true
-        if (symbol == ']') {
-            flagArray = false;
-            currentToken.append(symbol)
-            elements.add(currentToken.toString())
-            currentToken.clear()
-            continue
+        if (symbol == '\"') {
+            flagString = !flagString
         }
 
-        if (flagArray || flagString) {
+        if (!flagString && symbol == '[') {
+            arrayNestingLevel++
+        }
+
+        if (!flagString && symbol == ']') {
+            arrayNestingLevel--
+        }
+
+        if (flagString || arrayNestingLevel > 0) {
             currentToken.append(symbol)
-            continue;
+            continue
         }
 
         if (symbol in operators) {

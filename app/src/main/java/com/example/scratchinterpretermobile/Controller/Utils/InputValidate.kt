@@ -10,7 +10,10 @@ import com.example.scratchinterpretermobile.Controller.Error.INVALID_CHARACTERS
 import com.example.scratchinterpretermobile.Controller.Error.INVALID_CHARACTERS_IN_STRING
 import com.example.scratchinterpretermobile.Controller.Error.INVALID_FORMAT
 import com.example.scratchinterpretermobile.Controller.Error.INVALID_VARIABLE_START
+import com.example.scratchinterpretermobile.Controller.Error.SUCCESS
+import com.example.scratchinterpretermobile.Controller.Error.UNMATCHED_PARENTHESES
 import com.example.scratchinterpretermobile.Controller.Error.VARIABLE_HAS_SPACE
+import com.example.scratchinterpretermobile.Model.Stack
 import com.example.scratchinterpretermobile.Model.IntegerArrayBlock
 import com.example.scratchinterpretermobile.Model.UIContext
 
@@ -44,29 +47,53 @@ fun validateNameVariable(input: String): Int {
     return 0
 }
 
+
+fun validateAllBrackets(input: String): Int {
+    val stack = Stack<Char>()
+    val matchingBrackets = mapOf(
+        ')' to '(',
+        ']' to '['
+    )
+
+    for (char in input) {
+        when (char) {
+            '(', '[' -> stack.push(char)
+            ')', ']' -> {
+                if (stack.isEmpty()) return UNMATCHED_PARENTHESES.id
+                val top = stack.pop()
+                if (matchingBrackets[char] != top) return UNMATCHED_PARENTHESES.id
+            }
+        }
+    }
+
+    if (!stack.isEmpty()) return UNMATCHED_PARENTHESES.id
+    return 0
+}
+
 /**
  * Проверяет, синтаксическую корректность элемента массива
  * @param input строка, которую проверяем
  * @return Int - код ошибки (0 - в случае успеха)
  */
 fun validateSyntaxArrayName(input: String): Int {
-    if (input.trim().isEmpty()) return EMPTY_NAME.id
-    val regex = Regex(
-        """([a-zA-Z_]\w*)\[\s*([-+*\/%]?\s*(?:[a-zA-Z_]\w*|\d+|\([^()\r\n]*\))\s*(?:[-+*\/%]\s*(?:[a-zA-Z_]\w*|\d+|\([^()\r\n]*\))\s*)*)?\]"""
-    )
-    if (!regex.containsMatchIn(input.trim()))
-        return INCORRECT_ARRAY_ELEMENT_NAME.id
-    return 0
-}
+    val element = input.trim()
+    if (element.isEmpty()) return EMPTY_NAME.id
 
-/**
- * Проверяет, является ли строка корректным именем массива с индексом.
- *
- * @param input строка, содержащая потенциальное обращение к элементу массива
- * @return Int - код ошибки (0 - если строка корректна)
- */
-fun validateArrayName(input: String): Int {
-    return processArrayAccess(input).second
+    val openIndex = element.indexOf('[')
+    val closeIndex = element.lastIndexOf(']')
+    if (openIndex == -1 || closeIndex == -1 || openIndex > closeIndex) return UNMATCHED_PARENTHESES.id
+
+    val arrayName = element.substring(0, openIndex).trim()
+    val indexExpr = element.substring(openIndex + 1, closeIndex).trim()
+
+    if (validateNameVariable(arrayName) != SUCCESS.id) {
+        return validateNameVariable(arrayName)
+    }
+    if (validateAllBrackets(indexExpr) != SUCCESS.id){
+        return UNMATCHED_PARENTHESES.id
+    }
+
+    return SUCCESS.id
 }
 
 /**
@@ -112,22 +139,23 @@ fun validateString(input: String): Int {
  * @param element строка с обращением к элементу массива
  * @return Pair<Int, Int> пара: значение элемента и код ошибки
  */
-fun processArrayAccess(element: String): Pair<Int, Int> {
-    val regexName = Regex("^([a-zA-Z_][a-zA-Z0-9_]*)")
-    val regexIndex = Regex("\\[(.*?)\\]")
+fun processArrayAccess(input: String): Pair<Int, Int> {
+    val element = input.trim()
+    if (input.isEmpty()) return Pair(-1, EMPTY_NAME.id)
 
-    val matchName = regexName.find(element) ?: return Pair(-1, INVALID_ARRAY_ACCESS.id)
-    val matchIndex = regexIndex.find(element) ?:return Pair(-1, INVALID_ARRAY_ACCESS.id)
+    val openIndex = input.indexOf('[')
+    val closeIndex = input.lastIndexOf(']')
+    if (openIndex == -1 || closeIndex == -1 || openIndex > closeIndex) return Pair(-1, UNMATCHED_PARENTHESES.id)
 
-    val arrayName = matchName.groups[1]?.value ?: return Pair(-1, INVALID_ARRAY_ACCESS.id)
-    val indexExpr = matchIndex.groups[1]?.value ?: return Pair(-1, INVALID_ARRAY_ACCESS.id)
+    val arrayName = element.substring(0, openIndex).trim()
+    val indexExpr = element.substring(openIndex + 1, closeIndex).trim()
 
     if (validateNameVariable(arrayName) != 0) {
         return Pair(-1, validateNameVariable(arrayName))
     }
 
     val (indexValue, indexError) = calculationArithmeticExpression(indexExpr)
-    if (indexError != 0) {
+    if (indexError != SUCCESS.id) {
         return Pair(-1, indexError)
     }
 
@@ -139,5 +167,5 @@ fun processArrayAccess(element: String): Pair<Int, Int> {
 
     if (indexValue < 0 || indexValue >= array.size) return Pair(-1, ARRAY_BOUNDS_ERROR.id)
 
-    return Pair(array[indexValue], 0)
+    return Pair(array[indexValue], SUCCESS.id)
 }
