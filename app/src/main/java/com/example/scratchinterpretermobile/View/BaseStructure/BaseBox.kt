@@ -39,7 +39,7 @@ import com.example.scratchinterpretermobile.View.Dialogs.CreateBoxesDialog
 import com.example.scratchinterpretermobile.View.Dialogs.CustomDialog
 
 @Composable
-fun BaseBox(name: String, showState: MutableState<Boolean>, dialogModifier: Modifier = Modifier, onConfirmButton:() -> Unit, dialogContent:@Composable () -> Unit,onDelete:() -> Unit, boxContent:@Composable () -> Unit){
+fun BaseBox(name: String, showState: MutableState<Boolean>, dialogModifier: Modifier = Modifier,onCloseDialog: () -> Unit = {}, onConfirmButton:() -> Unit, dialogContent:@Composable () -> Unit,onDelete:() -> Unit, boxContent:@Composable () -> Unit){
     Card(Modifier.fillMaxWidth().heightIn(min = 80.dp).padding(10.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
     ) {
@@ -70,7 +70,7 @@ fun BaseBox(name: String, showState: MutableState<Boolean>, dialogModifier: Modi
         }
     }
     if(showState.value){
-        BoxDialog(showState, modifier = dialogModifier,onConfirmButton){
+        BoxDialog(showState, modifier = dialogModifier,onCloseDialog = onCloseDialog,onConfirmButton){
             Box(modifier = Modifier.fillMaxSize()){
                 dialogContent()
             }

@@ -74,7 +74,10 @@ class IfBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(externalBoxes) 
                         ElseScreen()
                     }
                 }
-        }, onDelete = {
+        }, onCloseDialog = {
+
+            },
+            onDelete = {
             value.removeBlock()
             externalBoxes.removeAll { it.id == id }}, dialogModifier = Modifier.height(800.dp)) {
             Column(Modifier.fillMaxHeight().width(230.dp)){
