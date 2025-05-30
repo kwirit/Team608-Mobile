@@ -1,89 +1,102 @@
 package com.example.scratchinterpretermobile.Model
 
 import com.example.scratchinterpretermobile.Controller.Error.CONTEXT_IS_NULL
+import com.example.scratchinterpretermobile.Controller.Error.INVALID_ARRAY_LENGTH
 import com.example.scratchinterpretermobile.Controller.Error.MULTIPLE_INITIALIZATION
-import com.example.scratchinterpretermobile.Controller.Error.REDECLARING_A_VARIABLE
+import com.example.scratchinterpretermobile.Controller.Error.REINITIALIZE_VARIABLE
+import com.example.scratchinterpretermobile.Controller.Error.RUNTIME_ERROR
 import com.example.scratchinterpretermobile.Controller.Error.SUCCESS
-import com.example.scratchinterpretermobile.Controller.calculationArithmeticExpression
-import com.example.scratchinterpretermobile.Controller.calculationPostfix
-import com.example.scratchinterpretermobile.Controller.getElementFromString
-import com.example.scratchinterpretermobile.Controller.transferPrefixToPostfix
-import com.example.scratchinterpretermobile.Controller.validateNameVariable
+import com.example.scratchinterpretermobile.Controller.Utils.calculationArithmeticExpression
+import com.example.scratchinterpretermobile.Controller.Utils.validateNameVariable
 
-class InitBlock : InstructionBlock() {
-    private var newVarBlocks = mutableListOf<VarBlock>()
+class InitBlock(
+    override var context: Context
+) : InstructionBlock {
+    private val newVarBlocks:MutableList<VarBlock<*>> = mutableListOf()
 
-    private fun fillIntegerBlock(variableName: String, newBlocks: MutableList<VarBlock>): Int {
-        val words = variableName.split(",").map { it.trim() }
-
-        for(word in words) {
-            val validateNameVariableError = validateNameVariable(word)
+    private fun fillNames(variableNames: MutableList<String>, input: String): Int {
+        val names = input.split(",").map { it.trim() }
+        for(name in names) {
+            val validateNameVariableError = validateNameVariable(name)
             if(validateNameVariableError != SUCCESS.id) return validateNameVariableError
 
-            if(mainContext.getVar(word) != null) return REDECLARING_A_VARIABLE.id
-
-            val newBlock = IntegerBlock(word, 0)
-            newBlocks.add(newBlock)
+            variableNames.add(name)
         }
 
         return SUCCESS.id
     }
 
-    private fun fillIntegerArrayBlock(variableName: String, arrayLength: String, newBlocks: MutableList<VarBlock>): Int {
-        val words = variableName.split(",").map { it.trim() }
-        if(words.size > 1) return MULTIPLE_INITIALIZATION.id
+    fun assembleIntegerBlock(input:String): Int {
+        context ?: return CONTEXT_IS_NULL.id
 
-        val word = words[0]
+        removeBlock()
 
-        val validateNameVariableError = validateNameVariable(word)
-        if(validateNameVariableError != SUCCESS.id) return validateNameVariableError
-
-        val (arrayLength, arifmeticError) = calculationArithmeticExpression(arrayLength)
-        if(arifmeticError != SUCCESS.id) return arifmeticError
-
-        val newBlock = IntegerArrayBlock(word, mutableListOf<Int>(arrayLength))
-        newBlocks.add((newBlock))
-
-        return SUCCESS.id
-    }
-
-    private fun updateContext(newBlocks: MutableList<VarBlock>): Int {
-        val scope = mainContext.peekScope()
-
-        for(varBlock in newVarBlocks) {
-            scope!!.remove(varBlock.name)
-        }
-
-        for(varBlock in newBlocks) {
-            scope!!.put(varBlock.name, varBlock)
-        }
-
-        return SUCCESS.id
-    }
-
-    fun processInput(variableName:String, arrayLength:String = ""): Int {
-        if(mainContext.peekScope() == null) return CONTEXT_IS_NULL.id
-
-        val newBlocks = mutableListOf<VarBlock>()
-
-        var fillError = SUCCESS.id
-        if(arrayLength == "") {
-            fillError = fillIntegerBlock(variableName, newBlocks)
-        }
-        else {
-            fillError = fillIntegerArrayBlock(variableName, arrayLength, newBlocks)
-        }
-
+        val variableNames = mutableListOf<String>()
+        val fillError =  fillNames(variableNames, input)
         if(fillError != SUCCESS.id) return fillError
 
-        updateContext(newBlocks)
+        // Добавляем новые переменные в контекст и сохраняем их копию
+        val scoupe = context.peekScope()
+        for(variableName in variableNames) {
+            val newIntegerBlock = IntegerBlock(variableName, 0)
+            newVarBlocks.add(newIntegerBlock.getCopy())
+        }
 
         return SUCCESS.id
+    }
+
+    fun assembleIntegerArrayBlock(inputArrayName:String, inputArrayLength:String): Int {
+        context?: return CONTEXT_IS_NULL.id
+
+        removeBlock()
+
+        val arrayNames = mutableListOf<String>()
+        val fillError =  fillNames(arrayNames, inputArrayName)
+        if(fillError != SUCCESS.id) return fillError
+        else if(arrayNames.size > 1) return MULTIPLE_INITIALIZATION.id
+        else if(inputArrayName.isEmpty()) return INVALID_ARRAY_LENGTH.id
+
+        val (arrayLength, calculationLengthError) = calculationArithmeticExpression(inputArrayLength, context)
+        if(calculationLengthError != SUCCESS.id) return calculationLengthError
+        else if(arrayLength <= 0) return INVALID_ARRAY_LENGTH.id
+
+        //сохраняем копию
+        for(arrayName in arrayNames) {
+            val newIntegerArrayBlock = IntegerArrayBlock(arrayName, MutableList<Int>(arrayLength) {0})
+            newVarBlocks.add(newIntegerArrayBlock.getCopy())
+        }
+
+        return SUCCESS.id
+    }
+
+    // для тестов
+    fun removeBlocksFromContext() {
+        for(varBlock in newVarBlocks) {
+            context.removeVar(varBlock.getName())
+        }
+        return
+    }
+
+    override fun removeBlock(){
+        for(varBlock in newVarBlocks) {
+            context.removeVar(varBlock.getName())
+        }
+        newVarBlocks.clear()
+
+        return;
     }
 
     override fun run(): Int {
-        //
-        
-        return 0
+        context ?: return CONTEXT_IS_NULL.id
+
+        if(newVarBlocks.size <= 0) return RUNTIME_ERROR.id
+
+        for(varBlock in newVarBlocks) {
+            if(context.getVar(varBlock.getName()) != null) return REINITIALIZE_VARIABLE.id
+
+            context.peekScope()!!.put(varBlock.getName(), varBlock.getCopy())
+        }
+
+        return SUCCESS.id
     }
 }

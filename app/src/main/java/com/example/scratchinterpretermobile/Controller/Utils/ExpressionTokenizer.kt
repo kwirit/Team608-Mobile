@@ -1,0 +1,99 @@
+package com.example.scratchinterpretermobile.Controller.Utils
+
+/**
+ * Разделяет строку на элементы по указанному разделителю, игнорируя разделители внутри строк (в кавычках).
+ *
+ * @param input исходная строка для разбиения
+ * @param separator символ-разделитель (по умолчанию — запятая)
+ * @return MutableList<String> список обработанных и разбитых элементов
+ */
+fun parserSplit(input: String, separator: Char = ',') : MutableList<String> {
+    val trimmedInput = input.trim()
+
+    val elements = mutableListOf<String>()
+
+    var currentToken = StringBuilder()
+
+    var flagString = false
+
+    for (symbol in trimmedInput) {
+        if (symbol == separator && !flagString) {
+            elements.add(currentToken.toString().trim())
+            currentToken.clear()
+            continue
+        }
+        if (symbol == '\"') flagString = !flagString
+        currentToken.append(symbol)
+    }
+
+    if (currentToken.toString().trim().isNotEmpty()) {
+        elements.add(currentToken.toString())
+    }
+
+    return elements
+}
+
+/**
+ * Разбивает арифметическое/строковое выражение на токены, сохраняя структуру.
+ * Учитывает строки, операторы и доступ к массивам.
+ *
+ * @param input исходное выражение
+ * @return MutableList<String> список токенов
+ */
+fun getElementFromString(
+    input: String
+): MutableList<String> {
+    val trimmedInput = input.trim()
+
+    var operators = "+-*%/()"
+    val elements = mutableListOf<String>()
+
+    var currentToken = StringBuilder()
+
+    var flagString = false
+    var pendingCloseParenthesis = false
+
+    var arrayNestingLevel = 0
+    var lastElement: String? = null
+
+    for (symbol in trimmedInput) {
+        when {
+            symbol == ' ' && !flagString -> continue
+            symbol == '\"' -> flagString = !flagString
+            symbol == '[' && !flagString -> arrayNestingLevel++
+            symbol == ']' && !flagString -> arrayNestingLevel--
+        }
+        if (flagString || arrayNestingLevel > 0) {
+            currentToken.append(symbol)
+        }
+        else if (symbol == '-' && (lastElement == null || lastElement in operators)) {
+            elements += listOf("(", "0", "-")
+            lastElement = "-"
+            pendingCloseParenthesis = true
+        }
+        else if (symbol in operators) {
+            if (currentToken.isNotEmpty()) {
+                elements.add(currentToken.toString())
+                if (pendingCloseParenthesis){
+                    elements.add(")")
+                    pendingCloseParenthesis = false
+                }
+                currentToken.clear()
+            }
+            elements.add(symbol.toString())
+            lastElement = symbol.toString()
+        } else {
+            currentToken.append(symbol)
+            lastElement = currentToken.toString()
+        }
+    }
+
+    if (currentToken.isNotEmpty()) {
+        elements.add(currentToken.toString())
+    }
+    if (pendingCloseParenthesis) {
+        elements.add(")")
+    }
+
+    return elements
+}

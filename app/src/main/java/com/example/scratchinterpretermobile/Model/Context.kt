@@ -1,7 +1,7 @@
 package com.example.scratchinterpretermobile.Model
 
 class Context {
-    private val context = Stack<HashMap<String, VarBlock>>().apply {
+    private val context = Stack<HashMap<String, VarBlock<*>>>().apply {
         push(HashMap())
     }
 
@@ -28,7 +28,7 @@ class Context {
         return false
     }
 
-    fun getVar(key: String): VarBlock? {
+    fun getVar(key: String): VarBlock<*>? {
         for (scope in context) {
             if (scope.containsKey(key)) {
                 return scope[key]
@@ -36,10 +36,39 @@ class Context {
         }
         return null
     }
+    fun setVar(key: String, varBlock: VarBlock<*>) {
+        for (scope in context) {
+            if (scope.containsKey(key)) {
+                scope[key] = varBlock
+                return
+            }
+        }
+        // Или добавляем в верхний скоуп, если не нашли
+        context.peek()?.set(key, varBlock)
+    }
 
-    fun pushScope(scope: HashMap<String, VarBlock> = HashMap()) = context.push(scope)
-    fun popScope(): HashMap<String, VarBlock>? = context.pop()
-    fun peekScope(): HashMap<String, VarBlock>? = context.peek()
+    fun removeVar(key: String) {
+        for(scope in context) {
+            if(scope.containsKey(key)) {
+                scope.remove(key)
+                break
+            }
+        }
+
+        return;
+    }
+
+    fun pushScope(scope: HashMap<String, VarBlock<*>> = HashMap()) = context.push(scope)
+    fun popScope(): HashMap<String, VarBlock<*>>? = context.pop()
+    fun peekScope(): HashMap<String, VarBlock<*>>? = context.peek()
+    fun removeScope(scope: HashMap<String, VarBlock<*>>) {
+        for (item in context.toReversedList()) {
+            context.pop()
+            if (item == scope) {
+                break
+            }
+        }
+    }
 
     fun clear() = context.clear()
 
@@ -63,6 +92,17 @@ class Context {
                 }
             }
         }
+        return result
+    }
+
+    fun getListVarBlock(): MutableList<VarBlock<*>> {
+        val result = mutableListOf<VarBlock<*>>();
+        for(scope in context) {
+            for((key, value ) in scope) {
+                result.add(value)
+            }
+        }
+
         return result
     }
 }

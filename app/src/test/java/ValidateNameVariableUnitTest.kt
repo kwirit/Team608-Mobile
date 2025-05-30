@@ -1,6 +1,6 @@
 import org.junit.Test
 import org.junit.Assert.*
-import com.example.scratchinterpretermobile.Controller.validateNameVariable
+import com.example.scratchinterpretermobile.Controller.Utils.validateNameVariable
 
 class ValidateNameVariableUnitTest {
     @Test

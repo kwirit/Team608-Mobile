@@ -1,5 +1,8 @@
 package com.example.scratchinterpretermobile.Model
 
-abstract class InstructionBlock {
-    abstract fun run(): Int
+
+interface InstructionBlock{
+    var context: Context
+    fun removeBlock()
+    fun run(): Int
 }

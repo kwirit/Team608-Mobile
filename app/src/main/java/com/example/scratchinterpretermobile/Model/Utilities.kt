@@ -1,6 +1,8 @@
 package com.example.scratchinterpretermobile.Model
 
-var mainContext = Context()
+var UIContext = Context()
+var outputList:MutableList<String> = mutableListOf()
+//var interpreterContext = Context()
 
 class Stack<T> : Iterable<T> {
     private val elements = mutableListOf<T>()
@@ -25,4 +27,20 @@ class Stack<T> : Iterable<T> {
     // Преобразование
     fun toList(): List<T> = elements.toList()
     fun toReversedList(): List<T> = elements.asReversed()
+}
+
+fun rollbackActions(instructionBlocks:MutableList<InstructionBlock>) {
+    for(instructionBlock in instructionBlocks) {
+        instructionBlock.removeBlock()
+    }
+
+    return
+}
+
+fun rollActions(instructionBlocks: MutableList<InstructionBlock>) {
+    for(instructionBlock in instructionBlocks) {
+        instructionBlock.run()
+    }
+
+    return
 }

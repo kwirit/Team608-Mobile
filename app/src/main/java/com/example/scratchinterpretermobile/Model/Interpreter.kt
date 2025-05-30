@@ -1,28 +1,37 @@
 package com.example.scratchinterpretermobile.Model
 
-class Interpreter(
-    blocksToRun: MutableList<InstructionBlock> = mutableListOf()
-) {
-    var blocksToRun: MutableList<InstructionBlock> = mutableListOf()
-    // хранит скрипт где каждый элемент скрипта - блок-инструкция
+import com.example.scratchinterpretermobile.Controller.Error.CONTEXT_IS_NULL
+import com.example.scratchinterpretermobile.Controller.Error.SUCCESS
 
-    fun add(index: Int, block: InstructionBlock) {
-        blocksToRun.add(index, block);
+class Interpreter(
+    private var context:Context
+) {
+    private var script:MutableList<InstructionBlock> = mutableListOf()
+
+    fun getContext(): Context {
+        return context
     }
-    fun remove(block: InstructionBlock) {
-        blocksToRun.remove(block)
+
+    fun setContext(newContext: Context) {
+        context = newContext
     }
-    fun removeByIndex(index: Int) {
-        blocksToRun.removeAt(index)
+
+    fun setScript(script: MutableList<InstructionBlock>) {
+        this.script = script
     }
 
     fun run(): Int {
-        for (block in blocksToRun) {
+        context ?: return CONTEXT_IS_NULL.id
+
+        for (block in script) {
+            val contextOfBlock = block.context
+            block.context = this.context
+
             val result = block.run();
-            if (result != 0) {
-                return result
-            }
+            block.context = contextOfBlock
+
+            if (result != SUCCESS.id) return result
         }
-        return 0
+        return SUCCESS.id
     }
 }
