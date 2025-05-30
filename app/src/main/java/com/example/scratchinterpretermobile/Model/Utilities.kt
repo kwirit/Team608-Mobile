@@ -1,6 +1,7 @@
 package com.example.scratchinterpretermobile.Model
 
 var UIContext = Context()
+var outputList:MutableList<String> = mutableListOf()
 //var interpreterContext = Context()
 
 class Stack<T> : Iterable<T> {

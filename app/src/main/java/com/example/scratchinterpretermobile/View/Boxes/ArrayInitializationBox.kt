@@ -16,23 +16,26 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.scratchinterpretermobile.Controller.Error.ErrorStore
 import com.example.scratchinterpretermobile.Model.InitBlock
+import com.example.scratchinterpretermobile.Model.UIContext
 import com.example.scratchinterpretermobile.View.BaseStructure.BaseBox
 import com.example.scratchinterpretermobile.View.Widgets.VariableTextField
 
 class ArrayInitializationBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(externalBoxes) {
-    override val value = InitBlock()
+    override val value = InitBlock(UIContext)
     var arrayName by mutableStateOf("")
     var arraySize by mutableStateOf("")
 
     @Composable
-    override fun render(){
-        BaseBox(name = "Инициализация массива", showState,
+    override fun render() {
+        BaseBox(
+            name = "Инициализация массива", showState,
             onConfirmButton = {
                 code = this.value.assembleIntegerArrayBlock(arrayName, arraySize)
+                value.run()
             },
             dialogContent = {
                 Box(modifier = Modifier.fillMaxSize()) {
-                    Box(modifier = Modifier.align(Alignment.Center)){
+                    Box(modifier = Modifier.align(Alignment.Center)) {
                         Column {
                             Text(text = "Введите название массива:")
                             VariableTextField(onValueChange = { newArrayName ->
@@ -51,13 +54,20 @@ class ArrayInitializationBox(externalBoxes: MutableList<ProgramBox>) : ProgramBo
                 value.removeBlock()
                 externalBoxes.removeAll { it.id == id }
             }) {
-            if(code == 0){
+            if (code == 0) {
                 Text(text = arrayName + ": " + arraySize)
-            }
-            else{
+            } else {
                 Column {
-                    Text(text = ErrorStore.get(code)!!.description, lineHeight = 12.sp, fontSize = 8.sp)
-                    Text(text = ErrorStore.get(code)!!.category, lineHeight = 12.sp, fontSize = 8.sp)
+                    Text(
+                        text = ErrorStore.get(code)!!.description,
+                        lineHeight = 12.sp,
+                        fontSize = 8.sp
+                    )
+                    Text(
+                        text = ErrorStore.get(code)!!.category,
+                        lineHeight = 12.sp,
+                        fontSize = 8.sp
+                    )
                     Text(text = ErrorStore.get(code)!!.title, lineHeight = 12.sp, fontSize = 8.sp)
                 }
             }

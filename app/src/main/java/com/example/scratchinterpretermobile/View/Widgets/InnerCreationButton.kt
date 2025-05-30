@@ -21,16 +21,25 @@ import androidx.compose.ui.unit.dp
 import com.example.scratchinterpretermobile.R
 
 @Composable
-fun InnerCreationButton(showState: MutableState<Boolean>,modifier: Modifier = Modifier){
-    Box(modifier = modifier){
-        Button(modifier = Modifier.align(Alignment.TopEnd).size(50.dp),onClick = {
-            showState.value = true},
+fun InnerCreationButton(showState: MutableState<Boolean>, modifier: Modifier = Modifier) {
+    Box(modifier = modifier) {
+        Button(
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .size(50.dp), onClick = {
+                showState.value = true
+            },
             colors = ButtonDefaults.buttonColors(
-                contentColor = Color.White),
+                contentColor = Color.White
+            ),
             shape = RoundedCornerShape(16.dp),
             contentPadding = PaddingValues(0.dp)
         ) {
-            Icon(painter = painterResource(R.drawable.baseline_add), contentDescription = null, modifier = Modifier.size(30.dp))
+            Icon(
+                painter = painterResource(R.drawable.baseline_add),
+                contentDescription = null,
+                modifier = Modifier.size(30.dp)
+            )
         }
     }
 }

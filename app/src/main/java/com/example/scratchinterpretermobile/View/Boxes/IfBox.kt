@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.sp
 import com.example.scratchinterpretermobile.Controller.Error.ErrorStore
 import com.example.scratchinterpretermobile.Controller.Utils.parseCardToInstructionBoxes
 import com.example.scratchinterpretermobile.Model.ConditionBlock
+import com.example.scratchinterpretermobile.Model.UIContext
 import com.example.scratchinterpretermobile.View.BaseStructure.BaseBox
 import com.example.scratchinterpretermobile.View.Dialogs.CreateBoxesDialog
 import com.example.scratchinterpretermobile.View.Widgets.InnerCreationButton
@@ -33,7 +34,7 @@ import com.example.scratchinterpretermobile.View.Widgets.VerticalReorderList
 class IfBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(externalBoxes) {
     val ifBoxes = mutableStateListOf<ProgramBox>()
     val elseBoxes = mutableStateListOf<ProgramBox>()
-    override val value = ConditionBlock();
+    override val value = ConditionBlock(UIContext);
     val showInnerBoxesState = mutableStateOf(false)
     var leftOperand by mutableStateOf("")
     var rightOperand by mutableStateOf("")
@@ -41,72 +42,101 @@ class IfBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(externalBoxes) 
     var currentIsIf = mutableStateOf(true)
 
     @Composable
-    override fun render(){
-        BaseBox(name = "Условие", showState,
+    override fun render() {
+        BaseBox(
+            name = "Условие", showState,
             onConfirmButton = {
-                code = value.processInput(leftOperand, rightOperand,operator.value, parseCardToInstructionBoxes(ifBoxes),parseCardToInstructionBoxes(elseBoxes))
-        },
+                value.setTrueScript(parseCardToInstructionBoxes(ifBoxes))
+                value.setFalseScript(parseCardToInstructionBoxes(elseBoxes))
+                code = value.assembleBlock(leftOperand, operator.value, rightOperand)
+            },
             dialogContent = {
+                value.addTrueScopeInContext()
                 Column(modifier = Modifier.fillMaxSize()) {
                     Row(
-                        modifier = Modifier.fillMaxWidth().align(Alignment.End).padding(20.dp), horizontalArrangement = Arrangement.End
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .align(Alignment.End)
+                            .padding(20.dp),
+                        horizontalArrangement = Arrangement.End
                     ) {
-                        Button(onClick = { currentIsIf.value = true },modifier = Modifier.padding(end = 8.dp)) {
+                        Button(
+                            onClick = { currentIsIf.value = true },
+                            modifier = Modifier.padding(end = 8.dp)
+                        ) {
                             Text(text = "if")
                         }
-                        Button(onClick = { currentIsIf.value = false },modifier = Modifier.padding(end = 8.dp)) {
+                        Button(
+                            onClick = { currentIsIf.value = false },
+                            modifier = Modifier.padding(end = 8.dp)
+                        ) {
                             Text(text = "else")
                         }
                         InnerCreationButton(showInnerBoxesState)
                     }
 
                     if (currentIsIf.value) {
-                        value.setElseBlock(parseCardToInstructionBoxes(elseBoxes))
-                        value.addThenScopeInContext()
+                        value.setFalseScript(parseCardToInstructionBoxes(elseBoxes))
+                        value.addTrueScopeInContext()
                         IfScreen()
                     } else {
-                        value.setThenBlock(parseCardToInstructionBoxes(ifBoxes))
-                        value.addElseScopeInContext()
+                        value.setTrueScript(parseCardToInstructionBoxes(ifBoxes))
+                        value.addFalseScopeInContext()
                         ElseScreen()
                     }
                 }
-        }, onDelete = {
-            value.removeBlock()
-            externalBoxes.removeAll { it.id == id }}, dialogModifier = Modifier.height(800.dp)) {
-            Column(Modifier.fillMaxHeight().width(230.dp)){
-                if(code == 0){
+            }, onCloseDialog = {
+
+            },
+            onDelete = {
+                value.removeBlock()
+                externalBoxes.removeAll { it.id == id }
+            }, dialogModifier = Modifier.height(800.dp)
+        ) {
+            Column(Modifier
+                .fillMaxHeight()
+                .width(230.dp)) {
+                if (code == 0) {
                     Text(text = rightOperand + " " + operator.value + " " + leftOperand)
-                }
-                else{
-                    Text(text = ErrorStore.get(code)!!.description, lineHeight = 12.sp, fontSize = 8.sp)
-                    Text(text = ErrorStore.get(code)!!.category, lineHeight = 12.sp, fontSize = 8.sp)
+                } else {
+                    Text(
+                        text = ErrorStore.get(code)!!.description,
+                        lineHeight = 12.sp,
+                        fontSize = 8.sp
+                    )
+                    Text(
+                        text = ErrorStore.get(code)!!.category,
+                        lineHeight = 12.sp,
+                        fontSize = 8.sp
+                    )
                     Text(text = ErrorStore.get(code)!!.title, lineHeight = 12.sp, fontSize = 8.sp)
                 }
             }
         }
     }
+
     @Composable
-    fun IfScreen(){
-        Row(modifier = Modifier.fillMaxWidth()){
-            VariableTextField(onValueChange = {newText->
+    fun IfScreen() {
+        Row(modifier = Modifier.fillMaxWidth()) {
+            VariableTextField(onValueChange = { newText ->
                 leftOperand = newText
-            },value = leftOperand,modifier = Modifier.weight(1f))
+            }, value = leftOperand, modifier = Modifier.weight(1f))
             ListOfIfOperators(operator)
-            VariableTextField(onValueChange = {newText->
+            VariableTextField(onValueChange = { newText ->
                 rightOperand = newText
-            },value = rightOperand,modifier = Modifier.weight(1f))
+            }, value = rightOperand, modifier = Modifier.weight(1f))
         }
         VerticalReorderList(ifBoxes)
-        if(showInnerBoxesState.value){
-            CreateBoxesDialog(showInnerBoxesState,ifBoxes)
+        if (showInnerBoxesState.value) {
+            CreateBoxesDialog(showInnerBoxesState, ifBoxes)
         }
     }
 
     @Composable
-    fun ElseScreen(){
+    fun ElseScreen() {
         VerticalReorderList(elseBoxes)
-        if(showInnerBoxesState.value){
-            CreateBoxesDialog(showInnerBoxesState,elseBoxes)
+        if (showInnerBoxesState.value) {
+            CreateBoxesDialog(showInnerBoxesState, elseBoxes)
         }
     }
 

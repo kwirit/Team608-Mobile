@@ -39,39 +39,74 @@ import com.example.scratchinterpretermobile.View.Dialogs.CreateBoxesDialog
 import com.example.scratchinterpretermobile.View.Dialogs.CustomDialog
 
 @Composable
-fun BaseBox(name: String, showState: MutableState<Boolean>, dialogModifier: Modifier = Modifier, onConfirmButton:() -> Unit, dialogContent:@Composable () -> Unit,onDelete:() -> Unit, boxContent:@Composable () -> Unit){
-    Card(Modifier.fillMaxWidth().heightIn(min = 80.dp).padding(10.dp),
+fun BaseBox(
+    name: String,
+    showState: MutableState<Boolean>,
+    dialogModifier: Modifier = Modifier,
+    onCloseDialog: () -> Unit = {},
+    onConfirmButton: () -> Unit,
+    dialogContent: @Composable () -> Unit,
+    onDelete: () -> Unit,
+    boxContent: @Composable () -> Unit
+) {
+    Card(
+        Modifier
+            .fillMaxWidth()
+            .heightIn(min = 80.dp)
+            .padding(10.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
     ) {
-        Box(Modifier.heightIn(min = 80.dp).fillMaxWidth().padding(end = 10.dp)){
-            Row(modifier = Modifier.align(Alignment.CenterEnd)){
-                Button(onClick = {
-                    onDelete()
-                }, modifier = Modifier.size(60.dp), shape = RoundedCornerShape(16.dp),
-                    contentPadding = PaddingValues(0.dp),colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent)
+        Box(Modifier
+            .heightIn(min = 80.dp)
+            .fillMaxWidth()
+            .padding(end = 10.dp)) {
+            Row(modifier = Modifier.align(Alignment.CenterEnd)) {
+                Button(
+                    onClick = {
+                        onDelete()
+                    },
+                    modifier = Modifier.size(60.dp),
+                    shape = RoundedCornerShape(16.dp),
+                    contentPadding = PaddingValues(0.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent)
                 ) {
-                    Icon(painter = painterResource(R.drawable.baseline_delete_outline_24), contentDescription = null,modifier = Modifier.size(35.dp))
+                    Icon(
+                        painter = painterResource(R.drawable.baseline_delete_outline_24),
+                        contentDescription = null,
+                        modifier = Modifier.size(35.dp)
+                    )
                 }
-                Button(onClick = {
-                    showState.value = true
-                }, modifier = Modifier.size(60.dp), shape = RoundedCornerShape(16.dp),
+                Button(
+                    onClick = {
+                        showState.value = true
+                    },
+                    modifier = Modifier.size(60.dp), shape = RoundedCornerShape(16.dp),
                     contentPadding = PaddingValues(0.dp),
                 ) {
-                    Icon(painter = painterResource(R.drawable.settings_icon), contentDescription = null,modifier = Modifier.size(35.dp))
+                    Icon(
+                        painter = painterResource(R.drawable.settings_icon),
+                        contentDescription = null,
+                        modifier = Modifier.size(35.dp)
+                    )
                 }
             }
             Column(modifier = Modifier.padding(7.dp)) {
                 Text(text = name)
-                Box (modifier = Modifier.fillMaxHeight()){
+                Box(modifier = Modifier.fillMaxHeight()) {
                     boxContent()
                 }
                 Spacer(modifier = Modifier.width(10.dp))
             }
         }
     }
-    if(showState.value){
-        BoxDialog(showState, modifier = dialogModifier,onConfirmButton){
-            Box(modifier = Modifier.fillMaxSize()){
+    if (showState.value) {
+        BoxDialog(
+            showState,
+            modifier = dialogModifier,
+            onCloseDialog = onCloseDialog,
+            onConfirmButton
+        ) {
+            Box(modifier = Modifier.fillMaxSize()) {
                 dialogContent()
             }
         }

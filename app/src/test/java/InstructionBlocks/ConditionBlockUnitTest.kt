@@ -12,9 +12,9 @@ class ConditionBlockUnitTest {
     fun test1() {
         val scope = UIContext.peekScope()
 
-        val conditionBlock = ConditionBlock()
-        val initBlock = InitBlock()
-        val assignmentBlock = AssignmentBlock()
+        val conditionBlock = ConditionBlock(UIContext)
+        val initBlock = InitBlock(UIContext)
+        val assignmentBlock = AssignmentBlock(UIContext)
         initBlock.assembleIntegerBlock("var")
         initBlock.run()
         assignmentBlock.assembleIntegerBlock("var", "3")
@@ -22,8 +22,8 @@ class ConditionBlockUnitTest {
 
         // IF
         //--------------------
-        val initBlockIF = InitBlock()
-        val assignmentBlockIF = AssignmentBlock()
+        val initBlockIF = InitBlock(UIContext)
+        val assignmentBlockIF = AssignmentBlock(UIContext)
         initBlockIF.assembleIntegerArrayBlock("ar", "7")
         initBlockIF.run()
         assignmentBlockIF.assembleIntegerArrayBlock("ar", "1,2,3,4,5,6,7")
@@ -34,8 +34,8 @@ class ConditionBlockUnitTest {
         ifList.add(assignmentBlockIF)
 
         //ELSE
-        val initBlockELSE = InitBlock()
-        val assignmentBlockELSE = AssignmentBlock()
+        val initBlockELSE = InitBlock(UIContext)
+        val assignmentBlockELSE = AssignmentBlock(UIContext)
         initBlockELSE.assembleIntegerBlock("abc")
         initBlockELSE.run()
         assignmentBlockELSE.assembleIntegerBlock("var", "7")
@@ -46,8 +46,11 @@ class ConditionBlockUnitTest {
         elseList.add(assignmentBlockELSE)
         //--------------------
 
-        conditionBlock.addThenScopeInContext()
-        conditionBlock.processInput("1","0","<",ifList, elseList)
+        conditionBlock.setTrueScript(ifList)
+        conditionBlock.setFalseScript(elseList)
+
+        conditionBlock.addTrueScopeInContext()
+        conditionBlock.assembleBlock("1","<","0")
         val error = conditionBlock.run()
     }
 }

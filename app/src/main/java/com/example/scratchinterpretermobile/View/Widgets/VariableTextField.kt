@@ -10,6 +10,10 @@ import com.example.scratchinterpretermobile.Model.Variable
 
 
 @Composable
-fun VariableTextField(onValueChange: (String) -> Unit, value: String, modifier: Modifier = Modifier){
+fun VariableTextField(
+    onValueChange: (String) -> Unit,
+    value: String,
+    modifier: Modifier = Modifier
+) {
     TextField(modifier = modifier.wrapContentWidth(), onValueChange = onValueChange, value = value)
 }

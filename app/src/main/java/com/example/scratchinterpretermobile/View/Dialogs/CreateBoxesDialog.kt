@@ -21,13 +21,21 @@ import com.example.scratchinterpretermobile.View.Cards.WhileCard
 import com.example.scratchinterpretermobile.View.ViewModels.MainViewModel
 
 @Composable
-fun CreateBoxesDialog(showBoxesState: MutableState<Boolean>,boxes: MutableList<ProgramBox>){
+fun CreateBoxesDialog(showBoxesState: MutableState<Boolean>, boxes: MutableList<ProgramBox>) {
     CustomDialog(showBoxesState) {
-        Column {VariableInitializationCard(onAdd = { boxes.add(VariableInitializationBox(boxes)) }, showBoxesState)
+        Column {
+            VariableInitializationCard(
+                onAdd = { boxes.add(VariableInitializationBox(boxes)) },
+                showBoxesState
+            )
             AssigningCard(onAdd = { boxes.add(AssigningBox(boxes)) }, showBoxesState)
             IfCard(onAdd = { boxes.add(IfBox(boxes)) }, showBoxesState)
-            WhileCard(onAdd = {boxes.add(WhileBox(boxes)) }, showBoxesState)
+            WhileCard(onAdd = { boxes.add(WhileBox(boxes)) }, showBoxesState)
             ConsoleCard(onAdd = { boxes.add(ConsoleBox(boxes)) }, showBoxesState)
-            ArrayInitializationCard(onAdd = { boxes.add(ArrayInitializationBox(boxes)) }, showBoxesState)  }
+            ArrayInitializationCard(
+                onAdd = { boxes.add(ArrayInitializationBox(boxes)) },
+                showBoxesState
+            )
+        }
     }
 }

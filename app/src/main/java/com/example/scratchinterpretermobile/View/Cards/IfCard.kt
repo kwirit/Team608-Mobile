@@ -8,7 +8,7 @@ import com.example.scratchinterpretermobile.View.Boxes.IfBox
 import com.example.scratchinterpretermobile.View.Boxes.ProgramBox
 
 @Composable
-fun IfCard(onAdd: () -> Unit, showBoxesState: MutableState<Boolean> = mutableStateOf(false)){
+fun IfCard(onAdd: () -> Unit, showBoxesState: MutableState<Boolean> = mutableStateOf(false)) {
     BaseCard(name = "Условие", onClick = {
         onAdd()
         showBoxesState.value = false

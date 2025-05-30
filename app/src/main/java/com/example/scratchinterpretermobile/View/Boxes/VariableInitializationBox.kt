@@ -17,41 +17,59 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.scratchinterpretermobile.Controller.Error.ErrorStore
 import com.example.scratchinterpretermobile.Model.InitBlock
+import com.example.scratchinterpretermobile.Model.UIContext
 import com.example.scratchinterpretermobile.View.BaseStructure.BaseBox
 import com.example.scratchinterpretermobile.View.Widgets.VariableTextField
 
-class VariableInitializationBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(externalBoxes) {
-    override val value = InitBlock();
+class VariableInitializationBox(externalBoxes: MutableList<ProgramBox>) :
+    ProgramBox(externalBoxes) {
+    override val value = InitBlock(UIContext);
     var text by mutableStateOf("")
     val name = "Объявление переменной"
 
     @Composable
-    override fun render(){
-        BaseBox(name = name, showState,
+    override fun render() {
+        BaseBox(
+            name = name, showState,
             onConfirmButton = {
                 code = this.value.assembleIntegerBlock(text)
-        },
+                value.run()
+            },
             dialogContent = {
-                Box(modifier = Modifier.fillMaxSize()){
-                    Text(text = name, modifier = Modifier.align(Alignment.TopCenter).padding(top = 100.dp))
-                    Column (modifier = Modifier.align(alignment = Alignment.Center)){
+                Box(modifier = Modifier.fillMaxSize()) {
+                    Text(
+                        text = name,
+                        modifier = Modifier
+                            .align(Alignment.TopCenter)
+                            .padding(top = 100.dp)
+                    )
+                    Column(modifier = Modifier.align(alignment = Alignment.Center)) {
                         Text(text = "Введите название переменной:")
                         VariableTextField(onValueChange = { newText ->
                             text = newText
                         }, value = text)
                     }
                 }
-        }, onDelete = {
-            value.removeBlock()
-            externalBoxes.removeAll { it.id == id }
-        }) {
-            Column(Modifier.fillMaxHeight().width(230.dp)){
-                if(code == 0){
+            }, onDelete = {
+                value.removeBlock()
+                externalBoxes.removeAll { it.id == id }
+            }) {
+            Column(Modifier
+                .fillMaxHeight()
+                .width(230.dp)) {
+                if (code == 0) {
                     Text(text = text)
-                }
-                else{
-                    Text(text = ErrorStore.get(code)!!.description, lineHeight = 12.sp, fontSize = 8.sp)
-                    Text(text = ErrorStore.get(code)!!.category, lineHeight = 12.sp, fontSize = 8.sp)
+                } else {
+                    Text(
+                        text = ErrorStore.get(code)!!.description,
+                        lineHeight = 12.sp,
+                        fontSize = 8.sp
+                    )
+                    Text(
+                        text = ErrorStore.get(code)!!.category,
+                        lineHeight = 12.sp,
+                        fontSize = 8.sp
+                    )
                     Text(text = ErrorStore.get(code)!!.title, lineHeight = 12.sp, fontSize = 8.sp)
                 }
             }

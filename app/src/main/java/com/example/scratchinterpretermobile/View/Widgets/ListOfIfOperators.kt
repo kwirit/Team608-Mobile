@@ -16,10 +16,10 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun ListOfIfOperators(selectedOperator: MutableState<String>): String {
-    val operators = listOf<String>("==","!=","<",">","<=",">=",)
+    val operators = listOf<String>("==", "!=", "<", ">", "<=", ">=")
     val expanded = remember { mutableStateOf(false) }
 
-    Box(modifier = Modifier.width(85.dp)){
+    Box(modifier = Modifier.width(85.dp)) {
         TextButton(onClick = { expanded.value = true }) {
             Text(text = selectedOperator.value)
         }

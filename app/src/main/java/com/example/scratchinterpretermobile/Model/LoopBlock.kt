@@ -5,18 +5,18 @@ import com.example.scratchinterpretermobile.Controller.Error.SUCCESS
 import com.example.scratchinterpretermobile.Controller.Utils.calculationArithmeticExpression
 
 class LoopBlock(
+    override var context: Context
 ) : InstructionBlock {
-    override var context: Context = UIContext
+//    override var context: Context = UIContext
     override var runResult: Int = SUCCESS.id
 
     private var leftPartCondition: String = ""
     private var rightPartCondition: String = ""
     private var operator: String = "=="
-    private var iterations = 0
 
     private var resultValue: Boolean = false
 
-    private var blocksToRun: MutableList<InstructionBlock> = mutableListOf()
+    private var script: MutableList<InstructionBlock> = mutableListOf()
 
     private var scope: HashMap<String, VarBlock<*>> = hashMapOf()
 
@@ -27,6 +27,14 @@ class LoopBlock(
      */
     fun addScopeToContext() {
         context.pushScope(scope)
+    }
+
+    /**
+     * Добавление scope в context
+     * Обязательная функция при выходе из карточку
+     */
+    fun removeScopeToContext() {
+        context.popScope()
     }
 
     /**
@@ -42,38 +50,42 @@ class LoopBlock(
      *   - [NO_COMPARISON_OPERATOR_SELECTED.id] — не выбран оператор сравнения.
      *   - Код ошибки из метода [compare], если сравнение частей условия завершилось с ошибкой.
      */
-    fun processInput(leftPartCondition: String, rightPartCondition: String, operator: String, blocksToRun: MutableList<InstructionBlock>): Int {
+
+    fun setScript(script:MutableList<InstructionBlock>) {
+        this.script = script
+    }
+
+    fun assembleBlock(leftPartCondition: String, operator: String, rightPartCondition: String): Int {
         this.leftPartCondition = leftPartCondition
         this.rightPartCondition = rightPartCondition
         this.operator = operator
-        this.blocksToRun = blocksToRun
 
         if (this.operator == "Выбрать оператор") return NO_COMPARISON_OPERATOR_SELECTED.id
 
         var errorCompare = compare()
 
         if (errorCompare != SUCCESS.id) {
-            context.popScope()
+//            context.popScope()
             return errorCompare
         }
 
-        context.popScope()
+//        context.popScope()
         return SUCCESS.id
     }
 
     /**
      * Выполняет сравнение двух арифметических выражений на основе заданного оператора.
-     * @return 0 в случае успеха, код ошибки — в случае неудачи.
+     * @return SUCCES.id в случае успеха, код ошибки — в случае неудачи.
      * В случае успеха изменяет resultValue.
      */
     private fun compare(): Int {
         val (valueLeftPart, errorLeft) = calculationArithmeticExpression(leftPartCondition, context)
-        if (errorLeft != 0) {
+        if (errorLeft != SUCCESS.id) {
             return errorLeft;
         }
 
         val (valueRightPart, errorRight) = calculationArithmeticExpression(rightPartCondition, context)
-        if (errorRight != 0) {
+        if (errorRight != SUCCESS.id) {
             return errorRight
         }
 
@@ -87,45 +99,42 @@ class LoopBlock(
             else -> false
         }
 
-        return 0
+        return SUCCESS.id
     }
 
-    override fun removeBlock() {
-        return
-    }
+    override fun removeBlock() {}
 
     override fun run(): Int {
-//        context.pushScope(hashMapOf())
         var compareError = compare()
 
-        if (compareError != 0){
+        if (compareError != SUCCESS.id){
             context.popScope();
             return compareError
         }
 
         while (resultValue) {
             context.pushScope(hashMapOf())
-            for (block in blocksToRun) {
+            for (block in script) {
                 val contextOfBlock = block.context
 
                 block.context = this.context
                 val result = block.run();
 
                 block.context = contextOfBlock
-                if (result != 0) {
+                if (result != SUCCESS.id) {
                     context.popScope();
                     return result
                 }
             }
             compareError = compare()
-            if (compareError != 0){
+            if (compareError != SUCCESS.id){
                 context.popScope();
                 return compareError
             }
 
             context.popScope()
         }
-//        context.popScope()
-        return 0;
+
+        return SUCCESS.id
     }
 }

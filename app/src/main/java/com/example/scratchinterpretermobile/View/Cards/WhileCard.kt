@@ -6,7 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import com.example.scratchinterpretermobile.View.BaseStructure.BaseCard
 
 @Composable
-fun WhileCard(onAdd: () -> Unit, showBoxesState: MutableState<Boolean> = mutableStateOf(false)){
+fun WhileCard(onAdd: () -> Unit, showBoxesState: MutableState<Boolean> = mutableStateOf(false)) {
     BaseCard(name = "Цикл", onClick = {
         onAdd()
         showBoxesState.value = false

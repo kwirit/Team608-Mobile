@@ -14,9 +14,9 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         val mainViewModel: MainViewModel by viewModels()
         setContent {
-            AppTheme(){
-               MainScreen(mainViewModel)
-           }
+            AppTheme() {
+                MainScreen(mainViewModel)
+            }
         }
     }
 }

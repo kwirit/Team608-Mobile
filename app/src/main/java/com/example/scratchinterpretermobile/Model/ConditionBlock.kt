@@ -6,8 +6,9 @@ import com.example.scratchinterpretermobile.Controller.Error.SUCCESS
 import com.example.scratchinterpretermobile.Controller.Utils.calculationArithmeticExpression
 
 class ConditionBlock(
+    override var context: Context
 ) : InstructionBlock {
-    override var context: Context = UIContext
+//    override var context: Context = UIContext
     override var runResult: Int = SUCCESS.id
 
     private var operator: String = "=="
@@ -16,38 +17,44 @@ class ConditionBlock(
 
     private var resultValue: Boolean = false
 
-    private var thenBlock: MutableList<InstructionBlock> = mutableListOf()
-    private var elseBlock: MutableList<InstructionBlock> = mutableListOf()
+    private var trueScript: MutableList<InstructionBlock> = mutableListOf()
+    private var falseScript: MutableList<InstructionBlock> = mutableListOf()
 
-    private var elseScope: HashMap<String, VarBlock<*>> = hashMapOf()
-    private var thenScope: HashMap<String, VarBlock<*>> = hashMapOf()
+    private var trueScope: HashMap<String, VarBlock<*>> = hashMapOf()
+    private var falseScope: HashMap<String, VarBlock<*>> = hashMapOf()
 
-    private var elseScopeInContext: Boolean = false
-    private var thenScopeInContext: Boolean = false
+    private var trueScopeInContext: Boolean = false
+    private var falseScopeInContext: Boolean = false
 
-    fun setThenBlock(thenBlocks:MutableList<InstructionBlock>) {
-        this.thenBlock = thenBlocks
+    fun setTrueScript(script:MutableList<InstructionBlock>) {
+        this.trueScript = script
     }
-    fun setElseBlock(elseBlocks: MutableList<InstructionBlock>) {
-        this.elseBlock = elseBlocks
+    fun setFalseScript(script: MutableList<InstructionBlock>) {
+        this.falseScript = script
     }
 
-    fun addElseScopeInContext() {
-        if (thenScopeInContext) {
+    /**
+     * Добавление scope в context
+     * Обязательная функция при заходе в карточку
+     */
+    fun addTrueScopeInContext() {
+        if (falseScopeInContext) {
             context.popScope()
         }
-        if (elseScopeInContext) return
-        context.pushScope(elseScope)
-        elseScopeInContext = true
+        if (trueScopeInContext) return
+        context.pushScope(trueScope)
+        trueScopeInContext = true
     }
-    fun addThenScopeInContext() {
-        if (elseScopeInContext) {
+
+    fun addFalseScopeInContext() {
+        if (trueScopeInContext) {
             context.popScope()
         }
-        if (thenScopeInContext) return
-        context.pushScope(thenScope)
-        thenScopeInContext = true
+        if (falseScopeInContext) return
+        context.pushScope(falseScope)
+        falseScopeInContext = true
     }
+
     /**
      * Обрабатывает входные данные условия, проверяет оператор сравнения и выполняет сравнение.
      * Удаляет scope из context по
@@ -62,12 +69,10 @@ class ConditionBlock(
      *   - [NO_COMPARISON_OPERATOR_SELECTED.id] — не выбран оператор сравнения.
      *   - Код ошибки из метода [compare], если сравнение частей условия завершилось с ошибкой.
      */
-    fun processInput(leftPartCondition: String, rightPartCondition: String, operator: String, thenBlock: MutableList<InstructionBlock>, elseBlock: MutableList<InstructionBlock>): Int {
+    fun assembleBlock(leftPartCondition: String, operator: String, rightPartCondition: String,): Int {
         this.leftPartCondition = leftPartCondition
         this.rightPartCondition = rightPartCondition
         this.operator = operator
-        this.thenBlock = thenBlock
-        this.elseBlock = elseBlock
 
         if (this.operator == "Выбрать оператор") return NO_COMPARISON_OPERATOR_SELECTED.id
 
@@ -111,9 +116,7 @@ class ConditionBlock(
         return SUCCESS.id
     }
 
-    override fun removeBlock() {
-        return
-    }
+    override fun removeBlock() {}
 
     override fun run(): Int {
         context.pushScope(hashMapOf())
@@ -123,7 +126,7 @@ class ConditionBlock(
             return compareError
         }
 
-        val blocksToRun = if (resultValue) thenBlock else elseBlock
+        val blocksToRun = if (resultValue) trueScript else falseScript
 
         for (block in blocksToRun) {
             val contextOFBlock = block.context
@@ -138,6 +141,7 @@ class ConditionBlock(
             }
         }
         context.popScope();
-        return 0
+
+        return SUCCESS.id
     }
 }

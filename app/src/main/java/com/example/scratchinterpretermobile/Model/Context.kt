@@ -1,5 +1,7 @@
 package com.example.scratchinterpretermobile.Model
 
+import androidx.compose.runtime.mutableStateListOf
+
 class Context {
     private val context = Stack<HashMap<String, VarBlock<*>>>().apply {
         push(HashMap())
@@ -95,7 +97,7 @@ class Context {
         return result
     }
 
-    fun GetListVarBlock(): MutableList<VarBlock<*>> {
+    fun getListVarBlock(): MutableList<VarBlock<*>> {
         val result = mutableListOf<VarBlock<*>>();
         for(scope in context) {
             for((key, value ) in scope) {

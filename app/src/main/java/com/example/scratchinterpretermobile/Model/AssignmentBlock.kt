@@ -6,18 +6,20 @@ import com.example.scratchinterpretermobile.Controller.Error.INVALID_ARRAY_INDEX
 import com.example.scratchinterpretermobile.Controller.Error.INVALID_ASSIGNMENT_ARRAY
 import com.example.scratchinterpretermobile.Controller.Error.RUNTIME_ERROR
 import com.example.scratchinterpretermobile.Controller.Error.SUCCESS
-import com.example.scratchinterpretermobile.Controller.Error.VARIABLE_DOES_NOT_EXIST
+import com.example.scratchinterpretermobile.Controller.Error.VARIABLE_IS_NOT_INITIALIZED
 import com.example.scratchinterpretermobile.Controller.Utils.calculationArithmeticExpression
 import com.example.scratchinterpretermobile.Controller.Utils.validateNameVariable
 
 
 
 
-class AssignmentBlock:InstructionBlock {
-    override var runResult: Int = SUCCESS.id
+class AssignmentBlock(
+    override var context: Context
+): InstructionBlock {
+    override var runResult: Int = RUNTIME_ERROR.id
 
-    override var context: Context = UIContext
-    private var newVarBlock: VarBlock<*>? = null // новый блок
+//    override var context: Context = UIContext
+    private var newVarBlock: VarBlock<*> = IntegerBlock("NONE", 0) // новый блок
 
     private var valueVarBlock:String = String()
     private var index:String = String()
@@ -40,7 +42,7 @@ class AssignmentBlock:InstructionBlock {
         val validateNameError = validateNameVariable(name)
         if(validateNameError != SUCCESS.id) return Pair(newIntegerBlock, validateNameError)
 
-        val integerBlock = context.getVar(name) ?: return Pair(newIntegerBlock, VARIABLE_DOES_NOT_EXIST.id)
+        val integerBlock = context.getVar(name) ?: return Pair(newIntegerBlock, VARIABLE_IS_NOT_INITIALIZED.id)
 
         if(!(integerBlock is IntegerBlock)) return Pair(newIntegerBlock, ASSIGNING_DIFFERENT_TYPES.id)
 
@@ -61,8 +63,6 @@ class AssignmentBlock:InstructionBlock {
      * @return код ошибки
      */
     fun assembleIntegerBlock(integerName:String, integerValue:String):Int {
-//        newVarBlock = null
-
         val (newIntegerBlock, getError) = getIntegerBlock(integerName, integerValue)
         if(getError != SUCCESS.id) setRunResult(getError)
 
@@ -86,7 +86,7 @@ class AssignmentBlock:InstructionBlock {
         val validateNameError = validateNameVariable(arrayName)
         if(validateNameError != SUCCESS.id) return Pair(newIntegerArrayBlock, validateNameError)
 
-        val arrayBlock = context.getVar(arrayName) ?: return Pair(newIntegerArrayBlock, VARIABLE_DOES_NOT_EXIST.id)
+        val arrayBlock = context.getVar(arrayName) ?: return Pair(newIntegerArrayBlock, VARIABLE_IS_NOT_INITIALIZED.id)
 
         if(!(arrayBlock is IntegerArrayBlock)) return Pair(newIntegerArrayBlock, ASSIGNING_DIFFERENT_TYPES.id)
 
@@ -114,13 +114,13 @@ class AssignmentBlock:InstructionBlock {
         val name = arrayName.trim()
         val validateNameError = validateNameVariable(name)
         if(validateNameError != SUCCESS.id) return Pair(newIntegerArrayBlock, validateNameError)
-        val integerBlock = context.getVar(name) ?: return Pair(newIntegerArrayBlock, VARIABLE_DOES_NOT_EXIST.id)
+        val integerBlock = context.getVar(name) ?: return Pair(newIntegerArrayBlock, VARIABLE_IS_NOT_INITIALIZED.id)
 
         // второй массив
         val anotherName = anotherArrayName.trim()
         val validateAnotherNameError = validateNameVariable(anotherName)
         if(validateAnotherNameError != SUCCESS.id) return Pair(newIntegerArrayBlock, validateAnotherNameError)
-        val anotherIntegerBlock = context.getVar(anotherName) ?: return Pair(newIntegerArrayBlock, VARIABLE_DOES_NOT_EXIST.id)
+        val anotherIntegerBlock = context.getVar(anotherName) ?: return Pair(newIntegerArrayBlock, VARIABLE_IS_NOT_INITIALIZED.id)
 
         if(!(integerBlock is IntegerArrayBlock) || !(anotherIntegerBlock is IntegerArrayBlock)) {
             return Pair(newIntegerArrayBlock, ASSIGNING_DIFFERENT_TYPES.id)
@@ -178,7 +178,7 @@ class AssignmentBlock:InstructionBlock {
         val validateNameError = validateNameVariable(name)
         if(validateNameError != SUCCESS.id) return Pair(newIntegerArrayBlock, validateNameError)
 
-        val integerArrayBlock = context.getVar(name) ?: return Pair(newIntegerArrayBlock, VARIABLE_DOES_NOT_EXIST.id)
+        val integerArrayBlock = context.getVar(name) ?: return Pair(newIntegerArrayBlock, VARIABLE_IS_NOT_INITIALIZED.id)
         if(!(integerArrayBlock is IntegerArrayBlock)) return Pair(newIntegerArrayBlock, ASSIGNING_DIFFERENT_TYPES.id)
 
         val (index, calculationIndexError) = calculationArithmeticExpression(arrayIndex, context)
@@ -221,7 +221,7 @@ class AssignmentBlock:InstructionBlock {
     override fun removeBlock() {
         runResult = RUNTIME_ERROR.id
 
-        newVarBlock = null
+        newVarBlock = IntegerBlock("NONE", 0)
         valueVarBlock = String()
         index = String()
 
@@ -231,14 +231,14 @@ class AssignmentBlock:InstructionBlock {
     override fun run(): Int {
         if(runResult != SUCCESS.id) return runResult
 
-        if(newVarBlock is IntegerBlock) assembleIntegerBlock(newVarBlock!!.getName(), valueVarBlock)
+        if(newVarBlock is IntegerBlock) assembleIntegerBlock(newVarBlock.getName(), valueVarBlock)
         else if(newVarBlock is IntegerArrayBlock) {
-            if(index.isEmpty()) assembleIntegerArrayBlock(newVarBlock!!.getName(), valueVarBlock)
-            else assembleElementIntegerArrayBlock(newVarBlock!!.getName(), index, valueVarBlock)
+            if(index.isEmpty()) assembleIntegerArrayBlock(newVarBlock.getName(), valueVarBlock)
+            else assembleElementIntegerArrayBlock(newVarBlock.getName(), index, valueVarBlock)
         }
         else return ASSIGNING_DIFFERENT_TYPES.id
 
-        context.setVar(newVarBlock!!.getName(), newVarBlock!!)
+        context.setVar(newVarBlock.getName(), newVarBlock)
 
 
         return SUCCESS.id

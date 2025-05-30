@@ -3,15 +3,16 @@ package com.example.scratchinterpretermobile.Model
 import com.example.scratchinterpretermobile.Controller.Error.CONTEXT_IS_NULL
 import com.example.scratchinterpretermobile.Controller.Error.INVALID_ARRAY_LENGTH
 import com.example.scratchinterpretermobile.Controller.Error.MULTIPLE_INITIALIZATION
-import com.example.scratchinterpretermobile.Controller.Error.REDECLARING_A_VARIABLE
+import com.example.scratchinterpretermobile.Controller.Error.REINITIALIZE_VARIABLE
 import com.example.scratchinterpretermobile.Controller.Error.RUNTIME_ERROR
 import com.example.scratchinterpretermobile.Controller.Error.SUCCESS
 import com.example.scratchinterpretermobile.Controller.Utils.calculationArithmeticExpression
 import com.example.scratchinterpretermobile.Controller.Utils.validateNameVariable
 
-class InitBlock : InstructionBlock {
+class InitBlock(
+    override var context: Context
+) : InstructionBlock {
     override var runResult: Int = RUNTIME_ERROR.id
-    override var context = UIContext
     private val newVarBlocks:MutableList<VarBlock<*>> = mutableListOf()
 
     private fun setRunResult(codeError:Int): Int {
@@ -97,7 +98,7 @@ class InitBlock : InstructionBlock {
         if(runResult != SUCCESS.id) return runResult
 
         for(varBlock in newVarBlocks) {
-            if(context.getVar(varBlock.getName()) != null) return REDECLARING_A_VARIABLE.id
+            if(context.getVar(varBlock.getName()) != null) return REINITIALIZE_VARIABLE.id
 
             context.peekScope()!!.put(varBlock.getName(), varBlock.getCopy())
         }
