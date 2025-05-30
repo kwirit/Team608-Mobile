@@ -4,6 +4,7 @@ import com.example.scratchinterpretermobile.Controller.Error.SUCCESS
 
 class Interpreter() {
     private var context = Context()
+    private var blocksToRun:MutableList<InstructionBlock> = mutableListOf()
 
     fun getContext(): Context {
         return context
@@ -13,7 +14,12 @@ class Interpreter() {
         context = newContext
     }
 
-    fun run(blocksToRun: MutableList<InstructionBlock> = mutableListOf()): Int {
+    fun setBlocksToRun(blocksToRun: MutableList<InstructionBlock>) {
+        this.blocksToRun = blocksToRun
+    }
+
+    fun run(): Int {
+
         for (block in blocksToRun) {
             val contextOfBlock = block.context
             block.context = this.context
@@ -21,9 +27,7 @@ class Interpreter() {
             val result = block.run();
             block.context = contextOfBlock
 
-            if (result != SUCCESS.id) {
-                return result
-            }
+            if (result != SUCCESS.id) return result
         }
         return SUCCESS.id
     }

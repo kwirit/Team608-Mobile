@@ -155,7 +155,7 @@ fun processArrayAccess(input: String, context: Context = UIContext): Pair<Int, I
         return Pair(-1, validateNameVariable(arrayName))
     }
 
-    val (indexValue, indexError) = calculationArithmeticExpression(indexExpr)
+    val (indexValue, indexError) = calculationArithmeticExpression(indexExpr, context)
     if (indexError != SUCCESS.id) {
         return Pair(-1, indexError)
     }

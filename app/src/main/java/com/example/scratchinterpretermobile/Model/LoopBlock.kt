@@ -67,12 +67,12 @@ class LoopBlock(
      * В случае успеха изменяет resultValue.
      */
     private fun compare(): Int {
-        val (valueLeftPart, errorLeft) = calculationArithmeticExpression(leftPartCondition)
+        val (valueLeftPart, errorLeft) = calculationArithmeticExpression(leftPartCondition, context)
         if (errorLeft != 0) {
             return errorLeft;
         }
 
-        val (valueRightPart, errorRight) = calculationArithmeticExpression(rightPartCondition)
+        val (valueRightPart, errorRight) = calculationArithmeticExpression(rightPartCondition, context)
         if (errorRight != 0) {
             return errorRight
         }
@@ -95,7 +95,7 @@ class LoopBlock(
     }
 
     override fun run(): Int {
-        context.pushScope(scope)
+//        context.pushScope(hashMapOf())
         var compareError = compare()
 
         if (compareError != 0){
@@ -104,8 +104,14 @@ class LoopBlock(
         }
 
         while (resultValue) {
+            context.pushScope(hashMapOf())
             for (block in blocksToRun) {
+                val contextOfBlock = block.context
+
+                block.context = this.context
                 val result = block.run();
+
+                block.context = contextOfBlock
                 if (result != 0) {
                     context.popScope();
                     return result
@@ -116,8 +122,10 @@ class LoopBlock(
                 context.popScope();
                 return compareError
             }
+
+            context.popScope()
         }
-        context.popScope()
+//        context.popScope()
         return 0;
     }
 }

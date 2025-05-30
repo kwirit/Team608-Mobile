@@ -21,7 +21,7 @@ import kotlin.collections.get
  * @param elements список токенов исходного выражения
  * @return Pair<MutableList<String>, Int> - постфиксное выражение и код ошибки (0 - в случае успеха)
  */
-fun transferPrefixToPostfix(elements: MutableList<String>, context: Context = UIContext): Pair<MutableList<String>, Int> {
+fun transferPrefixToPostfix(elements: MutableList<String>, context: Context): Pair<MutableList<String>, Int> {
     val postfix = mutableListOf<String>()
     val stack = Stack<String>()
     val priority = mapOf(
@@ -129,7 +129,7 @@ fun calculationPostfix(postfix: MutableList<String>): Pair<Int, Int> {
  * @param input строка с арифметическим выражением
  * @return Pair<Int, Int> - результат и код ошибки (0 - в случае успеха)
  */
-fun calculationArithmeticExpression(input: String, context: Context = UIContext): Pair<Int, Int> {
+fun calculationArithmeticExpression(input: String, context: Context): Pair<Int, Int> {
     val (elements, error) = transferPrefixToPostfix(getElementFromString(input), context)
     if (error != 0) return Pair(-1, error)
     val (result, errorCalculation) = calculationPostfix(elements)
@@ -143,7 +143,7 @@ fun calculationArithmeticExpression(input: String, context: Context = UIContext)
  * @param elements список токенов исходного выражения
  * @return Pair<MutableList<Pair<String, String>>, Int> постфиксное выражение и код ошибки
  */
-fun transferStringPrefixToPostfix(elements: MutableList<String>, context: Context = UIContext): Pair<MutableList<Pair<String, String>>, Int>  {
+fun transferStringPrefixToPostfix(elements: MutableList<String>, context: Context): Pair<MutableList<Pair<String, String>>, Int>  {
     val postfix = mutableListOf<Pair<String, String>>()
     val stack = Stack<String>()
     val priority = mapOf(
@@ -284,7 +284,7 @@ fun calculationStringPostfix(
  * @param input строка со строковым выражением
  * @return Pair<String, Int> результат и код ошибки
  */
-fun calculationStringExpression(input: String, context: Context = UIContext): Pair<String, Int> {
+fun calculationStringExpression(input: String, context: Context): Pair<String, Int> {
     val (elements, error) = transferStringPrefixToPostfix(getElementFromString(input.trim()), context)
     if (error != 0) return Pair("", error)
     val (result, errorCalculation) = calculationStringPostfix(elements)

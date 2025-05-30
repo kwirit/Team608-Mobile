@@ -61,7 +61,7 @@ class InitBlock : InstructionBlock {
         else if(arrayNames.size > 1) return setRunResult(MULTIPLE_INITIALIZATION.id)
         else if(inputArrayName.isEmpty()) return setRunResult(INVALID_ARRAY_LENGTH.id)
 
-        val (arrayLength, calculationLengthError) = calculationArithmeticExpression(inputArrayLength)
+        val (arrayLength, calculationLengthError) = calculationArithmeticExpression(inputArrayLength, context)
         if(calculationLengthError != SUCCESS.id) return setRunResult(calculationLengthError)
         else if(arrayLength <= 0) return setRunResult(INVALID_ARRAY_LENGTH.id)
 
@@ -72,6 +72,14 @@ class InitBlock : InstructionBlock {
         }
 
         return setRunResult(SUCCESS.id)
+    }
+
+    // для тестов
+    fun removeBlocksFromContext() {
+        for(varBlock in newVarBlocks) {
+            context.removeVar(varBlock.getName())
+        }
+        return
     }
 
     override fun removeBlock(){

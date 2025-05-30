@@ -44,7 +44,7 @@ class AssignmentBlock:InstructionBlock {
 
         if(!(integerBlock is IntegerBlock)) return Pair(newIntegerBlock, ASSIGNING_DIFFERENT_TYPES.id)
 
-        val (value, calculationValueError) = calculationArithmeticExpression(integerValue)
+        val (value, calculationValueError) = calculationArithmeticExpression(integerValue, context)
         if(calculationValueError != SUCCESS.id) return Pair(newIntegerBlock, calculationValueError)
 
         newIntegerBlock.setName(name)
@@ -94,7 +94,7 @@ class AssignmentBlock:InstructionBlock {
 
         val value = mutableListOf<Int>()
         for(arrayElement in arrayElements) {
-            val (arrayElementValue, calculationValueError) = calculationArithmeticExpression(arrayElement)
+            val (arrayElementValue, calculationValueError) = calculationArithmeticExpression(arrayElement, context)
             if(calculationValueError != SUCCESS.id) return Pair(newIntegerArrayBlock, calculationValueError)
 
             value.add(arrayElementValue)
@@ -181,11 +181,11 @@ class AssignmentBlock:InstructionBlock {
         val integerArrayBlock = context.getVar(name) ?: return Pair(newIntegerArrayBlock, VARIABLE_DOES_NOT_EXIST.id)
         if(!(integerArrayBlock is IntegerArrayBlock)) return Pair(newIntegerArrayBlock, ASSIGNING_DIFFERENT_TYPES.id)
 
-        val (index, calculationIndexError) = calculationArithmeticExpression(arrayIndex)
+        val (index, calculationIndexError) = calculationArithmeticExpression(arrayIndex, context)
         if(calculationIndexError != SUCCESS.id) return Pair(newIntegerArrayBlock, calculationIndexError)
         else if((index < 0) || (index >= integerArrayBlock.getValue().size)) return Pair(newIntegerArrayBlock, INVALID_ARRAY_INDEX.id)
 
-        val (elementValue, calculationElementValue) = calculationArithmeticExpression(arrayElementValue)
+        val (elementValue, calculationElementValue) = calculationArithmeticExpression(arrayElementValue, context)
         if(calculationElementValue != SUCCESS.id) return Pair(newIntegerArrayBlock, calculationElementValue)
 
         val arrayValue = integerArrayBlock.getValue().toMutableList()
