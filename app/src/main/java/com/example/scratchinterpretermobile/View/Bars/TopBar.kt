@@ -27,6 +27,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -37,6 +39,12 @@ import com.example.scratchinterpretermobile.View.ViewModels.MainViewModel
 
 @Composable
 fun TopBar(viewModel: MainViewModel, modifier: Modifier = Modifier) {
+    var title = remember { mutableStateOf("") }
+    when(viewModel.screenState.value){
+        0 -> {title.value = "Main"}
+        1 -> {title.value = "Log"}
+        2 -> {title.value = "Settings"}
+    }
     Box(
         modifier = modifier
             .height(60.dp)

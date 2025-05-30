@@ -11,6 +11,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -42,7 +43,7 @@ import org.burnoutcrew.reorderable.rememberReorderableLazyGridState
 import org.burnoutcrew.reorderable.reorderable
 
 @Composable
-fun MainScreen(viewModel: MainViewModel, onThemeChange: () -> Unit) {
+fun MainScreen(viewModel: MainViewModel,darkTheme: Boolean, onThemeChange: () -> Unit) {
     if (viewModel.showBoxesState.value) {
         CreateBoxesDialog(viewModel.showBoxesState, viewModel.boxes)
     }
@@ -57,7 +58,7 @@ fun MainScreen(viewModel: MainViewModel, onThemeChange: () -> Unit) {
             when (viewModel.screenState.intValue) {
                 0 -> CodeBlocksScreen(viewModel)
                 1 -> LogScreen(viewModel)
-                2 -> SettingsScreen(onThemeChange)
+                2 -> SettingsScreen(darkTheme,onThemeChange)
             }
         }
         TopBar(viewModel, modifier = Modifier.align(Alignment.TopCenter))
@@ -99,13 +100,23 @@ fun CodeBlocksScreen(viewModel: MainViewModel) {
 }
 
 @Composable
-fun SettingsScreen(onThemeChange: () -> Unit) {
+fun SettingsScreen(darkTheme: Boolean,onThemeChange: () -> Unit) {
     Column {
-        Box(modifier = Modifier.fillMaxWidth()){
-            Row{
-                Button(onClick = {
-                    onThemeChange()
-                }) { }
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(text = "Переключение темы", modifier = Modifier.padding(20.dp),color = MaterialTheme.colorScheme.onSurface,)
+            Spacer(modifier = Modifier.weight(1f))
+            Button(onClick = onThemeChange,modifier = Modifier.padding(20.dp),colors = ButtonDefaults.buttonColors(
+                containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                contentColor = if(darkTheme) Color.Black else Color.White
+            ),) {
+                Icon(
+                    painter = painterResource(if (darkTheme) R.drawable.icon_dark else R.drawable.icon_light),
+                    contentDescription = null,
+                    modifier = Modifier.size(30.dp)
+                )
             }
         }
     }

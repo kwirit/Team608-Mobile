@@ -180,8 +180,11 @@ class AssigningBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(external
                     value.run()
                 }
             }
-            3 -> {}
-            4 -> {}
+            3 -> { code = value.assembleStringBlock(selectedVariable.value!!.getName(),arithmeticField)
+                value.run()
+            }
+            4 -> {code = value.assembleBooleanBlock(selectedVariable.value!!.getName(),arithmeticField)
+            value.run()}
         }
     }
 

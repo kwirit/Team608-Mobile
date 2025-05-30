@@ -22,7 +22,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             var darkTheme = remember { mutableStateOf(false) }
             AppTheme(darkTheme = darkTheme.value) {
-                MainScreen(mainViewModel){
+                MainScreen(mainViewModel,darkTheme.value){
                     darkTheme.value = !darkTheme.value
                 }
             }

@@ -43,10 +43,10 @@ class VariableInitializationBox(externalBoxes: MutableList<ProgramBox>) :
                     code = this.value.assembleIntegerBlock(text)
                 }
                 else if(selectedType.value == "String"){
-                    code = this.value.assembleIntegerBlock(text)
+                    code = this.value.assembleStringBlock(text)
                 }
                 else if(selectedType.value == "Boolean"){
-                    code = this.value.assembleIntegerBlock(text)
+                    code = this.value.assembleBooleanBlock(text)
                 }
                 value.run()
             },
