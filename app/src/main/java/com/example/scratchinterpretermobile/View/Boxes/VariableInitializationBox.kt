@@ -22,6 +22,7 @@ import com.example.scratchinterpretermobile.Model.UIContext
 import com.example.scratchinterpretermobile.R
 import com.example.scratchinterpretermobile.View.BaseStructure.BaseBox
 import com.example.scratchinterpretermobile.View.Widgets.VariableTextField
+import com.example.scratchinterpretermobile.ui.theme.innerText
 
 class VariableInitializationBox(externalBoxes: MutableList<ProgramBox>) :
     ProgramBox(externalBoxes) {

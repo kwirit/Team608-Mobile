@@ -104,9 +104,14 @@ fun SettingsScreen() {
 
 @Composable
 fun LogScreen(viewModel: MainViewModel) {
-    LazyColumn {
-        items(outputList) { item ->
-            Text(text = item)
+    if(outputList.isEmpty()){
+        Text(text = "This is log...")
+    }
+    else {
+        LazyColumn {
+            items(outputList) { item ->
+                Text(text = item)
+            }
         }
     }
 }

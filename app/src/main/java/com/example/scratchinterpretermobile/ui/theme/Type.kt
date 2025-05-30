@@ -2,29 +2,21 @@ package com.example.scratchinterpretermobile.ui.theme
 
 import com.example.scratchinterpretermobile.R
 import androidx.compose.material3.Typography
+import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 
 import androidx.compose.ui.text.googlefonts.GoogleFont
-import androidx.compose.ui.text.googlefonts.Font
-
-val provider = GoogleFont.Provider(
-    providerAuthority = "com.google.android.gms.fonts",
-    providerPackage = "com.google.android.gms",
-    certificates = R.array.com_google_android_gms_fonts_certs
-)
 
 val bodyFontFamily = FontFamily(
-    Font(
-        googleFont = GoogleFont("ADLaM Display"),
-        fontProvider = provider,
-    )
+    Font(R.font.adla)
 )
 
 val displayFontFamily = FontFamily(
-    Font(
-        googleFont = GoogleFont("Akaya Kanadaka"),
-        fontProvider = provider,
-    )
+    Font(R.font.akayakanadaka_regular)
+)
+
+val innerText = FontFamily(
+    Font(R.font.notosansdisplay_medium)
 )
 
 // Default Material 3 typography values

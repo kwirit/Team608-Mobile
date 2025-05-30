@@ -38,6 +38,7 @@ import com.example.scratchinterpretermobile.View.Widgets.InnerCreationButton
 import com.example.scratchinterpretermobile.View.Widgets.ListOfIfOperators
 import com.example.scratchinterpretermobile.View.Widgets.VariableTextField
 import com.example.scratchinterpretermobile.View.Widgets.VerticalReorderList
+import com.example.scratchinterpretermobile.ui.theme.innerText
 
 class IfBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(externalBoxes) {
     val ifBoxes = mutableStateListOf<ProgramBox>()

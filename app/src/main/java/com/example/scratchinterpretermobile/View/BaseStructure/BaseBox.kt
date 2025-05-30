@@ -31,12 +31,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.scratchinterpretermobile.R
 import com.example.scratchinterpretermobile.View.Dialogs.BoxDialog
 import com.example.scratchinterpretermobile.View.Dialogs.CreateBoxesDialog
 import com.example.scratchinterpretermobile.View.Dialogs.CustomDialog
+import com.example.scratchinterpretermobile.ui.theme.displayFontFamily
 
 @Composable
 fun BaseBox(
@@ -90,8 +92,8 @@ fun BaseBox(
                     )
                 }
             }
-            Column(modifier = Modifier.padding(7.dp)) {
-                Text(text = name)
+            Column(modifier = Modifier.padding(10.dp)) {
+                Text(fontFamily = displayFontFamily,text = name)
                 Box(modifier = Modifier.fillMaxHeight()) {
                     boxContent()
                 }
