@@ -1,7 +1,7 @@
 import org.junit.Test
 import org.junit.After
 import org.junit.Assert.*
-import com.example.scratchinterpretermobile.Controller.Utils.transferPrefixToPostfix
+import com.example.scratchinterpretermobile.Controller.Utils.transferArithmeticPrefixToPostfix
 import com.example.scratchinterpretermobile.Model.IntegerArrayBlock
 import com.example.scratchinterpretermobile.Model.IntegerBlock
 import com.example.scratchinterpretermobile.Model.VarBlock
@@ -17,7 +17,7 @@ class TransferPrefixToPostfixUnitTest {
 
         UIContext.pushScope(scope)
 
-        val (result, error) = transferPrefixToPostfix(mutableListOf("arr[i+1]"), UIContext)
+        val (result, error) = transferArithmeticPrefixToPostfix(mutableListOf("arr[i+1]"), UIContext)
         assertEquals(0, error)
         assertEquals(mutableListOf("40"), result)
     }

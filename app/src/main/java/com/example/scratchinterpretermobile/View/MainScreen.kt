@@ -1,5 +1,7 @@
 package com.example.scratchinterpretermobile.View
+
 import android.text.Layout
+import androidx.activity.ComponentActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
@@ -44,46 +46,73 @@ fun MainScreen(viewModel: MainViewModel) {
     if (viewModel.showBoxesState.value) {
         CreateBoxesDialog(viewModel.showBoxesState, viewModel.boxes)
     }
-    Box(modifier = Modifier.fillMaxSize()) {
+
+    Box(modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.primaryContainer).windowInsetsPadding(WindowInsets.safeDrawing)) {
         Box(
             modifier = Modifier
                 .padding(top = 60.dp, bottom = 60.dp)
                 .fillMaxSize()
+                .background(color = MaterialTheme.colorScheme.background)
         ) {
             when (viewModel.screenState.intValue) {
-                1 -> CodeBlocksScreen(viewModel)
-                4 -> LogScreen()
+                0 -> CodeBlocksScreen(viewModel)
+                1 -> LogScreen(viewModel)
+                2 -> SettingsScreen()
             }
         }
         TopBar(viewModel, modifier = Modifier.align(Alignment.TopCenter))
-        BottomBar(viewModel,modifier = Modifier.align(Alignment.BottomCenter))
+        BottomBar(viewModel, modifier = Modifier.align(Alignment.BottomCenter))
     }
 }
 
 
 @Composable
-fun CodeBlocksScreen(viewModel: MainViewModel){
-    VerticalReorderList(viewModel.boxes)
-    Box(modifier = Modifier.fillMaxSize().graphicsLayer(alpha = 0.7f)){
-        Button(modifier = Modifier.align(Alignment.BottomCenter).padding(12.dp).size(54.dp),onClick = {
-            viewModel.showBoxesState.value = true },
+fun CodeBlocksScreen(viewModel: MainViewModel) {
+    Box(modifier = Modifier.fillMaxSize().padding(top = 10.dp)){
+        VerticalReorderList(viewModel.boxes)
+    }
+    Box(modifier = Modifier
+        .fillMaxSize()
+        .graphicsLayer(alpha = 0.7f)) {
+        Button(
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(12.dp)
+                .size(54.dp),
+            onClick = {
+                viewModel.showBoxesState.value = true
+            },
             colors = ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                contentColor = Color.White),
+                containerColor = MaterialTheme.colorScheme.primaryContainer,
+                contentColor = MaterialTheme.colorScheme.onPrimary
+            ),
             shape = RoundedCornerShape(16.dp),
             contentPadding = PaddingValues(0.dp)
         ) {
-            Icon(painter = painterResource(R.drawable.baseline_add), contentDescription = null,modifier = Modifier.size(40.dp))
+            Icon(
+                painter = painterResource(R.drawable.baseline_add),
+                contentDescription = null,
+                modifier = Modifier.size(40.dp)
+            )
         }
     }
 }
 
 @Composable
-fun LogScreen(){
-    LazyColumn {
-        items(outputList) {
-            item ->
-            Text(text = item)
+fun SettingsScreen() {
+}
+
+@Composable
+fun LogScreen(viewModel: MainViewModel) {
+    if(outputList.isEmpty()){
+        Text(text = "This is log...")
+    }
+    else {
+        LazyColumn {
+            items(outputList) { item ->
+                Text(text = item)
+            }
         }
     }
 }
+

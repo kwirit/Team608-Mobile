@@ -23,21 +23,42 @@ import com.example.scratchinterpretermobile.R
 
 
 @Composable
-fun BoxDialog(showState: MutableState<Boolean>,modifier: Modifier,onConfirmDialog: () -> Unit,content:@Composable () -> Unit){
-    CustomDialog(showState, modifier = modifier){
-        Box(modifier = Modifier.fillMaxSize()){
-            Button(modifier = Modifier.align(Alignment.TopStart).padding(20.dp).size(50.dp),onClick = {
-                showState.value = false},
+fun BoxDialog(
+    showState: MutableState<Boolean>,
+    modifier: Modifier,
+    onCloseDialog: () -> Unit = {},
+    onConfirmDialog: () -> Unit,
+    content: @Composable () -> Unit
+) {
+    CustomDialog(showState, modifier = modifier) {
+        Box(modifier = Modifier.fillMaxSize()) {
+            Button(
+                modifier = Modifier
+                    .align(Alignment.TopStart)
+                    .padding(20.dp)
+                    .size(50.dp),
+                onClick = {
+                    onCloseDialog()
+                    showState.value = false
+                },
                 colors = ButtonDefaults.buttonColors(
-                    contentColor = Color.White),
+                    contentColor = Color.White
+                ),
                 shape = RoundedCornerShape(16.dp),
                 contentPadding = PaddingValues(0.dp)
             ) {
-                Icon(painter = painterResource(R.drawable.arrow), contentDescription = null, modifier = Modifier.size(30.dp))
+                Icon(
+                    painter = painterResource(R.drawable.arrow),
+                    contentDescription = null,
+                    modifier = Modifier.size(30.dp)
+                )
             }
             content()
-            Button(modifier = Modifier.align(Alignment.BottomEnd).padding(20.dp),onClick = {
+            Button(modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(20.dp), onClick = {
                 onConfirmDialog()
+                onCloseDialog()
                 showState.value = false
             }) {
                 Text(text = "OK")

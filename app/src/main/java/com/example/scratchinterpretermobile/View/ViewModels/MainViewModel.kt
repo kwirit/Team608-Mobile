@@ -21,20 +21,20 @@ import com.example.scratchinterpretermobile.View.Boxes.VariableInitializationBox
 
 class MainViewModel : ViewModel() {
     val showBoxesState = mutableStateOf(false)
-    val screenState =  mutableIntStateOf(1)
-
+    val screenState = mutableIntStateOf(0)
+    val saveDialogState = mutableStateOf(false)
     val boxes = mutableStateListOf<ProgramBox>()
-
 
 
     fun run() {
         outputList.clear()
 
         val instructionList: MutableList<InstructionBlock> = parseCardToInstructionBoxes(boxes)
-        val interpreter: Interpreter = Interpreter(com.example.scratchinterpretermobile.Model.Context())
+        val interpreter: Interpreter =
+            Interpreter(com.example.scratchinterpretermobile.Model.Context())
         interpreter.setScript(instructionList)
         val runResult = interpreter.run()
-        if(runResult != SUCCESS.id){
+        if (runResult != SUCCESS.id) {
             val error = ErrorStore.get(runResult)
 
             val line = "\t\n--------------------\n"

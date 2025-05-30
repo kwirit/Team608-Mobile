@@ -5,13 +5,22 @@ import com.example.scratchinterpretermobile.Controller.Error.NO_COMPARISON_OPERA
 import com.example.scratchinterpretermobile.Controller.Error.RUNTIME_ERROR
 import com.example.scratchinterpretermobile.Controller.Error.SUCCESS
 import com.example.scratchinterpretermobile.Controller.Utils.calculationArithmeticExpression
+import com.example.scratchinterpretermobile.Controller.Utils.calculationBooleanExpression
+import javax.xml.xpath.XPathExpression
 
 class LoopBlock(
     override var context: Context
 ) : InstructionBlock {
+<<<<<<< HEAD
     private var leftPartCondition: String = ""
     private var rightPartCondition: String = ""
     private var operator: String = "=="
+=======
+//    override var context: Context = UIContext
+    override var runResult: Int = SUCCESS.id
+
+    private var booleanExpression: String = ""
+>>>>>>> origin/sandbox
 
     private var resultValue: Boolean = false
 
@@ -20,6 +29,7 @@ class LoopBlock(
     private var scope: HashMap<String, VarBlock<*>> = hashMapOf()
 
     /**
+<<<<<<< HEAD
      * Обрабатывает входные данные условия, проверяет оператор сравнения и выполняет сравнение.
      * Удаляет scope из context по
      * @param leftPartCondition Левая часть условия (например, строка или значение для сравнения).
@@ -32,50 +42,68 @@ class LoopBlock(
      *   - [NO_COMPARISON_OPERATOR_SELECTED.id] — не выбран оператор сравнения.
      *   - Код ошибки из метода [compare], если сравнение частей условия завершилось с ошибкой.
      */
+=======
+     * Добавление scope в context
+     * Обязательная функция при заходе в карточку
+     */
+    fun addScopeToContext() {
+        for (item in context.toList()){
+            if (item == scope) {
+                return
+            }
+        }
+        context.pushScope(scope)
+    }
+
+    /**
+     * Добавление scope в context
+     * Обязательная функция при выходе из карточку
+     */
+    fun removeScopeToContext() {
+        context.popScope()
+    }
+>>>>>>> origin/sandbox
 
     fun setScript(script:MutableList<InstructionBlock>) {
         this.script = script
     }
 
-    fun assembleBlock(leftPartCondition: String, operator: String, rightPartCondition: String): Int {
-        this.leftPartCondition = leftPartCondition
-        this.rightPartCondition = rightPartCondition
-        this.operator = operator
-
-        if (this.operator == "Выбрать оператор") return NO_COMPARISON_OPERATOR_SELECTED.id
+    /**
+     * Обрабатывает входные данные условия, проверяет оператор сравнения и выполняет сравнение.
+     * Удаляет scope из context по
+     * @param booleanExpression boolean выражение.
+     * @return Код результата выполнения:
+     *   - [SUCCESS.id] — успешное выполнение.
+     *   - Код ошибки из метода [compare], если сравнение частей условия завершилось с ошибкой.
+     */
+    fun assembleBlock(booleanExpression: String): Int {
+        this.booleanExpression = booleanExpression
 
         var errorCompare = compare()
         if (errorCompare != SUCCESS.id) return errorCompare
 
+<<<<<<< HEAD
+=======
+        if (errorCompare != SUCCESS.id) {
+            context.popScope()
+            return errorCompare
+        }
+
+        context.popScope()
+>>>>>>> origin/sandbox
         return SUCCESS.id
     }
 
     /**
-     * Выполняет сравнение двух арифметических выражений на основе заданного оператора.
+     * Выполняет вычисления boolean выражения.
      * @return SUCCES.id в случае успеха, код ошибки — в случае неудачи.
      * В случае успеха изменяет resultValue.
      */
     private fun compare(): Int {
-        val (valueLeftPart, errorLeft) = calculationArithmeticExpression(leftPartCondition, context)
-        if (errorLeft != SUCCESS.id) {
-            return errorLeft;
-        }
+        val (booleanValue, booleanError) = calculationBooleanExpression(booleanExpression, context)
+        if (booleanError != 0) return booleanError
 
-        val (valueRightPart, errorRight) = calculationArithmeticExpression(rightPartCondition, context)
-        if (errorRight != SUCCESS.id) {
-            return errorRight
-        }
-
-        resultValue = when (operator) {
-            "==" -> valueLeftPart == valueRightPart
-            "<=" -> valueLeftPart <= valueRightPart
-            "<" -> valueLeftPart < valueRightPart
-            ">=" -> valueLeftPart >= valueRightPart
-            ">" -> valueLeftPart > valueRightPart
-            "!=" -> valueLeftPart != valueRightPart
-            else -> false
-        }
-
+        this.resultValue = booleanValue
         return SUCCESS.id
     }
 
