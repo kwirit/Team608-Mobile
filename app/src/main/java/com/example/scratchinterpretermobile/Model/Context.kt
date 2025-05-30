@@ -107,4 +107,7 @@ class Context {
 
         return result
     }
+    fun toList() : List<HashMap<String, VarBlock<*>>> {
+        return context.toList();
+    }
 }

@@ -26,6 +26,11 @@ class LoopBlock(
      * Обязательная функция при заходе в карточку
      */
     fun addScopeToContext() {
+        for (item in context.toList()){
+            if (item == scope) {
+                return
+            }
+        }
         context.pushScope(scope)
     }
 
@@ -65,11 +70,11 @@ class LoopBlock(
         var errorCompare = compare()
 
         if (errorCompare != SUCCESS.id) {
-//            context.popScope()
+            context.popScope()
             return errorCompare
         }
 
-//        context.popScope()
+        context.popScope()
         return SUCCESS.id
     }
 

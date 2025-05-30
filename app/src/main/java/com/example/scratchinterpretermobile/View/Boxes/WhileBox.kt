@@ -71,7 +71,7 @@ class WhileBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(externalBoxe
                     }
                 }
             }, onCloseDialog = {
-                value.removeScopeToContext()
+//                value.removeScopeToContext()
             }, onDelete = {
                 value.removeBlock()
                 externalBoxes.removeAll { it.id == id }
