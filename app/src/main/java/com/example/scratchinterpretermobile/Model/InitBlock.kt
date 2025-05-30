@@ -70,7 +70,7 @@ class InitBlock(
         return SUCCESS.id
     }
 
-    fun assembleStringBlock(inputStringName:String, inputStringValue:String): Int {
+    fun assembleStringBlock(inputStringName:String): Int {
         context?: return CONTEXT_IS_NULL.id
 
         removeBlock()
@@ -81,7 +81,7 @@ class InitBlock(
         else if(stringNames.size != 1) return INITIALIZATION_ERROR.id
 
         for(stringName in stringNames) {
-            val newStringBlock = StringBlock(stringName, inputStringValue)
+            val newStringBlock = StringBlock(stringName, String())
             newVarBlocks.add(newStringBlock)
         }
 
