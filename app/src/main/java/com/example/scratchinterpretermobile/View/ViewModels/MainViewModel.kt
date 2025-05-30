@@ -31,9 +31,19 @@ class MainViewModel : ViewModel() {
         val instructionList: MutableList<InstructionBlock> = parseCardToInstructionBoxes(boxes)
         val interpreter: Interpreter = Interpreter(com.example.scratchinterpretermobile.Model.Context())
         interpreter.setScript(instructionList)
-        val code = interpreter.run()
-        if(code!= SUCCESS.id){
-            outputList.add(ErrorStore.get(code)!!.title + ErrorStore.get(code)!!.description + ErrorStore.get(code)!!.category)
+        val runResult = interpreter.run()
+        if(runResult != SUCCESS.id){
+            val error = ErrorStore.get(runResult)
+
+            val line = "\n--------------------\n"
+            val errorTitle = "Title: " + error!!.title + "\n"
+            val errorDescription = "Description: " + error.description + "\n"
+            val errorID = "ID: " + error.id + "\n"
+            val errorCategory = "Category: " + error.category
+
+            val errorInfo = line + errorTitle + errorDescription + errorID + errorCategory + line
+
+            outputList.add(errorInfo)
         }
     }
 }
