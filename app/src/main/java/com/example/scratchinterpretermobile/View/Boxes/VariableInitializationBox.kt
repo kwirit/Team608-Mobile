@@ -31,6 +31,7 @@ class VariableInitializationBox(externalBoxes: MutableList<ProgramBox>) : Progra
         BaseBox(name = name, showState,
             onConfirmButton = {
                 code = this.value.assembleIntegerBlock(text)
+                value.run()
         },
             dialogContent = {
                 Box(modifier = Modifier.fillMaxSize()){

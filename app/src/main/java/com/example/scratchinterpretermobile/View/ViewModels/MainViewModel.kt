@@ -27,5 +27,7 @@ class MainViewModel : ViewModel() {
     fun run() {
         val instructionList: MutableList<InstructionBlock> = parseCardToInstructionBoxes(boxes)
         val interpreter: Interpreter = Interpreter(com.example.scratchinterpretermobile.Model.Context())
+        interpreter.setScript(instructionList)
+        interpreter.run()
     }
 }

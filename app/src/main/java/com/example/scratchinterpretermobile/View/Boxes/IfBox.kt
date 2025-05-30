@@ -50,6 +50,7 @@ class IfBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(externalBoxes) 
                 code = value.assembleBlock(leftOperand, operator.value, rightOperand)
         },
             dialogContent = {
+                value.addTrueScopeInContext()
                 Column(modifier = Modifier.fillMaxSize()) {
                     Row(
                         modifier = Modifier.fillMaxWidth().align(Alignment.End).padding(20.dp), horizontalArrangement = Arrangement.End
