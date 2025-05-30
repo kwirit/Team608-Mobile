@@ -298,6 +298,7 @@ fun transferBooleanPrefixToPostfix(elements: MutableList<String>, context: Conte
     val postfix = mutableListOf<Pair<String, String>>()
     val stack = Stack<String>()
     val priority = mapOf(
+        "!" to 5,
         "%" to 4,
         "/" to 4,
         "*" to 4,
@@ -313,7 +314,7 @@ fun transferBooleanPrefixToPostfix(elements: MutableList<String>, context: Conte
         "!=" to 2,
 
         "&&" to 1,
-        "||" to 1
+        "||" to 1,
     )
     val operators = "+-*%/>=<=!==&&||"
 
@@ -388,6 +389,18 @@ fun calculationBooleanPostfix(postfix: MutableList<Pair<String, String>>): Pair<
         val (value, typeValue) = element
 
         if (typeValue == "Operator") {
+            if (value == "!") {
+                val operand = stack.pop() ?: return Pair(false, INVALID_ARRAY_ACCESS.id)
+                val (valueStr, type) = operand
+
+                if (type != "Boolean") return Pair(false, TYPE_MISMATCH.id)
+
+                val booleanValue = valueStr.toBooleanStrictOrNull()
+                    ?: return Pair(false, INVALID_BOOLEAN.id)
+
+                stack.push(Pair((!booleanValue).toString(), "Boolean"))
+                continue
+            }
             val firstOperand = stack.pop() ?: return Pair(false, INVALID_ARRAY_ACCESS.id)
             val secondOperand = stack.pop() ?: return Pair(false, INVALID_ARRAY_ACCESS.id)
 

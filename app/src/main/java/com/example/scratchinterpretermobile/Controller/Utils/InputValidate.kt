@@ -134,7 +134,7 @@ fun validateString(input: String): Int {
 
 fun validateBoolean(input: String): Int {
     val element = input.trim()
-    if (element == "True" || element == "False") return SUCCESS.id
+    if (element == "true" || element == "false") return SUCCESS.id
     return INVALID_FORMAT.id
 }
 

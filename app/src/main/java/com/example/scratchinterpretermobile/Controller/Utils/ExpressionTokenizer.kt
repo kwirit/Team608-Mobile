@@ -92,6 +92,7 @@ fun getElementFromString(input: String): MutableList<String> {
                         if (index + 1 < trimmedInput.length && trimmedInput[index + 1] == '=') {
                             elements.add("$symbol=")
                             lastElement = "$symbol="
+                            index++
                         } else {
                             elements.add("$symbol")
                             lastElement = "$symbol"
@@ -102,6 +103,7 @@ fun getElementFromString(input: String): MutableList<String> {
                         if (index + 1 < trimmedInput.length && trimmedInput[index + 1] == '&') {
                             elements.add("&&")
                             lastElement = "&&"
+                            index++
                         } else {
                             elements.add("&")
                             lastElement = "&"
@@ -112,10 +114,14 @@ fun getElementFromString(input: String): MutableList<String> {
                         if (index + 1 < trimmedInput.length && trimmedInput[index + 1] == '|') {
                             elements.add("||")
                             lastElement = "||"
+                            index++
                         } else {
-                            elements.add("||")
-                            lastElement = "||"
+                            elements.add("|")
+                            lastElement = "|"
                         }
+                    }
+                    else -> {
+                        elements.add(symbol.toString())
                     }
                 }
             }
