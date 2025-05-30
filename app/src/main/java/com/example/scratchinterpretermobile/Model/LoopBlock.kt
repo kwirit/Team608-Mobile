@@ -1,15 +1,14 @@
 package com.example.scratchinterpretermobile.Model
 
+import com.example.scratchinterpretermobile.Controller.Error.CONTEXT_IS_NULL
 import com.example.scratchinterpretermobile.Controller.Error.NO_COMPARISON_OPERATOR_SELECTED
+import com.example.scratchinterpretermobile.Controller.Error.RUNTIME_ERROR
 import com.example.scratchinterpretermobile.Controller.Error.SUCCESS
 import com.example.scratchinterpretermobile.Controller.Utils.calculationArithmeticExpression
 
 class LoopBlock(
     override var context: Context
 ) : InstructionBlock {
-//    override var context: Context = UIContext
-    override var runResult: Int = SUCCESS.id
-
     private var leftPartCondition: String = ""
     private var rightPartCondition: String = ""
     private var operator: String = "=="
@@ -19,23 +18,6 @@ class LoopBlock(
     private var script: MutableList<InstructionBlock> = mutableListOf()
 
     private var scope: HashMap<String, VarBlock<*>> = hashMapOf()
-
-
-    /**
-     * Добавление scope в context
-     * Обязательная функция при заходе в карточку
-     */
-    fun addScopeToContext() {
-        context.pushScope(scope)
-    }
-
-    /**
-     * Добавление scope в context
-     * Обязательная функция при выходе из карточку
-     */
-    fun removeScopeToContext() {
-        context.popScope()
-    }
 
     /**
      * Обрабатывает входные данные условия, проверяет оператор сравнения и выполняет сравнение.
@@ -63,13 +45,8 @@ class LoopBlock(
         if (this.operator == "Выбрать оператор") return NO_COMPARISON_OPERATOR_SELECTED.id
 
         var errorCompare = compare()
+        if (errorCompare != SUCCESS.id) return errorCompare
 
-        if (errorCompare != SUCCESS.id) {
-//            context.popScope()
-            return errorCompare
-        }
-
-//        context.popScope()
         return SUCCESS.id
     }
 
@@ -105,6 +82,8 @@ class LoopBlock(
     override fun removeBlock() {}
 
     override fun run(): Int {
+        context ?: return CONTEXT_IS_NULL.id
+
         var compareError = compare()
 
         if (compareError != SUCCESS.id){

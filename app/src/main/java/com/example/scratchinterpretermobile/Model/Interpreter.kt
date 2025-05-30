@@ -1,11 +1,11 @@
 package com.example.scratchinterpretermobile.Model
 
+import com.example.scratchinterpretermobile.Controller.Error.CONTEXT_IS_NULL
 import com.example.scratchinterpretermobile.Controller.Error.SUCCESS
 
 class Interpreter(
     private var context:Context
 ) {
-//    private var context = Context()
     private var script:MutableList<InstructionBlock> = mutableListOf()
 
     fun getContext(): Context {
@@ -21,6 +21,7 @@ class Interpreter(
     }
 
     fun run(): Int {
+        context ?: return CONTEXT_IS_NULL.id
 
         for (block in script) {
             val contextOfBlock = block.context

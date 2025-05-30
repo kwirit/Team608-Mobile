@@ -1,5 +1,6 @@
 package com.example.scratchinterpretermobile.Model
 
+import com.example.scratchinterpretermobile.Controller.Error.CONTEXT_IS_NULL
 import com.example.scratchinterpretermobile.Controller.Error.NO_COMPARISON_OPERATOR_SELECTED
 import com.example.scratchinterpretermobile.Controller.Error.RUNTIME_ERROR
 import com.example.scratchinterpretermobile.Controller.Error.SUCCESS
@@ -8,9 +9,6 @@ import com.example.scratchinterpretermobile.Controller.Utils.calculationArithmet
 class ConditionBlock(
     override var context: Context
 ) : InstructionBlock {
-//    override var context: Context = UIContext
-    override var runResult: Int = SUCCESS.id
-
     private var operator: String = "=="
     private var leftPartCondition: String = ""
     private var rightPartCondition: String = ""
@@ -78,12 +76,8 @@ class ConditionBlock(
 
         val errorCompare = compare()
 
-        if(errorCompare != SUCCESS.id) {
-            context.popScope()
-            return errorCompare
-        }
+        if(errorCompare != SUCCESS.id) return errorCompare
 
-        context.popScope()
         return SUCCESS.id
     }
 
@@ -119,6 +113,8 @@ class ConditionBlock(
     override fun removeBlock() {}
 
     override fun run(): Int {
+        context ?: return CONTEXT_IS_NULL.id
+
         context.pushScope(hashMapOf())
         val compareError = compare()
         if (compareError != 0){

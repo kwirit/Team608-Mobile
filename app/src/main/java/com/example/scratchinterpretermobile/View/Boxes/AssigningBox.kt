@@ -58,7 +58,20 @@ class AssigningBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(external
                 }
                 else if(state.value == 2){
                     for((index,field) in arrayListField.withIndex()){
-                        code = value.assembleElementIntegerArrayBlock(selectedVariable.value!!.getName(),index.toString(),field)
+                        if(field.isEmpty()) continue
+                        value.assembleElementIntegerArrayBlock(selectedVariable.value!!.getName(),index.toString(),field)
+                        value.run()
+//                        if(field.isNotEmpty()) {
+//                            value.assembleElementIntegerArrayBlock(selectedVariable.value!!.getName(),index.toString(),field)
+////                            code = value.run()
+//                            value.run()
+//                        }
+                    }
+                    val arrayBlock = selectedVariable as? VarBlock<MutableList<Int>>
+                    if(arrayBlock != null) {
+                        val arrayValueString:String = arrayBlock.getValue().joinToString(separator = ",")
+                        value.assembleIntegerArrayBlock(selectedVariable.value!!.getName(), arrayValueString)
+//                        value.run()
                     }
                 }
         },

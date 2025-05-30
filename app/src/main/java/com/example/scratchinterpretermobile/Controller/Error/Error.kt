@@ -213,6 +213,13 @@ val ASSIGNMENT_ERROR = Error(
     "assignment"
 )
 
+val ASSIGNMENT_ARRAYS_OF_DIFFERENT_LENGTHS = Error(
+    506,
+    "Assigning arrays of different lengths",
+    "The assigned arrays must have the same length.",
+    "assignment"
+)
+
 // 600
 val VARIABLE_NOT_FOUND = Error(
     601,
@@ -277,6 +284,7 @@ object ErrorStore {
 //        503 to INVALID_ARRAY_ELEMENT_ASSIGNMENT
         504 to INVALID_ARRAY_INDEX,
         505 to ASSIGNMENT_ERROR,
+        506 to ASSIGNMENT_ARRAYS_OF_DIFFERENT_LENGTHS,
 
         601 to VARIABLE_NOT_FOUND,
 
