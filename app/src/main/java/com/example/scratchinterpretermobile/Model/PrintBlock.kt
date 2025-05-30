@@ -34,6 +34,7 @@ class PrintBlock(
                     is IntegerArrayBlock -> Pair(value.getValue().joinToString(separator = " "), SUCCESS.id)
                     is IntegerBlock -> Pair(value.getValue().toString(), SUCCESS.id)
                     is StringBlock -> Pair(value.getValue(), SUCCESS.id)
+                    is BooleanBlock -> Pair(value.getValue().toString(), SUCCESS.id)
                     else -> Pair("", VARIABLE_NOT_FOUND.id)
                 }
             }

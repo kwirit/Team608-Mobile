@@ -99,9 +99,9 @@ class AssignmentBlock(
         val validateNameError = validateNameVariable(name)
         if(validateNameError != SUCCESS.id) return Pair(newBooleanBlock, validateNameError)
 
-        val stringBlock = context.getVar(name) ?: return Pair(newBooleanBlock, VARIABLE_IS_NOT_INITIALIZED.id)
+        val booleanBlock = context.getVar(name) ?: return Pair(newBooleanBlock, VARIABLE_IS_NOT_INITIALIZED.id)
 
-        if(!(stringBlock is StringBlock)) return Pair(newBooleanBlock, ASSIGNING_DIFFERENT_TYPES.id)
+        if(booleanBlock !is BooleanBlock) return Pair(newBooleanBlock, ASSIGNING_DIFFERENT_TYPES.id)
 
         val (value, calculateValueError) = calculationBooleanExpression(booleanValue, context)
         if(calculateValueError != SUCCESS.id) return Pair(newBooleanBlock, calculateValueError)
@@ -286,13 +286,21 @@ class AssignmentBlock(
         }
         else if(newVarBlock is IntegerArrayBlock) {
             if(index.isEmpty()) {
-                val getEror = assembleIntegerArrayBlock(newVarBlock!!.getName(), valueVarBlock)
-                if(getEror != SUCCESS.id) return getEror
+                val getError = assembleIntegerArrayBlock(newVarBlock!!.getName(), valueVarBlock)
+                if(getError != SUCCESS.id) return getError
             }
             else {
                 val getError = assembleElementIntegerArrayBlock(newVarBlock!!.getName(), index, valueVarBlock)
                 if(getError != SUCCESS.id) return getError
             }
+        }
+        else if (newVarBlock is StringBlock) {
+            val getError = assembleStringBlock(newVarBlock!!.getName(), valueVarBlock)
+            if(getError != SUCCESS.id) return getError
+        }
+        else if (newVarBlock is BooleanBlock) {
+            val getError = assembleBooleanBlock(newVarBlock!!.getName(), valueVarBlock)
+            if(getError != SUCCESS.id) return getError
         }
         else return ASSIGNING_DIFFERENT_TYPES.id
 
