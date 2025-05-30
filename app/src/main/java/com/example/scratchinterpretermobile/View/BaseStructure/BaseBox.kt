@@ -48,7 +48,7 @@ fun BaseBox(
     onCloseDialog: () -> Unit = {},
     onConfirmButton: () -> Unit,
     dialogContent: @Composable () -> Unit,
-    onDelete: () -> Unit,
+    onDelete: () -> Unit = {},
     boxContent: @Composable () -> Unit
 ) {
     Card(
