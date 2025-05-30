@@ -50,7 +50,7 @@ class ConditionBlockUnitTest {
         conditionBlock.setFalseScript(elseList)
 
         conditionBlock.addTrueScopeInContext()
-        conditionBlock.assembleBlock("1","<","0")
+//        conditionBlock.assembleBlock(")
         val error = conditionBlock.run()
     }
 }
