@@ -1,14 +1,9 @@
 package com.example.scratchinterpretermobile.Model
 
-import com.example.scratchinterpretermobile.Controller.Error.INVALID_FORMAT
 import com.example.scratchinterpretermobile.Controller.Error.SUCCESS
 import com.example.scratchinterpretermobile.Controller.Error.TYPE_CONVERSION_MISMATCH
 import com.example.scratchinterpretermobile.Controller.Error.VARIABLE_NOT_FOUND
-import com.example.scratchinterpretermobile.Controller.Utils.calculationArithmeticExpression
-import com.example.scratchinterpretermobile.Controller.Utils.calculationStringExpression
-import com.example.scratchinterpretermobile.Controller.Utils.parserSplit
 import com.example.scratchinterpretermobile.Controller.Utils.validateNameVariable
-import com.example.scratchinterpretermobile.Controller.Utils.validateString
 
 class СonvertationTypeBlock(
     override var context: Context

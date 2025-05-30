@@ -23,7 +23,7 @@ fun BaseCard(name: String, onClick: () -> Unit = {}, content: @Composable () -> 
     Card(
         Modifier
             .fillMaxWidth()
-            .height(90.dp)
+            .height(80.dp)
             .padding(5.dp)
             .clickable(onClick = onClick),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),

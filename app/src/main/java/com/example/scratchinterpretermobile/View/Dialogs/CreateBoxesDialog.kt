@@ -2,20 +2,26 @@ package com.example.scratchinterpretermobile.View.Dialogs
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.ui.Modifier
 import com.example.scratchinterpretermobile.Model.Variable
 import com.example.scratchinterpretermobile.View.Boxes.ArrayInitializationBox
 import com.example.scratchinterpretermobile.View.Boxes.AssigningBox
 import com.example.scratchinterpretermobile.View.Boxes.ConsoleBox
 import com.example.scratchinterpretermobile.View.Boxes.IfBox
 import com.example.scratchinterpretermobile.View.Boxes.ProgramBox
+import com.example.scratchinterpretermobile.View.Boxes.TypeConversionBlock
 import com.example.scratchinterpretermobile.View.Boxes.VariableInitializationBox
 import com.example.scratchinterpretermobile.View.Boxes.WhileBox
 import com.example.scratchinterpretermobile.View.Cards.ArrayInitializationCard
 import com.example.scratchinterpretermobile.View.Cards.AssigningCard
 import com.example.scratchinterpretermobile.View.Cards.ConsoleCard
 import com.example.scratchinterpretermobile.View.Cards.IfCard
+import com.example.scratchinterpretermobile.View.Cards.TypeConversionCard
 import com.example.scratchinterpretermobile.View.Cards.VariableInitializationCard
 import com.example.scratchinterpretermobile.View.Cards.WhileCard
 import com.example.scratchinterpretermobile.View.ViewModels.MainViewModel
@@ -23,7 +29,7 @@ import com.example.scratchinterpretermobile.View.ViewModels.MainViewModel
 @Composable
 fun CreateBoxesDialog(showBoxesState: MutableState<Boolean>, boxes: MutableList<ProgramBox>) {
     CustomDialog(showBoxesState) {
-        Column {
+        Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
             VariableInitializationCard(
                 onAdd = { boxes.add(VariableInitializationBox(boxes)) },
                 showBoxesState
@@ -36,6 +42,7 @@ fun CreateBoxesDialog(showBoxesState: MutableState<Boolean>, boxes: MutableList<
                 onAdd = { boxes.add(ArrayInitializationBox(boxes)) },
                 showBoxesState
             )
+            TypeConversionCard(onAdd = {boxes.add(TypeConversionBlock(boxes))}, showBoxesState)
         }
     }
 }
