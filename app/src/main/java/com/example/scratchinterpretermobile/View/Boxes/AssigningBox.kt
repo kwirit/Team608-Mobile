@@ -35,33 +35,50 @@ class AssigningBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(external
     override val value = AssignmentBlock(UIContext);
     val checkVariableState = mutableStateOf(true)
     val checkArrayState = mutableStateOf(false)
-    var arrayListField = mutableStateListOf<String>()
+    val arrayListField = mutableStateListOf<String>("")
     var arithmeticField by mutableStateOf("")
     var arrayIndex by mutableStateOf("")
     val state = mutableIntStateOf(-1)
-    var selectedVariable = mutableStateOf<VarBlock<*>?>(null)
+    val selectedVariable = mutableStateOf<VarBlock<*>?>(null)
 
     @Composable
-    override fun render(){
-        BaseBox(name = "Присваивание", showState,
+    override fun render() {
+        BaseBox(
+            name = "Присваивание", showState,
             onConfirmButton = {
-                if(state.value == 0){
-                    code = value.assembleIntegerBlock(selectedVariable.value!!.getName(),arithmeticField)
-                }
-                else if(state.value == 1){
-                    if(arrayIndex == ""){
-                        code = value.assembleIntegerArrayBlock(selectedVariable.value!!.getName(),arithmeticField)
-                    }
-                    else{
-                        code = value.assembleElementIntegerArrayBlock(selectedVariable.value!!.getName(),arrayIndex,arithmeticField)
+                for (i in arrayListField.indices) {
+                    if (arrayListField[i].isBlank()) {
+                        arrayListField[i] = ""
                     }
                 }
-                else if(state.value == 2){
-                    for((index,field) in arrayListField.withIndex()){
-                        code = value.assembleElementIntegerArrayBlock(selectedVariable.value!!.getName(),index.toString(),field)
+                if (state.value == 0) {
+                    code = value.assembleIntegerBlock(
+                        selectedVariable.value!!.getName(),
+                        arithmeticField
+                    )
+                } else if (state.value == 1) {
+                    if (arrayIndex == "") {
+                        code = value.assembleIntegerArrayBlock(
+                            selectedVariable.value!!.getName(),
+                            arithmeticField
+                        )
+                    } else {
+                        code = value.assembleElementIntegerArrayBlock(
+                            selectedVariable.value!!.getName(),
+                            arrayIndex,
+                            arithmeticField
+                        )
+                    }
+                } else if (state.value == 2) {
+                    for ((index, field) in arrayListField.withIndex()) {
+                        code = value.assembleElementIntegerArrayBlock(
+                            selectedVariable.value!!.getName(),
+                            index.toString(),
+                            field
+                        )
                     }
                 }
-        },
+            },
             dialogContent = {
                 Box(modifier = Modifier.fillMaxSize()) {
                     Column(
@@ -75,7 +92,7 @@ class AssigningBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(external
                             ListOfVar(selectedVariable)
 
                             if (selectedVariable.value is IntegerArrayBlock) {
-                                Box(modifier = Modifier.fillMaxWidth()){
+                                Box(modifier = Modifier.fillMaxWidth()) {
                                     ArrayAssignment()
                                 }
 
@@ -86,19 +103,30 @@ class AssigningBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(external
                             selectedVariable.value is IntegerBlock -> {
                                 state.value = 0
                                 Text("Значение:")
-                                VariableTextField(onValueChange = { arithmeticField = it }, value = arithmeticField)
+                                VariableTextField(
+                                    onValueChange = { arithmeticField = it },
+                                    value = arithmeticField
+                                )
                             }
 
                             selectedVariable.value is IntegerArrayBlock -> {
                                 if (checkVariableState.value) {
                                     state.value = 1
                                     Text("Индекс:")
-                                    VariableTextField(onValueChange = { arrayIndex = it }, value = arrayIndex)
+                                    VariableTextField(
+                                        onValueChange = { arrayIndex = it },
+                                        value = arrayIndex
+                                    )
                                     Text("Значение:")
-                                    VariableTextField(onValueChange = { arithmeticField = it }, value = arithmeticField)
+                                    VariableTextField(
+                                        onValueChange = { arithmeticField = it },
+                                        value = arithmeticField
+                                    )
                                 } else {
                                     state.value = 2;
-                                    val arraySize = (selectedVariable.value as? IntegerArrayBlock)?.getValue()?.size ?: 0
+                                    val arraySize =
+                                        (selectedVariable.value as? IntegerArrayBlock)?.getValue()?.size
+                                            ?: 0
 
                                     if (arrayListField.size != arraySize) {
                                         arrayListField.clear()
@@ -133,18 +161,28 @@ class AssigningBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(external
                 value.removeBlock()
                 externalBoxes.removeAll { it.id == id }
             }) {
-            Column(Modifier.fillMaxHeight().width(230.dp)){
-                if(code == 0){
+            Column(Modifier
+                .fillMaxHeight()
+                .width(230.dp)) {
+                if (code == 0) {
                     Text(text = selectedVariable.value!!.getName() + ": " + arithmeticField)
-                }
-                else{
-                    Text(text = ErrorStore.get(code)!!.description, lineHeight = 12.sp, fontSize = 8.sp)
-                    Text(text = ErrorStore.get(code)!!.category, lineHeight = 12.sp, fontSize = 8.sp)
+                } else {
+                    Text(
+                        text = ErrorStore.get(code)!!.description,
+                        lineHeight = 12.sp,
+                        fontSize = 8.sp
+                    )
+                    Text(
+                        text = ErrorStore.get(code)!!.category,
+                        lineHeight = 12.sp,
+                        fontSize = 8.sp
+                    )
                     Text(text = ErrorStore.get(code)!!.title, lineHeight = 12.sp, fontSize = 8.sp)
                 }
             }
         }
     }
+
     @Composable
     fun ArrayAssignment() {
         Row(modifier = Modifier.padding(start = 40.dp)) {

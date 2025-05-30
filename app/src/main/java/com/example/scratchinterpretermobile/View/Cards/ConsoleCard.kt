@@ -8,7 +8,7 @@ import com.example.scratchinterpretermobile.View.Boxes.ConsoleBox
 import com.example.scratchinterpretermobile.View.Boxes.ProgramBox
 
 @Composable
-fun ConsoleCard(onAdd: () -> Unit, showBoxesState: MutableState<Boolean> = mutableStateOf(false)){
+fun ConsoleCard(onAdd: () -> Unit, showBoxesState: MutableState<Boolean> = mutableStateOf(false)) {
     BaseCard(name = "Вывод", onClick = {
         onAdd()
         showBoxesState.value = false

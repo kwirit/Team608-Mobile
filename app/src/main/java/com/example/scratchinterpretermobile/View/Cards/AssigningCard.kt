@@ -11,7 +11,10 @@ import com.example.scratchinterpretermobile.View.Boxes.ProgramBox
 import com.example.scratchinterpretermobile.View.Widgets.ListOfVar
 
 @Composable
-fun AssigningCard(onAdd: () -> Unit , showBoxesState: MutableState<Boolean> = mutableStateOf(false)){
+fun AssigningCard(
+    onAdd: () -> Unit,
+    showBoxesState: MutableState<Boolean> = mutableStateOf(false)
+) {
     BaseCard(name = "Присваивание", onClick = {
         onAdd()
         showBoxesState.value = false

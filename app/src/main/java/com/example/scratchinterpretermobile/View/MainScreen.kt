@@ -1,4 +1,5 @@
 package com.example.scratchinterpretermobile.View
+
 import android.text.Layout
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -31,7 +32,6 @@ import com.example.scratchinterpretermobile.View.Bars.BottomBar
 import com.example.scratchinterpretermobile.View.Bars.TopBar
 import com.example.scratchinterpretermobile.View.Boxes.ArrayInitializationBox
 import com.example.scratchinterpretermobile.View.Dialogs.CreateBoxesDialog
-import com.example.scratchinterpretermobile.View.Dialogs.SaveDialog
 import com.example.scratchinterpretermobile.View.ViewModels.MainViewModel
 import com.example.scratchinterpretermobile.View.Widgets.VerticalReorderList
 import org.burnoutcrew.reorderable.NoDragCancelledAnimation
@@ -58,42 +58,51 @@ fun MainScreen(viewModel: MainViewModel) {
             }
         }
         TopBar(viewModel, modifier = Modifier.align(Alignment.TopCenter))
-        BottomBar(viewModel,modifier = Modifier.align(Alignment.BottomCenter))
+        BottomBar(viewModel, modifier = Modifier.align(Alignment.BottomCenter))
     }
 }
 
 
 @Composable
-fun CodeBlocksScreen(viewModel: MainViewModel){
+fun CodeBlocksScreen(viewModel: MainViewModel) {
     VerticalReorderList(viewModel.boxes)
-    Box(modifier = Modifier.fillMaxSize().graphicsLayer(alpha = 0.7f)){
-        Button(modifier = Modifier.align(Alignment.BottomCenter).padding(12.dp).size(54.dp),onClick = {
-            viewModel.showBoxesState.value = true },
+    Box(modifier = Modifier
+        .fillMaxSize()
+        .graphicsLayer(alpha = 0.7f)) {
+        Button(
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(12.dp)
+                .size(54.dp),
+            onClick = {
+                viewModel.showBoxesState.value = true
+            },
             colors = ButtonDefaults.buttonColors(
                 containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                contentColor = Color.White),
+                contentColor = Color.White
+            ),
             shape = RoundedCornerShape(16.dp),
             contentPadding = PaddingValues(0.dp)
         ) {
-            Icon(painter = painterResource(R.drawable.baseline_add), contentDescription = null,modifier = Modifier.size(40.dp))
+            Icon(
+                painter = painterResource(R.drawable.baseline_add),
+                contentDescription = null,
+                modifier = Modifier.size(40.dp)
+            )
         }
-    }
-    if(viewModel.saveDialogState.value){
-        SaveDialog(viewModel)
     }
 }
 
 @Composable
-fun LogScreen(){
+fun LogScreen() {
     LazyColumn {
-        items(outputList) {
-            item ->
+        items(outputList) { item ->
             Text(text = item)
         }
     }
 }
 
 @Composable
-fun LoadScreen(viewModel: MainViewModel){
+fun LoadScreen(viewModel: MainViewModel) {
 
 }

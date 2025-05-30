@@ -27,52 +27,86 @@ import com.example.scratchinterpretermobile.View.ViewModels.MainViewModel
 
 
 @Composable
-fun BottomBar(viewModel: MainViewModel,modifier: Modifier = Modifier){
-    Box(modifier = modifier.height(60.dp).background(color = MaterialTheme.colorScheme.primaryContainer)){
-        Row(Modifier.fillMaxSize().background(color = MaterialTheme.colorScheme.primaryContainer), horizontalArrangement = Arrangement.SpaceAround, verticalAlignment = Alignment.CenterVertically){
-            Button(modifier = Modifier.size(48.dp),onClick = {
-                viewModel.screenState.value=0
-            },
+fun BottomBar(viewModel: MainViewModel, modifier: Modifier = Modifier) {
+    Box(
+        modifier = modifier
+            .height(60.dp)
+            .background(color = MaterialTheme.colorScheme.primaryContainer)
+    ) {
+        Row(
+            Modifier
+                .fillMaxSize()
+                .background(color = MaterialTheme.colorScheme.primaryContainer),
+            horizontalArrangement = Arrangement.SpaceAround,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Button(
+                modifier = Modifier.size(48.dp), onClick = {
+                    viewModel.screenState.value = 0
+                },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                    contentColor = Color.White),
+                    contentColor = Color.White
+                ),
                 shape = RoundedCornerShape(16.dp),
                 contentPadding = PaddingValues(0.dp)
             ) {
-                Icon(painter = painterResource(R.drawable.home), contentDescription = null, modifier = Modifier.size(50.dp))
+                Icon(
+                    painter = painterResource(R.drawable.home),
+                    contentDescription = null,
+                    modifier = Modifier.size(50.dp)
+                )
             }
-            Button(modifier = Modifier.size(48.dp),onClick = {
-                viewModel.screenState.value=1
-            },
+            Button(
+                modifier = Modifier.size(48.dp), onClick = {
+                    viewModel.screenState.value = 1
+                },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                    contentColor = Color.White),
+                    contentColor = Color.White
+                ),
                 shape = RoundedCornerShape(16.dp),
                 contentPadding = PaddingValues(0.dp)
             ) {
-                Icon(painter = painterResource(R.drawable.home), contentDescription = null, modifier = Modifier.size(50.dp))
+                Icon(
+                    painter = painterResource(R.drawable.home),
+                    contentDescription = null,
+                    modifier = Modifier.size(50.dp)
+                )
             }
-            Button(modifier = Modifier.size(48.dp),onClick = {
-                viewModel.screenState.value=1
-            },
+            Button(
+                modifier = Modifier.size(48.dp), onClick = {
+                    viewModel.screenState.value = 1
+                },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                    contentColor = Color.White),
+                    contentColor = Color.White
+                ),
                 shape = RoundedCornerShape(16.dp),
                 contentPadding = PaddingValues(0.dp)
             ) {
-                Icon(painter = painterResource(R.drawable.home), contentDescription = null, modifier = Modifier.size(50.dp))
+                Icon(
+                    painter = painterResource(R.drawable.home),
+                    contentDescription = null,
+                    modifier = Modifier.size(50.dp)
+                )
             }
-            Button(modifier = Modifier.size(48.dp),onClick = {
-                viewModel.screenState.value=4
-            },
+            Button(
+                modifier = Modifier.size(48.dp), onClick = {
+                    viewModel.screenState.value = 4
+                },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                    contentColor = Color.White),
+                    contentColor = Color.White
+                ),
                 shape = RoundedCornerShape(16.dp),
                 contentPadding = PaddingValues(0.dp)
             ) {
-                Icon(painter = painterResource(R.drawable.console), contentDescription = null, modifier = Modifier.size(50.dp))
+                Icon(
+                    painter = painterResource(R.drawable.console),
+                    contentDescription = null,
+                    modifier = Modifier.size(50.dp)
+                )
             }
         }
     }

@@ -28,40 +28,73 @@ import com.example.scratchinterpretermobile.R
 import com.example.scratchinterpretermobile.View.ViewModels.MainViewModel
 
 @Composable
-fun TopBar(viewModel: MainViewModel,modifier: Modifier = Modifier){
-    Box(modifier = modifier.height(60.dp).background(color = MaterialTheme.colorScheme.primaryContainer)){
-        Text(text = "Pick me", style = MaterialTheme.typography.headlineLarge, modifier = Modifier.padding(top = 10.dp, start = 25.dp), color = Color.White)
-        Row(modifier = Modifier.fillMaxSize().padding(end = 16.dp), horizontalArrangement = Arrangement.spacedBy(space = 16.dp, alignment = Alignment.End), verticalAlignment = Alignment.CenterVertically){
-            Button(modifier = Modifier.size(48.dp),onClick = {
-                viewModel.saveDialogState.value = true
-            },
+fun TopBar(viewModel: MainViewModel, modifier: Modifier = Modifier) {
+    Box(
+        modifier = modifier
+            .height(60.dp)
+            .background(color = MaterialTheme.colorScheme.primaryContainer)
+    ) {
+        Text(
+            text = "Pick me",
+            style = MaterialTheme.typography.headlineLarge,
+            modifier = Modifier.padding(top = 10.dp, start = 25.dp),
+            color = Color.White
+        )
+        Row(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(end = 16.dp),
+            horizontalArrangement = Arrangement.spacedBy(space = 16.dp, alignment = Alignment.End),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Button(
+                modifier = Modifier.size(48.dp), onClick = {
+                    viewModel.saveDialogState.value = true
+                },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color.Transparent,
-                    contentColor = Color.White),
+                    contentColor = Color.White
+                ),
                 shape = RoundedCornerShape(16.dp),
                 contentPadding = PaddingValues(0.dp)
             ) {
-                Icon(painter = painterResource(R.drawable.icons_save), contentDescription = null,modifier = Modifier.size(40.dp))
+                Icon(
+                    painter = painterResource(R.drawable.icons_save),
+                    contentDescription = null,
+                    modifier = Modifier.size(40.dp)
+                )
             }
-            Button(modifier = Modifier.size(48.dp),onClick = {},
+            Button(
+                modifier = Modifier.size(48.dp), onClick = {},
                 colors = ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                    contentColor = Color.Green),
+                    contentColor = Color.Green
+                ),
                 shape = RoundedCornerShape(16.dp),
                 contentPadding = PaddingValues(0.dp)
             ) {
-                Icon(painter = painterResource(R.drawable.baseline_bug_report_24), contentDescription = null,modifier = Modifier.size(40.dp))
+                Icon(
+                    painter = painterResource(R.drawable.baseline_bug_report_24),
+                    contentDescription = null,
+                    modifier = Modifier.size(40.dp)
+                )
             }
-            Button(modifier = Modifier.size(48.dp),onClick = {
-                viewModel.run()
-            },
+            Button(
+                modifier = Modifier.size(48.dp), onClick = {
+                    viewModel.run()
+                },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                    contentColor = Color.Green),
+                    contentColor = Color.Green
+                ),
                 shape = RoundedCornerShape(16.dp),
                 contentPadding = PaddingValues(0.dp)
             ) {
-                Icon(painter = painterResource(R.drawable.play_button), contentDescription = null,modifier = Modifier.size(26.dp))
+                Icon(
+                    painter = painterResource(R.drawable.play_button),
+                    contentDescription = null,
+                    modifier = Modifier.size(26.dp)
+                )
             }
         }
     }

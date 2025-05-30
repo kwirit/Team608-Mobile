@@ -17,20 +17,22 @@ class ConsoleBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(externalBo
     override val value = PrintBlock(UIContext);
     var arithmeticField by mutableStateOf("")
     var result by mutableStateOf("");
+
     @Composable
-    override fun render(){
-        BaseBox(name = "Вывод", showState,
+    override fun render() {
+        BaseBox(
+            name = "Вывод", showState,
             onConfirmButton = {
                 value.updateOutput(arithmeticField)
                 value.run()
                 result = value.consoleOutput
-        },
+            },
             dialogContent = {
-                VariableTextField(onValueChange = {newText ->
+                VariableTextField(onValueChange = { newText ->
                     arithmeticField = newText;
                 }, value = arithmeticField)
                 Text(text = result)
-        },
+            },
             onDelete = {
                 value.removeBlock()
                 externalBoxes.removeAll { it.id == id }

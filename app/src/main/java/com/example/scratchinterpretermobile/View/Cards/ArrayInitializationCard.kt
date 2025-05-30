@@ -12,7 +12,10 @@ import com.example.scratchinterpretermobile.View.Boxes.ArrayInitializationBox
 import com.example.scratchinterpretermobile.View.Boxes.ProgramBox
 
 @Composable
-fun ArrayInitializationCard(onAdd: () -> Unit, showBoxesState: MutableState<Boolean> = mutableStateOf(false)){
+fun ArrayInitializationCard(
+    onAdd: () -> Unit,
+    showBoxesState: MutableState<Boolean> = mutableStateOf(false)
+) {
     BaseCard(name = "Инициализация массива", onClick = {
         onAdd()
         showBoxesState.value = false

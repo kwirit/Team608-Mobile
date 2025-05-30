@@ -22,6 +22,7 @@ abstract class ProgramBox(var externalBoxes: MutableList<ProgramBox>) {
     override fun hashCode(): Int {
         return id.hashCode()
     }
+
     @Composable
     abstract fun render()
 }
