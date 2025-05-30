@@ -100,15 +100,14 @@ fun CodeBlocksScreen(viewModel: MainViewModel) {
 
 @Composable
 fun SettingsScreen() {
+}
+
+@Composable
+fun LogScreen(viewModel: MainViewModel) {
     LazyColumn {
         items(outputList) { item ->
             Text(text = item)
         }
     }
-}
-
-@Composable
-fun LogScreen(viewModel: MainViewModel) {
-
 }
 
