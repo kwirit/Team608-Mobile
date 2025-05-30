@@ -1,14 +1,18 @@
 package com.example.scratchinterpretermobile.View.Boxes
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -18,12 +22,15 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.max
 import androidx.compose.ui.unit.sp
 import com.example.scratchinterpretermobile.Controller.Error.ErrorStore
 import com.example.scratchinterpretermobile.Controller.Utils.parseCardToInstructionBoxes
 import com.example.scratchinterpretermobile.Model.ConditionBlock
 import com.example.scratchinterpretermobile.Model.UIContext
+import com.example.scratchinterpretermobile.R
 import com.example.scratchinterpretermobile.View.BaseStructure.BaseBox
 import com.example.scratchinterpretermobile.View.Dialogs.CreateBoxesDialog
 import com.example.scratchinterpretermobile.View.Widgets.InnerCreationButton
@@ -38,13 +45,13 @@ class IfBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(externalBoxes) 
     val showInnerBoxesState = mutableStateOf(false)
     var leftOperand by mutableStateOf("")
     var rightOperand by mutableStateOf("")
-    var operator = mutableStateOf("Выбрать оператор")
+    var operator = mutableStateOf("")
     var currentIsIf = mutableStateOf(true)
 
     @Composable
     override fun render() {
         BaseBox(
-            name = "Условие", showState,
+            name = stringResource(R.string.condition), showState,
             onConfirmButton = {
                 value.setTrueScript(parseCardToInstructionBoxes(ifBoxes))
                 value.setFalseScript(parseCardToInstructionBoxes(elseBoxes))
@@ -110,6 +117,18 @@ class IfBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(externalBoxes) 
                         fontSize = 8.sp
                     )
                     Text(text = ErrorStore.get(code)!!.title, lineHeight = 12.sp, fontSize = 8.sp)
+                }
+            }
+        }
+    }
+
+    @Composable
+    fun MiniBlocks() {
+        LazyColumn(modifier = Modifier.height(60.dp)) {
+            items(ifBoxes) {
+                item ->
+                Box(modifier = Modifier.height(30.dp).fillMaxWidth()){
+                    item.render()
                 }
             }
         }

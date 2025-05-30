@@ -6,9 +6,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.res.stringResource
 import com.example.scratchinterpretermobile.Model.InitBlock
 import com.example.scratchinterpretermobile.Model.PrintBlock
 import com.example.scratchinterpretermobile.Model.UIContext
+import com.example.scratchinterpretermobile.R
 import com.example.scratchinterpretermobile.View.BaseStructure.BaseBox
 import com.example.scratchinterpretermobile.View.Boxes.ProgramBox
 import com.example.scratchinterpretermobile.View.Widgets.VariableTextField
@@ -21,7 +23,7 @@ class ConsoleBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(externalBo
     @Composable
     override fun render() {
         BaseBox(
-            name = "Вывод", showState,
+            name = stringResource(R.string.output), showState,
             onConfirmButton = {
                 value.updateOutput(arithmeticField)
                 value.run()

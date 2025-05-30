@@ -4,7 +4,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.res.stringResource
 import com.example.scratchinterpretermobile.Model.Variable
+import com.example.scratchinterpretermobile.R
 import com.example.scratchinterpretermobile.View.BaseStructure.BaseCard
 import com.example.scratchinterpretermobile.View.Boxes.AssigningBox
 import com.example.scratchinterpretermobile.View.Boxes.ProgramBox
@@ -15,7 +17,7 @@ fun AssigningCard(
     onAdd: () -> Unit,
     showBoxesState: MutableState<Boolean> = mutableStateOf(false)
 ) {
-    BaseCard(name = "Присваивание", onClick = {
+    BaseCard(name = stringResource(R.string.assign), onClick = {
         onAdd()
         showBoxesState.value = false
     }) {

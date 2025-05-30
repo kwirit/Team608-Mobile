@@ -12,7 +12,10 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.stringResource
+import com.example.scratchinterpretermobile.R
 
 @Composable
 fun ListOfIfOperators(selectedOperator: MutableState<String>): String {
@@ -21,7 +24,7 @@ fun ListOfIfOperators(selectedOperator: MutableState<String>): String {
 
     Box(modifier = Modifier.width(85.dp)) {
         TextButton(onClick = { expanded.value = true }) {
-            Text(text = selectedOperator.value)
+            Text(text = if (selectedOperator.value == "") stringResource(R.string.select_operator) else selectedOperator.value)
         }
 
         DropdownMenu(expanded = expanded.value, onDismissRequest = { expanded.value = false }) {

@@ -1,4 +1,19 @@
 <resources>
     <string name="app_name">ScratchInterpreterMobile</string>
-    <string name="Initializaton">Объявление массива</string>
+    <string name="array_Initializaton">Объявление массива</string>
+    <string name="array_input">Введите название массива:</string>
+    <string name="array_length">Введите длину массива:</string>
+    <string name="assign">Присваивание</string>
+    <string name="value">Значение</string>
+    <string name="index">Индекс</string>
+    <string name="element">Элемент</string>
+    <string name="single_element">Один элемент</string>
+    <string name="all_elements">Все элементы</string>
+    <string name="output">Вывод</string>
+    <string name="select_operator">Выбрать оператор</string>
+    <string name="condition">Условие</string>
+    <string name="var_init">Объявление переменной</string>
+    <string name="input_var_name">Введите название переменной</string>
+    <string name="cycle">Цикл</string>
+    <string name="select_var">Выберите переменную</string>
 </resources>

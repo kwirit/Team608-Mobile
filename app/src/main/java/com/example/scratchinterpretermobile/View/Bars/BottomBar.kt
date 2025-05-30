@@ -5,11 +5,20 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeContent
+import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.safeGestures
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.windowInsetsBottomHeight
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -69,41 +78,24 @@ fun BottomBar(viewModel: MainViewModel, modifier: Modifier = Modifier) {
                 contentPadding = PaddingValues(0.dp)
             ) {
                 Icon(
-                    painter = painterResource(R.drawable.home),
-                    contentDescription = null,
-                    modifier = Modifier.size(50.dp)
-                )
-            }
-            Button(
-                modifier = Modifier.size(48.dp), onClick = {
-                    viewModel.screenState.value = 1
-                },
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                    contentColor = Color.White
-                ),
-                shape = RoundedCornerShape(16.dp),
-                contentPadding = PaddingValues(0.dp)
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.home),
-                    contentDescription = null,
-                    modifier = Modifier.size(50.dp)
-                )
-            }
-            Button(
-                modifier = Modifier.size(48.dp), onClick = {
-                    viewModel.screenState.value = 4
-                },
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                    contentColor = Color.White
-                ),
-                shape = RoundedCornerShape(16.dp),
-                contentPadding = PaddingValues(0.dp)
-            ) {
-                Icon(
                     painter = painterResource(R.drawable.console),
+                    contentDescription = null,
+                    modifier = Modifier.size(40.dp)
+                )
+            }
+            Button(
+                modifier = Modifier.size(48.dp), onClick = {
+                    viewModel.screenState.value = 2
+                },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                    contentColor = Color.White
+                ),
+                shape = RoundedCornerShape(16.dp),
+                contentPadding = PaddingValues(0.dp)
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.settings_icon),
                     contentDescription = null,
                     modifier = Modifier.size(50.dp)
                 )
