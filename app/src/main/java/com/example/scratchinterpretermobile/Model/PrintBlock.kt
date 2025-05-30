@@ -1,5 +1,6 @@
 package com.example.scratchinterpretermobile.Model
 
+import com.example.scratchinterpretermobile.Controller.Error.CONTEXT_IS_NULL
 import com.example.scratchinterpretermobile.Controller.Error.INVALID_FORMAT
 import com.example.scratchinterpretermobile.Controller.Error.SUCCESS
 import com.example.scratchinterpretermobile.Controller.Error.VARIABLE_NOT_FOUND
@@ -16,15 +17,8 @@ class PrintBlock(
     var consoleOutput: String = "",
 
 ) : InstructionBlock {
-//    override var context: Context = UIContext
-    override var runResult: Int = SUCCESS.id
-
     fun updateOutput(newOutput: String) {
         output = newOutput.trim();
-    }
-
-    fun processInput(input: String) {
-        updateOutput(input);
     }
 
     override fun removeBlock() {
@@ -57,6 +51,8 @@ class PrintBlock(
     }
 
     override fun run(): Int {
+        context ?: return CONTEXT_IS_NULL.id
+
         consoleOutput = ""
         if (output == "") return SUCCESS.id
         val elements = parserSplit(output)

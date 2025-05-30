@@ -37,11 +37,42 @@ class AssigningBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(external
     private val selectedVariable = mutableStateOf<VarBlock<*>?>(null)
 
     @Composable
+<<<<<<< HEAD
+    override fun render(){
+        BaseBox(name = "Присваивание", showState,
+            onConfirmButton = {
+                if(state.value == 0){
+                    code = value.assembleIntegerBlock(selectedVariable.value!!.getName(),arithmeticField)
+                }
+                else if(state.value == 1){
+                    if(arrayIndex == ""){
+                        code = value.assembleIntegerArrayBlock(selectedVariable.value!!.getName(),arithmeticField)
+                    }
+                    else{
+                        code = value.assembleElementIntegerArrayBlock(selectedVariable.value!!.getName(),arrayIndex,arithmeticField)
+                    }
+                }
+                else if(state.value == 2){
+                    for((index,field) in arrayListField.withIndex()){
+                        if(field.isEmpty()) continue
+                        value.assembleElementIntegerArrayBlock(selectedVariable.value!!.getName(),index.toString(),field)
+                        value.run()
+                    }
+                    val arrayBlock = selectedVariable.value
+                    if(arrayBlock is IntegerArrayBlock) {
+                        val integerArrayBlock = UIContext.getVar(arrayBlock.getName()) as IntegerArrayBlock
+                        val arrayValueString:String = integerArrayBlock.getValue().joinToString(",")
+                        value.assembleIntegerArrayBlock(selectedVariable.value!!.getName(), arrayValueString)
+                    }
+                }
+        },
+=======
     override fun render() {
         BaseBox(
             name = stringResource(R.string.assign),
             showState,
             onConfirmButton = handleConfirmButton,
+>>>>>>> origin/sandbox
             dialogContent = {
                 Box(modifier = Modifier.fillMaxSize()) {
                     Column(

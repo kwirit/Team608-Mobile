@@ -38,7 +38,7 @@ class LoopBlockUnitTest {
             // -------------------------------------
         loopBlock.setScript(blocksToLoop)
 
-        loopBlock.addScopeToContext()
+//        loopBlock.addScopeToContext()
         loopBlock.assembleBlock("count","<","5")
         val error = loopBlock.run()
     }
@@ -97,7 +97,7 @@ class LoopBlockUnitTest {
 
         loopBlock.setScript(blocksToLoop)
 
-        loopBlock.addScopeToContext()
+//        loopBlock.addScopeToContext()
         loopBlock.assembleBlock("i+1","<","5")
 //        loopBlock.run()
 
@@ -171,7 +171,7 @@ class LoopBlockUnitTest {
 
                 loopSecond.setScript(blocksToSecondLoop)
 
-                loopSecond.addScopeToContext()
+//                loopSecond.addScopeToContext()
                 loopSecond.assembleBlock("j", "<","10 - i - 1")
             //------------------------------
 
@@ -185,7 +185,7 @@ class LoopBlockUnitTest {
 
             loopFirst.setScript(blocksToFirstLoop)
 
-            loopFirst.addScopeToContext()
+//            loopFirst.addScopeToContext()
             loopFirst.assembleBlock("i","<", "10 - 1")
         //------------------------------
 
@@ -210,7 +210,7 @@ class LoopBlockUnitTest {
         init_i.run()
 
         val loop = LoopBlock(UIContext)
-        loop.addScopeToContext()
+//        loop.addScopeToContext()
         //----------------------------
             val list = UIContext.getListVarBlock()
 

@@ -46,7 +46,10 @@ class WhileBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(externalBoxe
                 code = value.assembleBlock(arithmeticField)
             },
             dialogContent = {
+<<<<<<< HEAD
+=======
                 value.addScopeToContext()
+>>>>>>> origin/sandbox
                 Column {
                     Row(
                         modifier = Modifier
