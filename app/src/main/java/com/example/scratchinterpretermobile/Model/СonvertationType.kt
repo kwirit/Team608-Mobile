@@ -10,7 +10,7 @@ import com.example.scratchinterpretermobile.Controller.Utils.parserSplit
 import com.example.scratchinterpretermobile.Controller.Utils.validateNameVariable
 import com.example.scratchinterpretermobile.Controller.Utils.validateString
 
-class СonvertationType() : InstructionBlock {
+class СonvertationTypeBlock() : InstructionBlock {
     override var runResult: Int = SUCCESS.id
 
     var inputType: String = ""
