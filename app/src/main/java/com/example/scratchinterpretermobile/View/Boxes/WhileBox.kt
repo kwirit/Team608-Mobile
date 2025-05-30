@@ -1,6 +1,7 @@
 package com.example.scratchinterpretermobile.View.Boxes
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -33,9 +34,7 @@ import com.example.scratchinterpretermobile.View.Widgets.VerticalReorderList
 class WhileBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(externalBoxes) {
     val boxes = mutableStateListOf<ProgramBox>()
     val showInnerBoxesState = mutableStateOf(false)
-    var leftOperand by mutableStateOf("")
-    var rightOperand by mutableStateOf("")
-    var operator = mutableStateOf("")
+    var arithmeticField by mutableStateOf("")
     override val value = LoopBlock(UIContext);
 
     @Composable
@@ -44,7 +43,7 @@ class WhileBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(externalBoxe
             name = stringResource(R.string.cycle), showState,
             onConfirmButton = {
                 value.setScript(parseCardToInstructionBoxes(boxes))
-                code = value.assembleBlock(leftOperand, operator.value, rightOperand)
+                code = value.assembleBlock(arithmeticField)
             },
             dialogContent = {
                 value.addScopeToContext()
@@ -58,14 +57,10 @@ class WhileBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(externalBoxe
                     ) {
                         InnerCreationButton(showInnerBoxesState, modifier = Modifier.fillMaxWidth())
                     }
-                    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                    Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
                         VariableTextField(onValueChange = { newText ->
-                            leftOperand = newText
-                        }, value = leftOperand, modifier = Modifier)
-                        ListOfIfOperators(operator)
-                        VariableTextField(onValueChange = { newText ->
-                            rightOperand = newText
-                        }, value = rightOperand, modifier = Modifier)
+                            arithmeticField = newText
+                        }, value = arithmeticField, modifier = Modifier)
                     }
                     VerticalReorderList(boxes)
                     if (showInnerBoxesState.value) {
@@ -73,7 +68,6 @@ class WhileBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(externalBoxe
                     }
                 }
             }, onCloseDialog = {
-//                value.removeScopeToContext()
             }, onDelete = {
                 value.removeBlock()
                 externalBoxes.removeAll { it.id == id }
@@ -82,7 +76,7 @@ class WhileBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(externalBoxe
                 .fillMaxHeight()
                 .width(210.dp)) {
                 if (code == 0) {
-                    Text(text = rightOperand + " " + operator.value + " " + leftOperand)
+                    Text(text = arithmeticField)
                 } else {
                     Text(
                         text = ErrorStore.get(code)!!.description,

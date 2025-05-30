@@ -16,5 +16,5 @@ fun VariableTextField(
     value: String,
     modifier: Modifier = Modifier
 ) {
-    TextField(modifier = modifier.width(200.dp), onValueChange = onValueChange, value = value)
+    TextField(modifier = modifier.wrapContentWidth(), onValueChange = onValueChange, value = value)
 }

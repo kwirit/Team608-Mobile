@@ -44,9 +44,7 @@ class IfBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(externalBoxes) 
     val elseBoxes = mutableStateListOf<ProgramBox>()
     override val value = ConditionBlock(UIContext);
     val showInnerBoxesState = mutableStateOf(false)
-    var leftOperand by mutableStateOf("")
-    var rightOperand by mutableStateOf("")
-    var operator = mutableStateOf("")
+    var arithmeticField by mutableStateOf("")
     var currentIsIf = mutableStateOf(true)
 
     @Composable
@@ -56,7 +54,7 @@ class IfBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(externalBoxes) 
             onConfirmButton = {
                 value.setTrueScript(parseCardToInstructionBoxes(ifBoxes))
                 value.setFalseScript(parseCardToInstructionBoxes(elseBoxes))
-                code = value.assembleBlock(leftOperand, operator.value, rightOperand)
+                code = value.assembleBlock(arithmeticField)
             },
             dialogContent = {
                 value.addTrueScopeInContext()
@@ -105,7 +103,7 @@ class IfBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(externalBoxes) 
                 .fillMaxHeight()
                 .width(210.dp)) {
                 if (code == 0) {
-                    Text(text = rightOperand + " " + operator.value + " " + leftOperand)
+                    Text(text = arithmeticField)
                 } else {
                     Text(
                         text = ErrorStore.get(code)!!.description,
@@ -137,16 +135,10 @@ class IfBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(externalBoxes) 
 
     @Composable
     fun IfScreen() {
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+        Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
             VariableTextField(onValueChange = { newText ->
-                leftOperand = newText
-            }, value = leftOperand, modifier = Modifier.weight(1f))
-            Box(modifier = Modifier.size(60.dp), contentAlignment = Alignment.Center){
-                ListOfIfOperators(operator)
-            }
-            VariableTextField(onValueChange = { newText ->
-                rightOperand = newText
-            }, value = rightOperand, modifier = Modifier.weight(1f))
+                arithmeticField = newText
+            }, value = arithmeticField, modifier = Modifier)
         }
         VerticalReorderList(ifBoxes)
         if (showInnerBoxesState.value) {
