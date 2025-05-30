@@ -9,7 +9,6 @@ import com.example.scratchinterpretermobile.Controller.Utils.validateNameVariabl
 class СonvertationTypeBlock(
     override var context: Context
 ) : InstructionBlock {
-    override var runResult: Int = SUCCESS.id
 
     var inputType: String = ""
     var inputVariable = ""

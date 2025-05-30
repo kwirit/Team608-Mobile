@@ -10,16 +10,7 @@ import com.example.scratchinterpretermobile.Controller.Utils.calculationBooleanE
 class ConditionBlock(
     override var context: Context
 ) : InstructionBlock {
-<<<<<<< HEAD
-    private var operator: String = "=="
-    private var leftPartCondition: String = ""
-    private var rightPartCondition: String = ""
-=======
-//    override var context: Context = UIContext
-    override var runResult: Int = SUCCESS.id
-
     private var booleanExpression: String = ""
->>>>>>> origin/sandbox
 
     private var resultValue: Boolean = false
 

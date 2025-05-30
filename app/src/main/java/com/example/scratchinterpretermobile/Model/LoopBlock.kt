@@ -11,16 +11,7 @@ import javax.xml.xpath.XPathExpression
 class LoopBlock(
     override var context: Context
 ) : InstructionBlock {
-<<<<<<< HEAD
-    private var leftPartCondition: String = ""
-    private var rightPartCondition: String = ""
-    private var operator: String = "=="
-=======
-//    override var context: Context = UIContext
-    override var runResult: Int = SUCCESS.id
-
     private var booleanExpression: String = ""
->>>>>>> origin/sandbox
 
     private var resultValue: Boolean = false
 
@@ -29,7 +20,6 @@ class LoopBlock(
     private var scope: HashMap<String, VarBlock<*>> = hashMapOf()
 
     /**
-<<<<<<< HEAD
      * Обрабатывает входные данные условия, проверяет оператор сравнения и выполняет сравнение.
      * Удаляет scope из context по
      * @param leftPartCondition Левая часть условия (например, строка или значение для сравнения).
@@ -42,7 +32,8 @@ class LoopBlock(
      *   - [NO_COMPARISON_OPERATOR_SELECTED.id] — не выбран оператор сравнения.
      *   - Код ошибки из метода [compare], если сравнение частей условия завершилось с ошибкой.
      */
-=======
+
+    /**
      * Добавление scope в context
      * Обязательная функция при заходе в карточку
      */
@@ -62,7 +53,6 @@ class LoopBlock(
     fun removeScopeToContext() {
         context.popScope()
     }
->>>>>>> origin/sandbox
 
     fun setScript(script:MutableList<InstructionBlock>) {
         this.script = script
@@ -82,15 +72,13 @@ class LoopBlock(
         var errorCompare = compare()
         if (errorCompare != SUCCESS.id) return errorCompare
 
-<<<<<<< HEAD
-=======
+
         if (errorCompare != SUCCESS.id) {
             context.popScope()
             return errorCompare
         }
 
         context.popScope()
->>>>>>> origin/sandbox
         return SUCCESS.id
     }
 
