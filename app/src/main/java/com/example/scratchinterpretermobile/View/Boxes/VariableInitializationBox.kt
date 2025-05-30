@@ -57,7 +57,7 @@ class VariableInitializationBox(externalBoxes: MutableList<ProgramBox>) :
             }) {
             Column(Modifier
                 .fillMaxHeight()
-                .width(230.dp)) {
+                .width(210.dp)) {
                 if (code == 0) {
                     Text(text = text)
                 } else {

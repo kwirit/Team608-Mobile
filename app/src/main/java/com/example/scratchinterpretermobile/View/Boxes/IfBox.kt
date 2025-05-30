@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -102,7 +103,7 @@ class IfBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(externalBoxes) 
         ) {
             Column(Modifier
                 .fillMaxHeight()
-                .width(230.dp)) {
+                .width(210.dp)) {
                 if (code == 0) {
                     Text(text = rightOperand + " " + operator.value + " " + leftOperand)
                 } else {
@@ -136,11 +137,13 @@ class IfBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(externalBoxes) 
 
     @Composable
     fun IfScreen() {
-        Row(modifier = Modifier.fillMaxWidth()) {
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
             VariableTextField(onValueChange = { newText ->
                 leftOperand = newText
             }, value = leftOperand, modifier = Modifier.weight(1f))
-            ListOfIfOperators(operator)
+            Box(modifier = Modifier.size(60.dp), contentAlignment = Alignment.Center){
+                ListOfIfOperators(operator)
+            }
             VariableTextField(onValueChange = { newText ->
                 rightOperand = newText
             }, value = rightOperand, modifier = Modifier.weight(1f))

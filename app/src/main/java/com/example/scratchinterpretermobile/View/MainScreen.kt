@@ -68,7 +68,9 @@ fun MainScreen(viewModel: MainViewModel) {
 
 @Composable
 fun CodeBlocksScreen(viewModel: MainViewModel) {
-    VerticalReorderList(viewModel.boxes)
+    Box(modifier = Modifier.fillMaxSize().padding(top = 10.dp)){
+        VerticalReorderList(viewModel.boxes)
+    }
     Box(modifier = Modifier
         .fillMaxSize()
         .graphicsLayer(alpha = 0.7f)) {
@@ -81,8 +83,8 @@ fun CodeBlocksScreen(viewModel: MainViewModel) {
                 viewModel.showBoxesState.value = true
             },
             colors = ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                contentColor = MaterialTheme.colorScheme.background
+                containerColor = MaterialTheme.colorScheme.primaryContainer,
+                contentColor = MaterialTheme.colorScheme.onPrimary
             ),
             shape = RoundedCornerShape(16.dp),
             contentPadding = PaddingValues(0.dp)

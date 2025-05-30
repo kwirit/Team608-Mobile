@@ -58,14 +58,14 @@ class WhileBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(externalBoxe
                     ) {
                         InnerCreationButton(showInnerBoxesState, modifier = Modifier.fillMaxWidth())
                     }
-                    Row(modifier = Modifier.fillMaxWidth()) {
+                    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
                         VariableTextField(onValueChange = { newText ->
                             leftOperand = newText
-                        }, value = leftOperand, modifier = Modifier.weight(1f))
+                        }, value = leftOperand, modifier = Modifier)
                         ListOfIfOperators(operator)
                         VariableTextField(onValueChange = { newText ->
                             rightOperand = newText
-                        }, value = rightOperand, modifier = Modifier.weight(1f))
+                        }, value = rightOperand, modifier = Modifier)
                     }
                     VerticalReorderList(boxes)
                     if (showInnerBoxesState.value) {
@@ -80,7 +80,7 @@ class WhileBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(externalBoxe
             }) {
             Column(Modifier
                 .fillMaxHeight()
-                .width(230.dp)) {
+                .width(210.dp)) {
                 if (code == 0) {
                     Text(text = rightOperand + " " + operator.value + " " + leftOperand)
                 } else {
