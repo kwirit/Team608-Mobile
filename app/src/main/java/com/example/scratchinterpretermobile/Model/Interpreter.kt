@@ -14,7 +14,6 @@ class Interpreter() {
     }
 
     fun run(blocksToRun: MutableList<InstructionBlock> = mutableListOf()): Int {
-
         for (block in blocksToRun) {
             val contextOfBlock = block.context
             block.context = this.context
