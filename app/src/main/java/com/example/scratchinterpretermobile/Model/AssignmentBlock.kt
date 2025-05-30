@@ -72,6 +72,26 @@ class AssignmentBlock(
         return setRunResult(SUCCESS.id)
     }
 
+    fun assembleStringBlock(stringName: String, stringValue: String) : Int {
+        val (newIntegerBlock, getError) = getIntegerBlock(stringName, stringValue)
+        if(getError != SUCCESS.id) setRunResult(getError)
+
+        valueVarBlock = stringValue
+        newVarBlock = newIntegerBlock
+
+        return setRunResult(SUCCESS.id)
+    }
+
+    fun assembleBooleanBlock(booleanName: String, booleanValue: String) : Int {
+        val (newIntegerBlock, getError) = getIntegerBlock(booleanName, booleanValue)
+        if(getError != SUCCESS.id) setRunResult(getError)
+
+        valueVarBlock = booleanValue
+        newVarBlock = newIntegerBlock
+
+        return setRunResult(SUCCESS.id)
+    }
+
 
 
 

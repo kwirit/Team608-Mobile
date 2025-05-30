@@ -20,7 +20,6 @@ class LoopBlock(
 
     private var scope: HashMap<String, VarBlock<*>> = hashMapOf()
 
-
     /**
      * Добавление scope в context
      * Обязательная функция при заходе в карточку
@@ -42,24 +41,18 @@ class LoopBlock(
         context.popScope()
     }
 
-    /**
-     * Обрабатывает входные данные условия, проверяет оператор сравнения и выполняет сравнение.
-     * Удаляет scope из context по
-     * @param leftPartCondition Левая часть условия (например, строка или значение для сравнения).
-     * @param rightPartCondition Правая часть условия (например, строка или значение для сравнения).
-     * @param operator Оператор сравнения (например, ">", "<", "==", "!=" и т.д.).
-     * @param blocksToRun Список блоков инструкций, которые будут выполнены при успешной проверке условия.
-     *
-     * @return Код результата выполнения:
-     *   - [SUCCESS.id] — успешное выполнение.
-     *   - [NO_COMPARISON_OPERATOR_SELECTED.id] — не выбран оператор сравнения.
-     *   - Код ошибки из метода [compare], если сравнение частей условия завершилось с ошибкой.
-     */
-
     fun setScript(script:MutableList<InstructionBlock>) {
         this.script = script
     }
 
+    /**
+     * Обрабатывает входные данные условия, проверяет оператор сравнения и выполняет сравнение.
+     * Удаляет scope из context по
+     * @param booleanExpression boolean выражение.
+     * @return Код результата выполнения:
+     *   - [SUCCESS.id] — успешное выполнение.
+     *   - Код ошибки из метода [compare], если сравнение частей условия завершилось с ошибкой.
+     */
     fun assembleBlock(booleanExpression: String): Int {
         this.booleanExpression = booleanExpression
 
@@ -75,7 +68,7 @@ class LoopBlock(
     }
 
     /**
-     * Выполняет сравнение двух арифметических выражений на основе заданного оператора.
+     * Выполняет вычисления boolean выражения.
      * @return SUCCES.id в случае успеха, код ошибки — в случае неудачи.
      * В случае успеха изменяет resultValue.
      */
