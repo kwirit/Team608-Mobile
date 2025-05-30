@@ -35,7 +35,7 @@ class AssigningBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(external
     override val value = AssignmentBlock(UIContext);
     val checkVariableState = mutableStateOf(true)
     val checkArrayState = mutableStateOf(false)
-    val arrayListField = mutableStateListOf<String>("")
+    val arrayListField = mutableStateListOf<String>()
     var arithmeticField by mutableStateOf("")
     var arrayIndex by mutableStateOf("")
     val state = mutableIntStateOf(-1)

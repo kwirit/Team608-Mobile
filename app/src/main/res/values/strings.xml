@@ -1,4 +1,4 @@
 <resources>
     <string name="app_name">ScratchInterpreterMobile</string>
-    <string name="initialization">ScratchInterpreterMobile</string>
+    <string name="Initializaton">Объявление массива</string>
 </resources>
