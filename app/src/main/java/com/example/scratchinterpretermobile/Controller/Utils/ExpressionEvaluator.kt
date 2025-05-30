@@ -314,7 +314,7 @@ fun transferBooleanPrefixToPostfix(elements: MutableList<String>, context: Conte
         "!=" to 2,
 
         "&&" to 1,
-        "||" to 1,
+        "||" to 0,
     )
     val operators = "+-*%/>=<=!==&&||"
 

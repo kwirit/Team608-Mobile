@@ -33,7 +33,7 @@ class ConditionBlock(
     }
 
     /**
-     * Добавление scope в context
+     * Добавление thenScope в context
      * Обязательная функция при заходе в карточку
      */
     fun addTrueScopeInContext() {
@@ -45,6 +45,10 @@ class ConditionBlock(
         trueScopeInContext = true
     }
 
+    /**
+     * Добавление falseScope в context
+     * Обязательная функция при заходе в карточку
+     */
     fun addFalseScopeInContext() {
         if (trueScopeInContext) {
             context.popScope()
@@ -57,15 +61,9 @@ class ConditionBlock(
     /**
      * Обрабатывает входные данные условия, проверяет оператор сравнения и выполняет сравнение.
      * Удаляет scope из context по
-     * @param leftPartCondition Левая часть условия (например, строка или значение для сравнения).
-     * @param rightPartCondition Правая часть условия (например, строка или значение для сравнения).
-     * @param operator Оператор сравнения (например, ">", "<", "==", "!=", "<=", ">=").
-     * @param thenBlock Список блоков, которые будут выполнены при успешной проверке условия.
-     * @param elseBlock Список блоков, которые будут выполнены при успешной проверку условия.
-     *
+     * @param booleanExpression boolean выражение.
      * @return Код результата выполнения:
      *   - [SUCCESS.id] — успешное выполнение.
-     *   - [NO_COMPARISON_OPERATOR_SELECTED.id] — не выбран оператор сравнения.
      *   - Код ошибки из метода [compare], если сравнение частей условия завершилось с ошибкой.
      */
     fun assembleBlock(booleanExpression: String): Int {
@@ -83,7 +81,7 @@ class ConditionBlock(
     }
 
     /**
-     * Выполняет сравнение двух арифметических выражений на основе заданного оператора.
+     * Выполняет вычисления boolean выражения
      * @return 0 в случае успеха, код ошибки — в случае неудачи.
      * В случае успеха изменяет resultValue.
      */
