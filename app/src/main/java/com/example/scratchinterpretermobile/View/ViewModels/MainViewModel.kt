@@ -6,9 +6,12 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.lifecycle.ViewModel
+import com.example.scratchinterpretermobile.Controller.Error.ErrorStore
+import com.example.scratchinterpretermobile.Controller.Error.SUCCESS
 import com.example.scratchinterpretermobile.Controller.Utils.parseCardToInstructionBoxes
 import com.example.scratchinterpretermobile.Model.InstructionBlock
 import com.example.scratchinterpretermobile.Model.Interpreter
+import com.example.scratchinterpretermobile.Model.outputList
 import com.example.scratchinterpretermobile.View.Boxes.ArrayInitializationBox
 import com.example.scratchinterpretermobile.View.Boxes.AssigningBox
 import com.example.scratchinterpretermobile.View.Boxes.ConsoleBox
@@ -28,6 +31,9 @@ class MainViewModel : ViewModel() {
         val instructionList: MutableList<InstructionBlock> = parseCardToInstructionBoxes(boxes)
         val interpreter: Interpreter = Interpreter(com.example.scratchinterpretermobile.Model.Context())
         interpreter.setScript(instructionList)
-        interpreter.run()
+        val code = interpreter.run()
+        if(code!= SUCCESS.id){
+            outputList.add(ErrorStore.get(code)!!.title + ErrorStore.get(code)!!.description + ErrorStore.get(code)!!.category)
+        }
     }
 }
