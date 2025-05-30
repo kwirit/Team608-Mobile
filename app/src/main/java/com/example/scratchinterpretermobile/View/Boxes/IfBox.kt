@@ -58,13 +58,23 @@ class IfBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(externalBoxes) 
                 code = value.assembleBlock(arithmeticField)
             },
             dialogContent = {
-                Column(modifier = Modifier.fillMaxSize()) {
+                Box(modifier = Modifier.fillMaxSize()) {
+                    Column (modifier = Modifier.fillMaxSize().padding(top = 100.dp), horizontalAlignment = Alignment.CenterHorizontally){
+                        if (currentIsIf.value) {
+                            value.setFalseScript(parseCardToInstructionBoxes(elseBoxes))
+                            value.addTrueScopeInContext()
+                            IfScreen()
+                        } else {
+                            value.setTrueScript(parseCardToInstructionBoxes(ifBoxes))
+                            value.addFalseScopeInContext()
+                            ElseScreen()
+                        }
+                    }
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .align(Alignment.End)
+                            .align(Alignment.BottomEnd)
                             .padding(20.dp),
-                        horizontalArrangement = Arrangement.End
                     ) {
                         Button(
                             onClick = { currentIsIf.value = true },
@@ -80,19 +90,7 @@ class IfBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(externalBoxes) 
                         }
                         InnerCreationButton(showInnerBoxesState)
                     }
-
-                    if (currentIsIf.value) {
-                        value.setFalseScript(parseCardToInstructionBoxes(elseBoxes))
-                        value.addTrueScopeInContext()
-                        IfScreen()
-                    } else {
-                        value.setTrueScript(parseCardToInstructionBoxes(ifBoxes))
-                        value.addFalseScopeInContext()
-                        ElseScreen()
-                    }
                 }
-            }, onCloseDialog = {
-
             },
             onDelete = {
                 value.removeBlock()
@@ -121,21 +119,10 @@ class IfBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(externalBoxes) 
         }
     }
 
-    @Composable
-    fun MiniBlocks() {
-        LazyColumn(modifier = Modifier.height(60.dp)) {
-            items(ifBoxes) {
-                item ->
-                Box(modifier = Modifier.height(30.dp).fillMaxWidth()){
-                    item.render()
-                }
-            }
-        }
-    }
 
     @Composable
     fun IfScreen() {
-        Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+        Column () {
             VariableTextField(onValueChange = { newText ->
                 arithmeticField = newText
             }, value = arithmeticField, modifier = Modifier)

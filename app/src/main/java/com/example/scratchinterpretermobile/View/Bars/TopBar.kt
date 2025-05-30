@@ -51,7 +51,7 @@ fun TopBar(viewModel: MainViewModel, modifier: Modifier = Modifier) {
             .background(color = MaterialTheme.colorScheme.primaryContainer)
     ) {
         Text(
-            text = "Pick me",
+            text = title.value,
             style = MaterialTheme.typography.headlineLarge,
             modifier = Modifier.padding(top = 10.dp, start = 25.dp),
             color = Color.White

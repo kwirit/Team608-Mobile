@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -48,24 +49,26 @@ class WhileBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(externalBoxe
             },
             dialogContent = {
                 value.addScopeToContext()
-                Column {
+                Box(modifier = Modifier.fillMaxSize()) {
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .align(Alignment.End)
-                            .padding(20.dp),
+                            .align(Alignment.BottomEnd)
+                            .padding(end = 100.dp, bottom = 25.dp),
                         horizontalArrangement = Arrangement.End
                     ) {
                         InnerCreationButton(showInnerBoxesState, modifier = Modifier.fillMaxWidth())
                     }
-                    Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                        VariableTextField(onValueChange = { newText ->
-                            arithmeticField = newText
-                        }, value = arithmeticField, modifier = Modifier)
-                    }
-                    VerticalReorderList(boxes)
-                    if (showInnerBoxesState.value) {
-                        CreateBoxesDialog(showInnerBoxesState, boxes)
+                    Column (horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.padding(top = 100.dp)){
+                        Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                            VariableTextField(onValueChange = { newText ->
+                                arithmeticField = newText
+                            }, value = arithmeticField, modifier = Modifier)
+                        }
+                        VerticalReorderList(boxes)
+                        if (showInnerBoxesState.value) {
+                            CreateBoxesDialog(showInnerBoxesState, boxes)
+                        }
                     }
                 }
             }, onCloseDialog = {

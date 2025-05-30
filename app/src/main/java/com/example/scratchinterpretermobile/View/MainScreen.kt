@@ -110,10 +110,10 @@ fun SettingsScreen(darkTheme: Boolean,onThemeChange: () -> Unit) {
             Spacer(modifier = Modifier.weight(1f))
             Button(onClick = onThemeChange,modifier = Modifier.padding(20.dp),colors = ButtonDefaults.buttonColors(
                 containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                contentColor = if(darkTheme) Color.Black else Color.White
+                contentColor = if(darkTheme) Color.White else Color.Black
             ),) {
                 Icon(
-                    painter = painterResource(if (darkTheme) R.drawable.icon_dark else R.drawable.icon_light),
+                    painter = painterResource(if (darkTheme) R.drawable.icon_light else R.drawable.icon_dark),
                     contentDescription = null,
                     modifier = Modifier.size(30.dp)
                 )

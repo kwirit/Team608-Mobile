@@ -34,6 +34,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.scratchinterpretermobile.R
 import com.example.scratchinterpretermobile.View.Dialogs.BoxDialog
 import com.example.scratchinterpretermobile.View.Dialogs.CreateBoxesDialog
@@ -93,7 +94,7 @@ fun BaseBox(
                 }
             }
             Column(modifier = Modifier.padding(10.dp)) {
-                Text(fontFamily = displayFontFamily,text = name,color = MaterialTheme.colorScheme.onSurface)
+                Text(fontFamily = displayFontFamily,text = name,color = MaterialTheme.colorScheme.onSurface, fontSize = 13.sp)
                 Box(modifier = Modifier.fillMaxHeight()) {
                     boxContent()
                 }
@@ -103,6 +104,7 @@ fun BaseBox(
     }
     if (showState.value) {
         BoxDialog(
+            name,
             showState,
             modifier = dialogModifier,
             onCloseDialog = onCloseDialog,

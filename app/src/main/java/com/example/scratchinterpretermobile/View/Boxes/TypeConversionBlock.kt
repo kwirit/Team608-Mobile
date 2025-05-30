@@ -44,7 +44,10 @@ class TypeConversionBlock(externalBoxes: MutableList<ProgramBox>) : ProgramBox(e
 
             }
         }
-    }) {
+    }, onDelete = {
+            value.removeBlock()
+            externalBoxes.removeAll { it.id == id }
+        }) {
 
     }
     }

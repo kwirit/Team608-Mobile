@@ -19,11 +19,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.scratchinterpretermobile.R
+import com.example.scratchinterpretermobile.ui.theme.bodyFontFamily
+import com.example.scratchinterpretermobile.ui.theme.displayFontFamily
 
 
 @Composable
 fun BoxDialog(
+    name: String,
     showState: MutableState<Boolean>,
     modifier: Modifier,
     onCloseDialog: () -> Unit = {},
@@ -32,6 +36,7 @@ fun BoxDialog(
 ) {
     CustomDialog(showState, modifier = modifier) {
         Box(modifier = Modifier.fillMaxSize()) {
+            Text(fontFamily = displayFontFamily,modifier = Modifier.align(Alignment.TopEnd).padding(top = 20.dp, end = 30.dp),text = name)
             Button(
                 modifier = Modifier
                     .align(Alignment.TopStart)

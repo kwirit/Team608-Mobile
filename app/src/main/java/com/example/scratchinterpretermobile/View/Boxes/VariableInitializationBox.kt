@@ -1,5 +1,6 @@
 package com.example.scratchinterpretermobile.View.Boxes
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -52,21 +53,14 @@ class VariableInitializationBox(externalBoxes: MutableList<ProgramBox>) :
             },
             dialogContent = {
                 Box(modifier = Modifier.fillMaxSize()) {
-                    Column (Modifier.align(Alignment.Center).fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally){
-                        Text(
-                            text = stringResource(R.string.var_init),
-                            modifier = Modifier
-                                .padding(top = 120.dp)
-                        )
-
-                        Box(modifier = Modifier.padding(60.dp)){
+                    Column (Modifier.align(Alignment.Center).fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center){
+                        Box(modifier = Modifier){
                             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                                 Text(text = "Выберите тип:",color = MaterialTheme.colorScheme.onSurface)
                                 ListOfTypes(selectedType)
                             }
                         }
-                        Column(modifier = Modifier.padding(30.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-                            Text(text = stringResource(R.string.input_var_name) +":",color = MaterialTheme.colorScheme.onSurface)
+                        Column(modifier = Modifier, horizontalAlignment = Alignment.CenterHorizontally) {
                             VariableTextField(onValueChange = { newText ->
                                 text = newText
                             }, value = text)
