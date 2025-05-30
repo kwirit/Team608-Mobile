@@ -42,7 +42,7 @@ import org.burnoutcrew.reorderable.rememberReorderableLazyGridState
 import org.burnoutcrew.reorderable.reorderable
 
 @Composable
-fun MainScreen(viewModel: MainViewModel) {
+fun MainScreen(viewModel: MainViewModel, onThemeChange: () -> Unit) {
     if (viewModel.showBoxesState.value) {
         CreateBoxesDialog(viewModel.showBoxesState, viewModel.boxes)
     }
@@ -57,7 +57,7 @@ fun MainScreen(viewModel: MainViewModel) {
             when (viewModel.screenState.intValue) {
                 0 -> CodeBlocksScreen(viewModel)
                 1 -> LogScreen(viewModel)
-                2 -> SettingsScreen()
+                2 -> SettingsScreen(onThemeChange)
             }
         }
         TopBar(viewModel, modifier = Modifier.align(Alignment.TopCenter))
@@ -99,7 +99,16 @@ fun CodeBlocksScreen(viewModel: MainViewModel) {
 }
 
 @Composable
-fun SettingsScreen() {
+fun SettingsScreen(onThemeChange: () -> Unit) {
+    Column {
+        Box(modifier = Modifier.fillMaxWidth()){
+            Row{
+                Button(onClick = {
+                    onThemeChange()
+                }) { }
+            }
+        }
+    }
 }
 
 @Composable

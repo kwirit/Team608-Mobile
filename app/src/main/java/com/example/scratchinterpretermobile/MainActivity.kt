@@ -20,11 +20,12 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         val mainViewModel: MainViewModel by viewModels()
         setContent {
-            var darkTheme = remember { mutableStateOf(true) }
+            var darkTheme = remember { mutableStateOf(false) }
             AppTheme(darkTheme = darkTheme.value) {
-                MainScreen(mainViewModel)
+                MainScreen(mainViewModel){
+                    darkTheme.value = !darkTheme.value
+                }
             }
         }
     }
 }
-

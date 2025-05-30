@@ -93,7 +93,7 @@ fun BaseBox(
                 }
             }
             Column(modifier = Modifier.padding(10.dp)) {
-                Text(fontFamily = displayFontFamily,text = name)
+                Text(fontFamily = displayFontFamily,text = name,color = MaterialTheme.colorScheme.onSurface)
                 Box(modifier = Modifier.fillMaxHeight()) {
                     boxContent()
                 }
