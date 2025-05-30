@@ -3,9 +3,11 @@ import com.example.scratchinterpretermobile.Model.ConditionBlock
 import com.example.scratchinterpretermobile.Model.Context
 import com.example.scratchinterpretermobile.Model.InitBlock
 import com.example.scratchinterpretermobile.Model.InstructionBlock
+import com.example.scratchinterpretermobile.Model.IntegerBlock
 import com.example.scratchinterpretermobile.Model.Interpreter
 import com.example.scratchinterpretermobile.Model.LoopBlock
 import com.example.scratchinterpretermobile.Model.UIContext
+import com.example.scratchinterpretermobile.Model.VarBlock
 import org.junit.Test
 
 class LoopBlockUnitTest {
@@ -197,5 +199,50 @@ class LoopBlockUnitTest {
 
         interpreter.setScript(blocksToRun)
         val error = interpreter.run()
+    }
+
+    @Test
+    fun testAssignmentInLoop() {
+        val context = UIContext
+
+        val init_i = InitBlock(UIContext)
+        init_i.assembleIntegerBlock("i")
+        init_i.run()
+
+        val loop = LoopBlock(UIContext)
+        loop.addScopeToContext()
+        //----------------------------
+            val list = UIContext.getListVarBlock()
+
+            val assignmentBlock = AssignmentBlock(UIContext)
+            assignmentBlock.assembleIntegerBlock("i", "i+1")
+
+            val init_j = InitBlock(UIContext)
+            init_j.assembleIntegerBlock("j")
+            init_j.run()
+
+            assignmentBlock.assembleIntegerBlock("j", "j+1")
+
+            val script = mutableListOf<InstructionBlock>()
+            script.add(assignmentBlock)
+            script.add(init_j)
+
+            loop.setScript(script)
+            loop.assembleBlock("i","<","5")
+        //----------------------------
+
+        val interpreter = Interpreter(Context())
+        interpreter.run()
+    }
+
+    @Test
+    fun contextTest() {
+        val scope = UIContext.peekScope()
+        scope!!.put("1", IntegerBlock("i", 1))
+        scope!!.put("1", IntegerBlock("i", 1))
+        scope!!.put("1", IntegerBlock("i", 1))
+        scope!!.put("2", IntegerBlock("i", 1))
+        scope!!.put("3", IntegerBlock("i", 1))
+        scope!!.put("4", IntegerBlock("i", 1))
     }
 }

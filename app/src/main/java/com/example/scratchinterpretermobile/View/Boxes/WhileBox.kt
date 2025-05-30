@@ -43,7 +43,7 @@ class WhileBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(externalBoxe
                 value.assembleBlock(leftOperand, operator.value, rightOperand)
             },
             dialogContent = {
-                value.addScopeToContext()
+//                value.addScopeToContext()
                 Column {
                     Row(
                         modifier = Modifier.fillMaxWidth().align(Alignment.End).padding(20.dp), horizontalArrangement = Arrangement.End
