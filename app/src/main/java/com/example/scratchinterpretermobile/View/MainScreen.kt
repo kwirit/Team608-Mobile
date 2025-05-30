@@ -1,6 +1,7 @@
 package com.example.scratchinterpretermobile.View
 
 import android.text.Layout
+import androidx.activity.ComponentActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
@@ -45,16 +46,18 @@ fun MainScreen(viewModel: MainViewModel) {
     if (viewModel.showBoxesState.value) {
         CreateBoxesDialog(viewModel.showBoxesState, viewModel.boxes)
     }
-    Box(modifier = Modifier.fillMaxSize()) {
+
+    Box(modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.primaryContainer).windowInsetsPadding(WindowInsets.safeDrawing)) {
         Box(
             modifier = Modifier
                 .padding(top = 60.dp, bottom = 60.dp)
                 .fillMaxSize()
+                .background(color = MaterialTheme.colorScheme.background)
         ) {
             when (viewModel.screenState.intValue) {
-                0 -> LoadScreen(viewModel)
-                1 -> CodeBlocksScreen(viewModel)
-                4 -> LogScreen()
+                0 -> CodeBlocksScreen(viewModel)
+                1 -> LogScreen(viewModel)
+                2 -> SettingsScreen()
             }
         }
         TopBar(viewModel, modifier = Modifier.align(Alignment.TopCenter))
@@ -79,7 +82,7 @@ fun CodeBlocksScreen(viewModel: MainViewModel) {
             },
             colors = ButtonDefaults.buttonColors(
                 containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                contentColor = Color.White
+                contentColor = MaterialTheme.colorScheme.background
             ),
             shape = RoundedCornerShape(16.dp),
             contentPadding = PaddingValues(0.dp)
@@ -94,7 +97,7 @@ fun CodeBlocksScreen(viewModel: MainViewModel) {
 }
 
 @Composable
-fun LogScreen() {
+fun SettingsScreen() {
     LazyColumn {
         items(outputList) { item ->
             Text(text = item)
@@ -103,6 +106,7 @@ fun LogScreen() {
 }
 
 @Composable
-fun LoadScreen(viewModel: MainViewModel) {
+fun LogScreen(viewModel: MainViewModel) {
 
 }
+

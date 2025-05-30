@@ -21,7 +21,7 @@ import com.example.scratchinterpretermobile.View.Boxes.VariableInitializationBox
 
 class MainViewModel : ViewModel() {
     val showBoxesState = mutableStateOf(false)
-    val screenState = mutableIntStateOf(1)
+    val screenState = mutableIntStateOf(0)
     val saveDialogState = mutableStateOf(false)
     val boxes = mutableStateListOf<ProgramBox>()
 

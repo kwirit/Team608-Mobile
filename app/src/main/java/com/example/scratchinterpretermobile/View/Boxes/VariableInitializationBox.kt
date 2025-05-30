@@ -13,11 +13,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.scratchinterpretermobile.Controller.Error.ErrorStore
 import com.example.scratchinterpretermobile.Model.InitBlock
 import com.example.scratchinterpretermobile.Model.UIContext
+import com.example.scratchinterpretermobile.R
 import com.example.scratchinterpretermobile.View.BaseStructure.BaseBox
 import com.example.scratchinterpretermobile.View.Widgets.VariableTextField
 
@@ -25,12 +27,11 @@ class VariableInitializationBox(externalBoxes: MutableList<ProgramBox>) :
     ProgramBox(externalBoxes) {
     override val value = InitBlock(UIContext);
     var text by mutableStateOf("")
-    val name = "Объявление переменной"
 
     @Composable
     override fun render() {
         BaseBox(
-            name = name, showState,
+            name = stringResource(R.string.var_init), showState,
             onConfirmButton = {
                 code = this.value.assembleIntegerBlock(text)
                 value.run()
@@ -38,13 +39,13 @@ class VariableInitializationBox(externalBoxes: MutableList<ProgramBox>) :
             dialogContent = {
                 Box(modifier = Modifier.fillMaxSize()) {
                     Text(
-                        text = name,
+                        text = stringResource(R.string.var_init),
                         modifier = Modifier
                             .align(Alignment.TopCenter)
                             .padding(top = 100.dp)
                     )
                     Column(modifier = Modifier.align(alignment = Alignment.Center)) {
-                        Text(text = "Введите название переменной:")
+                        Text(text = stringResource(R.string.input_var_name) +":")
                         VariableTextField(onValueChange = { newText ->
                             text = newText
                         }, value = text)

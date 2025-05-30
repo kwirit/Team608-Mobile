@@ -11,7 +11,7 @@ import java.util.UUID
 abstract class ProgramBox(var externalBoxes: MutableList<ProgramBox>) {
     val showState = mutableStateOf(false)
     var id: String = UUID.randomUUID().toString()
-    var code by mutableIntStateOf(104)
+    var code by mutableIntStateOf(0)
     abstract val value: InstructionBlock
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

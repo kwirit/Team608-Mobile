@@ -19,6 +19,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.scratchinterpretermobile.Controller.Error.ErrorStore
@@ -27,6 +28,7 @@ import com.example.scratchinterpretermobile.Model.IntegerArrayBlock
 import com.example.scratchinterpretermobile.Model.IntegerBlock
 import com.example.scratchinterpretermobile.Model.UIContext
 import com.example.scratchinterpretermobile.Model.VarBlock
+import com.example.scratchinterpretermobile.R
 import com.example.scratchinterpretermobile.View.BaseStructure.BaseBox
 import com.example.scratchinterpretermobile.View.Widgets.ListOfVar
 import com.example.scratchinterpretermobile.View.Widgets.VariableTextField
@@ -44,13 +46,8 @@ class AssigningBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(external
     @Composable
     override fun render() {
         BaseBox(
-            name = "Присваивание", showState,
+            name = stringResource(R.string.assign), showState,
             onConfirmButton = {
-                for (i in arrayListField.indices) {
-                    if (arrayListField[i].isBlank()) {
-                        arrayListField[i] = ""
-                    }
-                }
                 if (state.value == 0) {
                     code = value.assembleIntegerBlock(
                         selectedVariable.value!!.getName(),
@@ -76,6 +73,7 @@ class AssigningBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(external
                             index.toString(),
                             field
                         )
+                        value.run()
                     }
                 }
             },
@@ -102,7 +100,7 @@ class AssigningBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(external
                         when {
                             selectedVariable.value is IntegerBlock -> {
                                 state.value = 0
-                                Text("Значение:")
+                                Text(stringResource(R.string.value) + ":")
                                 VariableTextField(
                                     onValueChange = { arithmeticField = it },
                                     value = arithmeticField
@@ -112,12 +110,12 @@ class AssigningBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(external
                             selectedVariable.value is IntegerArrayBlock -> {
                                 if (checkVariableState.value) {
                                     state.value = 1
-                                    Text("Индекс:")
+                                    Text(stringResource(R.string.index) + ":")
                                     VariableTextField(
                                         onValueChange = { arrayIndex = it },
                                         value = arrayIndex
                                     )
-                                    Text("Значение:")
+                                    Text(stringResource(R.string.value) + ":")
                                     VariableTextField(
                                         onValueChange = { arithmeticField = it },
                                         value = arithmeticField
@@ -142,7 +140,7 @@ class AssigningBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(external
                                     ) {
                                         items(arraySize) { index ->
                                             Column {
-                                                Text("Элемент $index")
+                                                Text(stringResource(R.string.element) + " $index")
                                                 VariableTextField(
                                                     onValueChange = { newText ->
                                                         arrayListField[index] = newText
@@ -165,7 +163,20 @@ class AssigningBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(external
                 .fillMaxHeight()
                 .width(230.dp)) {
                 if (code == 0) {
-                    Text(text = selectedVariable.value!!.getName() + ": " + arithmeticField)
+                    if (state.value == 0) {
+                        Text(text = selectedVariable.value!!.getName() + " = " + arithmeticField)
+                    } else if (state.value == 1) {
+                        Text(text = selectedVariable.value!!.getName() + "[" + arrayIndex + "]" + " = " + arithmeticField)
+                    } else if (state.value == 2) {
+                        for ((index, field) in arrayListField.withIndex()) {
+                            if(field.isBlank()){
+                                Text(text = index.toString() + ": " + "0")
+                            }
+                            else{
+                                Text(text = index.toString() + ": " + field)
+                            }
+                        }
+                    }
                 } else {
                     Text(
                         text = ErrorStore.get(code)!!.description,
@@ -187,7 +198,7 @@ class AssigningBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(external
     fun ArrayAssignment() {
         Row(modifier = Modifier.padding(start = 40.dp)) {
             Column(modifier = Modifier.width(80.dp)) {
-                Text("Один элемент")
+                Text(stringResource(R.string.single_element))
                 Checkbox(
                     checked = checkVariableState.value,
                     onCheckedChange = {
@@ -197,7 +208,7 @@ class AssigningBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(external
                 )
             }
             Column(modifier = Modifier.width(80.dp)) {
-                Text("Все элементы")
+                Text(stringResource(R.string.all_elements))
                 Checkbox(
                     checked = checkArrayState.value,
                     onCheckedChange = {

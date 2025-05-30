@@ -6,7 +6,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.example.scratchinterpretermobile.R
 import com.example.scratchinterpretermobile.View.BaseStructure.BaseCard
 import com.example.scratchinterpretermobile.View.Boxes.VariableInitializationBox
 import com.example.scratchinterpretermobile.View.Boxes.ProgramBox
@@ -16,7 +18,7 @@ fun VariableInitializationCard(
     onAdd: () -> Unit,
     showBoxesState: MutableState<Boolean> = mutableStateOf(false)
 ) {
-    BaseCard(name = "Инициализация переменной", onClick = {
+    BaseCard(name = stringResource(R.string.var_init), onClick = {
         showBoxesState.value = false
         onAdd()
     }) {
