@@ -9,8 +9,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -23,6 +25,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.zIndex
+import com.example.scratchinterpretermobile.Model.outputList
 import com.example.scratchinterpretermobile.R
 import com.example.scratchinterpretermobile.View.Bars.BottomBar
 import com.example.scratchinterpretermobile.View.Bars.TopBar
@@ -48,8 +51,8 @@ fun MainScreen(viewModel: MainViewModel) {
                 .fillMaxSize()
         ) {
             when (viewModel.screenState.intValue) {
-                0 -> CodeBlocksScreen(viewModel)
-                1 -> ConsoleScreen()
+                1 -> CodeBlocksScreen(viewModel)
+                4 -> LogScreen()
             }
         }
         TopBar(viewModel, modifier = Modifier.align(Alignment.TopCenter))
@@ -76,6 +79,11 @@ fun CodeBlocksScreen(viewModel: MainViewModel){
 }
 
 @Composable
-fun ConsoleScreen(){
-
+fun LogScreen(){
+    LazyColumn {
+        items(outputList) {
+            item ->
+            Text(text = item)
+        }
+    }
 }
