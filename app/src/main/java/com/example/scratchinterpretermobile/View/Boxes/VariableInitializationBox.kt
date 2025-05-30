@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -60,12 +61,12 @@ class VariableInitializationBox(externalBoxes: MutableList<ProgramBox>) :
 
                         Box(modifier = Modifier.padding(60.dp)){
                             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                                Text(text = "Выберите тип:")
+                                Text(text = "Выберите тип:",color = MaterialTheme.colorScheme.onSurface)
                                 ListOfTypes(selectedType)
                             }
                         }
                         Column(modifier = Modifier.padding(30.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-                            Text(text = stringResource(R.string.input_var_name) +":")
+                            Text(text = stringResource(R.string.input_var_name) +":",color = MaterialTheme.colorScheme.onSurface)
                             VariableTextField(onValueChange = { newText ->
                                 text = newText
                             }, value = text)
@@ -80,19 +81,19 @@ class VariableInitializationBox(externalBoxes: MutableList<ProgramBox>) :
                 .fillMaxHeight()
                 .width(210.dp)) {
                 if (code == 0) {
-                    Text(text = text)
+                    Text(text = text,color = MaterialTheme.colorScheme.onSurface)
                 } else {
                     Text(
                         text = ErrorStore.get(code)!!.description,
                         lineHeight = 12.sp,
-                        fontSize = 8.sp
+                        fontSize = 8.sp,color = MaterialTheme.colorScheme.onSurface
                     )
                     Text(
                         text = ErrorStore.get(code)!!.category,
                         lineHeight = 12.sp,
-                        fontSize = 8.sp
+                        fontSize = 8.sp,color = MaterialTheme.colorScheme.onSurface
                     )
-                    Text(text = ErrorStore.get(code)!!.title, lineHeight = 12.sp, fontSize = 8.sp)
+                    Text(text = ErrorStore.get(code)!!.title, lineHeight = 12.sp, fontSize = 8.sp,color = MaterialTheme.colorScheme.onSurface)
                 }
             }
         }

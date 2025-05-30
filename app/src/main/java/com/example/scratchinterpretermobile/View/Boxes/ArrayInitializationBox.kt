@@ -64,17 +64,17 @@ class ArrayInitializationBox(externalBoxes: MutableList<ProgramBox>) : ProgramBo
                 }
             } else {
                 Column {
-                    Text(
+                    Text(color = MaterialTheme.colorScheme.onSurface,
                         text = ErrorStore.get(code)!!.description,
                         lineHeight = 12.sp,
                         fontSize = 8.sp
                     )
-                    Text(
+                    Text(color = MaterialTheme.colorScheme.onSurface,
                         text = ErrorStore.get(code)!!.category,
                         lineHeight = 12.sp,
                         fontSize = 8.sp
                     )
-                    Text(text = ErrorStore.get(code)!!.title, lineHeight = 12.sp, fontSize = 8.sp)
+                    Text(color = MaterialTheme.colorScheme.onSurface,text = ErrorStore.get(code)!!.title, lineHeight = 12.sp, fontSize = 8.sp)
                 }
             }
         }

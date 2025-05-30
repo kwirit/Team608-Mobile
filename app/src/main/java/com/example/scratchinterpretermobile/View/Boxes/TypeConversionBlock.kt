@@ -26,7 +26,7 @@ class TypeConversionBlock(externalBoxes: MutableList<ProgramBox>) : ProgramBox(e
     override fun render() {
     BaseBox(name = "Приведение типов", showState,
         onConfirmButton = {
-
+            value.assembleBlock(selectedOperator2.value,input2.value,selectedOperator1.value,input1.value)
     }, dialogContent = {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
             Column(horizontalAlignment = Alignment.CenterHorizontally) {

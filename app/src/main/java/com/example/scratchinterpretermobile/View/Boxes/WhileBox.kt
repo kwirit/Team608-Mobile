@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -76,19 +77,19 @@ class WhileBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(externalBoxe
                 .fillMaxHeight()
                 .width(210.dp)) {
                 if (code == 0) {
-                    Text(text = arithmeticField)
+                    Text(text = arithmeticField,color = MaterialTheme.colorScheme.onSurface)
                 } else {
                     Text(
                         text = ErrorStore.get(code)!!.description,
                         lineHeight = 12.sp,
-                        fontSize = 8.sp
+                        fontSize = 8.sp,color = MaterialTheme.colorScheme.onSurface
                     )
                     Text(
                         text = ErrorStore.get(code)!!.category,
                         lineHeight = 12.sp,
-                        fontSize = 8.sp
+                        fontSize = 8.sp,color = MaterialTheme.colorScheme.onSurface
                     )
-                    Text(text = ErrorStore.get(code)!!.title, lineHeight = 12.sp, fontSize = 8.sp)
+                    Text(text = ErrorStore.get(code)!!.title, lineHeight = 12.sp, fontSize = 8.sp,color = MaterialTheme.colorScheme.onSurface)
                 }
             }
         }

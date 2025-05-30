@@ -3,6 +3,7 @@ package com.example.scratchinterpretermobile.View.Boxes
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -90,7 +91,7 @@ class AssigningBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(external
 
     private @Composable fun renderIntegerBlockInputs() {
         state.value = 0
-        Text(stringResource(R.string.value) + ":")
+        Text(stringResource(R.string.value) + ":",color = MaterialTheme.colorScheme.onSurface)
         VariableTextField(
             onValueChange = { arithmeticField = it },
             value = arithmeticField
@@ -98,7 +99,7 @@ class AssigningBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(external
     }
     private @Composable fun renderStringBlockInputs() {
         state.value = 3
-        Text(stringResource(R.string.value) + ":")
+        Text(stringResource(R.string.value) + ":",color = MaterialTheme.colorScheme.onSurface)
         VariableTextField(
             onValueChange = { arithmeticField = it },
             value = arithmeticField
@@ -106,7 +107,7 @@ class AssigningBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(external
     }
     private @Composable fun renderBooleanBlockInputs() {
         state.value = 4
-        Text(stringResource(R.string.value) + ":")
+        Text(stringResource(R.string.value) + ":",color = MaterialTheme.colorScheme.onSurface)
         VariableTextField(
             onValueChange = { arithmeticField = it },
             value = arithmeticField
@@ -115,12 +116,12 @@ class AssigningBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(external
 
     private @Composable fun renderArraySingleElementInputs() {
         state.value = 1
-        Text(stringResource(R.string.index) + ":")
+        Text(stringResource(R.string.index) + ":",color = MaterialTheme.colorScheme.onSurface)
         VariableTextField(
             onValueChange = { arrayIndex = it },
             value = arrayIndex
         )
-        Text(stringResource(R.string.value) + ":")
+        Text(stringResource(R.string.value) + ":",color = MaterialTheme.colorScheme.onSurface)
         VariableTextField(
             onValueChange = { arithmeticField = it },
             value = arithmeticField
@@ -219,19 +220,19 @@ class AssigningBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(external
         ) {
             if (code == 0) {
                 when (state.value) {
-                    0 -> Text(text = "${selectedVariable.value!!.getName()} = $arithmeticField")
-                    1 -> Text(text = "${selectedVariable.value!!.getName()}[$arrayIndex] = $arithmeticField")
+                    0 -> Text(text = "${selectedVariable.value!!.getName()} = $arithmeticField",color = MaterialTheme.colorScheme.onSurface)
+                    1 -> Text(text = "${selectedVariable.value!!.getName()}[$arrayIndex] = $arithmeticField",color = MaterialTheme.colorScheme.onSurface)
                     2 -> {
                         for ((index, field) in arrayListField.withIndex()) {
-                            Text(text = "$index: ${field.ifBlank { "0" }}")
+                            Text(text = "$index: ${field.ifBlank { "0" }}",color = MaterialTheme.colorScheme.onSurface)
                         }
                     }
                 }
             } else {
                 val error = ErrorStore.get(code)!!
-                Text(text = error.description, lineHeight = 12.sp, fontSize = 8.sp)
-                Text(text = error.category, lineHeight = 12.sp, fontSize = 8.sp)
-                Text(text = error.title, lineHeight = 12.sp, fontSize = 8.sp)
+                Text(text = error.description, lineHeight = 12.sp, fontSize = 8.sp,color = MaterialTheme.colorScheme.onSurface)
+                Text(text = error.category, lineHeight = 12.sp, fontSize = 8.sp,color = MaterialTheme.colorScheme.onSurface)
+                Text(text = error.title, lineHeight = 12.sp, fontSize = 8.sp,color = MaterialTheme.colorScheme.onSurface)
             }
         }
     }
