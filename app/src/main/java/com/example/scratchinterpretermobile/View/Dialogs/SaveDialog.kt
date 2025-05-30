@@ -22,7 +22,8 @@ fun SaveDialog(viewModel: MainViewModel){
                 text.value = newText
             }, value = text.value)
             Button(modifier = Modifier.padding(20.dp),onClick = {
-
+                viewModel.saveCurrentProject(text.value)
+                viewModel.saveDialogState.value = false
             }) {
 
             }

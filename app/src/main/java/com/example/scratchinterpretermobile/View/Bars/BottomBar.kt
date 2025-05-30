@@ -31,7 +31,7 @@ fun BottomBar(viewModel: MainViewModel,modifier: Modifier = Modifier){
     Box(modifier = modifier.height(60.dp).background(color = MaterialTheme.colorScheme.primaryContainer)){
         Row(Modifier.fillMaxSize().background(color = MaterialTheme.colorScheme.primaryContainer), horizontalArrangement = Arrangement.SpaceAround, verticalAlignment = Alignment.CenterVertically){
             Button(modifier = Modifier.size(48.dp),onClick = {
-                viewModel.screenState.value=1
+                viewModel.screenState.value=0
             },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.secondaryContainer,

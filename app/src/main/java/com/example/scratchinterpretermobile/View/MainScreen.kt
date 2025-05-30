@@ -31,6 +31,7 @@ import com.example.scratchinterpretermobile.View.Bars.BottomBar
 import com.example.scratchinterpretermobile.View.Bars.TopBar
 import com.example.scratchinterpretermobile.View.Boxes.ArrayInitializationBox
 import com.example.scratchinterpretermobile.View.Dialogs.CreateBoxesDialog
+import com.example.scratchinterpretermobile.View.Dialogs.SaveDialog
 import com.example.scratchinterpretermobile.View.ViewModels.MainViewModel
 import com.example.scratchinterpretermobile.View.Widgets.VerticalReorderList
 import org.burnoutcrew.reorderable.NoDragCancelledAnimation
@@ -51,6 +52,7 @@ fun MainScreen(viewModel: MainViewModel) {
                 .fillMaxSize()
         ) {
             when (viewModel.screenState.intValue) {
+                0 -> LoadScreen(viewModel)
                 1 -> CodeBlocksScreen(viewModel)
                 4 -> LogScreen()
             }
@@ -76,6 +78,9 @@ fun CodeBlocksScreen(viewModel: MainViewModel){
             Icon(painter = painterResource(R.drawable.baseline_add), contentDescription = null,modifier = Modifier.size(40.dp))
         }
     }
+    if(viewModel.saveDialogState.value){
+        SaveDialog(viewModel)
+    }
 }
 
 @Composable
@@ -86,4 +91,9 @@ fun LogScreen(){
             Text(text = item)
         }
     }
+}
+
+@Composable
+fun LoadScreen(viewModel: MainViewModel){
+
 }

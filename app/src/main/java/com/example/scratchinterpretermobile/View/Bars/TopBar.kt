@@ -33,7 +33,7 @@ fun TopBar(viewModel: MainViewModel,modifier: Modifier = Modifier){
         Text(text = "Pick me", style = MaterialTheme.typography.headlineLarge, modifier = Modifier.padding(top = 10.dp, start = 25.dp), color = Color.White)
         Row(modifier = Modifier.fillMaxSize().padding(end = 16.dp), horizontalArrangement = Arrangement.spacedBy(space = 16.dp, alignment = Alignment.End), verticalAlignment = Alignment.CenterVertically){
             Button(modifier = Modifier.size(48.dp),onClick = {
-
+                viewModel.saveDialogState.value = true
             },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color.Transparent,
