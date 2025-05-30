@@ -68,7 +68,7 @@ class InterpreterUnitTest {
 
                 loopSecond.setScript(blocksToSecondLoop)
 
-                loopSecond.addScopeToContext()
+//                loopSecond.addScopeToContext()
                 loopSecond.assembleBlock("j", "<","10-i-1")
             //------------------------------
 
@@ -82,7 +82,7 @@ class InterpreterUnitTest {
 
         loopFirst.setScript(blocksToFirstLoop)
 
-        loopFirst.addScopeToContext()
+//        loopFirst.addScopeToContext()
         loopFirst.assembleBlock("i","<", "10-1")
         //------------------------------
 

@@ -12,13 +12,7 @@ import com.example.scratchinterpretermobile.Controller.Utils.validateNameVariabl
 class InitBlock(
     override var context: Context
 ) : InstructionBlock {
-    override var runResult: Int = RUNTIME_ERROR.id
     private val newVarBlocks:MutableList<VarBlock<*>> = mutableListOf()
-
-    private fun setRunResult(codeError:Int): Int {
-        runResult = codeError
-        return codeError
-    }
 
     private fun fillNames(variableNames: MutableList<String>, input: String): Int {
         val names = input.split(",").map { it.trim() }
@@ -39,7 +33,7 @@ class InitBlock(
 
         val variableNames = mutableListOf<String>()
         val fillError =  fillNames(variableNames, input)
-        if(fillError != SUCCESS.id) return setRunResult(fillError)
+        if(fillError != SUCCESS.id) return fillError
 
         // Добавляем новые переменные в контекст и сохраняем их копию
         val scoupe = context.peekScope()
@@ -48,7 +42,7 @@ class InitBlock(
             newVarBlocks.add(newIntegerBlock.getCopy())
         }
 
-        return setRunResult(SUCCESS.id)
+        return SUCCESS.id
     }
 
     fun assembleIntegerArrayBlock(inputArrayName:String, inputArrayLength:String): Int {
@@ -58,13 +52,13 @@ class InitBlock(
 
         val arrayNames = mutableListOf<String>()
         val fillError =  fillNames(arrayNames, inputArrayName)
-        if(fillError != SUCCESS.id) return setRunResult(fillError)
-        else if(arrayNames.size > 1) return setRunResult(MULTIPLE_INITIALIZATION.id)
-        else if(inputArrayName.isEmpty()) return setRunResult(INVALID_ARRAY_LENGTH.id)
+        if(fillError != SUCCESS.id) return fillError
+        else if(arrayNames.size > 1) return MULTIPLE_INITIALIZATION.id
+        else if(inputArrayName.isEmpty()) return INVALID_ARRAY_LENGTH.id
 
         val (arrayLength, calculationLengthError) = calculationArithmeticExpression(inputArrayLength, context)
-        if(calculationLengthError != SUCCESS.id) return setRunResult(calculationLengthError)
-        else if(arrayLength <= 0) return setRunResult(INVALID_ARRAY_LENGTH.id)
+        if(calculationLengthError != SUCCESS.id) return calculationLengthError
+        else if(arrayLength <= 0) return INVALID_ARRAY_LENGTH.id
 
         //сохраняем копию
         for(arrayName in arrayNames) {
@@ -72,7 +66,7 @@ class InitBlock(
             newVarBlocks.add(newIntegerArrayBlock.getCopy())
         }
 
-        return setRunResult(SUCCESS.id)
+        return SUCCESS.id
     }
 
     // для тестов
@@ -84,8 +78,6 @@ class InitBlock(
     }
 
     override fun removeBlock(){
-        runResult = RUNTIME_ERROR.id
-
         for(varBlock in newVarBlocks) {
             context.removeVar(varBlock.getName())
         }
@@ -95,7 +87,9 @@ class InitBlock(
     }
 
     override fun run(): Int {
-        if(runResult != SUCCESS.id) return runResult
+        context ?: return CONTEXT_IS_NULL.id
+
+        if(newVarBlocks.size <= 0) return RUNTIME_ERROR.id
 
         for(varBlock in newVarBlocks) {
             if(context.getVar(varBlock.getName()) != null) return REINITIALIZE_VARIABLE.id

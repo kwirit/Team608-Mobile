@@ -1,6 +1,8 @@
 package com.example.scratchinterpretermobile.Model
 
+import com.example.scratchinterpretermobile.Controller.Error.CONTEXT_IS_NULL
 import com.example.scratchinterpretermobile.Controller.Error.NO_COMPARISON_OPERATOR_SELECTED
+import com.example.scratchinterpretermobile.Controller.Error.RUNTIME_ERROR
 import com.example.scratchinterpretermobile.Controller.Error.SUCCESS
 import com.example.scratchinterpretermobile.Controller.Utils.calculationArithmeticExpression
 import com.example.scratchinterpretermobile.Controller.Utils.calculationBooleanExpression
@@ -9,9 +11,6 @@ import javax.xml.xpath.XPathExpression
 class LoopBlock(
     override var context: Context
 ) : InstructionBlock {
-//    override var context: Context = UIContext
-    override var runResult: Int = SUCCESS.id
-
     private var booleanExpression: String = ""
 
     private var resultValue: Boolean = false
@@ -19,6 +18,20 @@ class LoopBlock(
     private var script: MutableList<InstructionBlock> = mutableListOf()
 
     private var scope: HashMap<String, VarBlock<*>> = hashMapOf()
+
+    /**
+     * Обрабатывает входные данные условия, проверяет оператор сравнения и выполняет сравнение.
+     * Удаляет scope из context по
+     * @param leftPartCondition Левая часть условия (например, строка или значение для сравнения).
+     * @param rightPartCondition Правая часть условия (например, строка или значение для сравнения).
+     * @param operator Оператор сравнения (например, ">", "<", "==", "!=" и т.д.).
+     * @param blocksToRun Список блоков инструкций, которые будут выполнены при успешной проверке условия.
+     *
+     * @return Код результата выполнения:
+     *   - [SUCCESS.id] — успешное выполнение.
+     *   - [NO_COMPARISON_OPERATOR_SELECTED.id] — не выбран оператор сравнения.
+     *   - Код ошибки из метода [compare], если сравнение частей условия завершилось с ошибкой.
+     */
 
     /**
      * Добавление scope в context
@@ -57,6 +70,8 @@ class LoopBlock(
         this.booleanExpression = booleanExpression
 
         var errorCompare = compare()
+        if (errorCompare != SUCCESS.id) return errorCompare
+
 
         if (errorCompare != SUCCESS.id) {
             context.popScope()
@@ -83,6 +98,8 @@ class LoopBlock(
     override fun removeBlock() {}
 
     override fun run(): Int {
+        context ?: return CONTEXT_IS_NULL.id
+
         var compareError = compare()
 
         if (compareError != SUCCESS.id){

@@ -57,7 +57,6 @@ class IfBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(externalBoxes) 
                 code = value.assembleBlock(arithmeticField)
             },
             dialogContent = {
-                value.addTrueScopeInContext()
                 Column(modifier = Modifier.fillMaxSize()) {
                     Row(
                         modifier = Modifier

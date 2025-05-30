@@ -1,6 +1,8 @@
 package com.example.scratchinterpretermobile.Model
 
 import com.example.scratchinterpretermobile.Controller.Error.ASSIGNING_DIFFERENT_TYPES
+import com.example.scratchinterpretermobile.Controller.Error.ASSIGNMENT_ARRAYS_OF_DIFFERENT_LENGTHS
+import com.example.scratchinterpretermobile.Controller.Error.CONTEXT_IS_NULL
 import com.example.scratchinterpretermobile.Controller.Error.INVALID_ARRAY_ACCESS
 import com.example.scratchinterpretermobile.Controller.Error.INVALID_ARRAY_INDEX
 import com.example.scratchinterpretermobile.Controller.Error.INVALID_ASSIGNMENT_ARRAY
@@ -16,22 +18,10 @@ import com.example.scratchinterpretermobile.Controller.Utils.validateNameVariabl
 class AssignmentBlock(
     override var context: Context
 ): InstructionBlock {
-    override var runResult: Int = RUNTIME_ERROR.id
-
-//    override var context: Context = UIContext
-    private var newVarBlock: VarBlock<*> = IntegerBlock("NONE", 0) // новый блок
+    private var newVarBlock: VarBlock<*>? = null // новый блок
 
     private var valueVarBlock:String = String()
     private var index:String = String()
-
-
-
-
-
-    private fun setRunResult(codeError:Int): Int {
-        runResult = codeError
-        return codeError
-    }
 
     // <-------------------- Присваивание целочисленной переменной -------------------->
 
@@ -64,32 +54,20 @@ class AssignmentBlock(
      */
     fun assembleIntegerBlock(integerName:String, integerValue:String):Int {
         val (newIntegerBlock, getError) = getIntegerBlock(integerName, integerValue)
-        if(getError != SUCCESS.id) setRunResult(getError)
+        if(getError != SUCCESS.id) return getError
 
         valueVarBlock = integerValue
         newVarBlock = newIntegerBlock
 
-        return setRunResult(SUCCESS.id)
+        return SUCCESS.id
     }
 
     fun assembleStringBlock(stringName: String, stringValue: String) : Int {
-        val (newIntegerBlock, getError) = getIntegerBlock(stringName, stringValue)
-        if(getError != SUCCESS.id) setRunResult(getError)
-
-        valueVarBlock = stringValue
-        newVarBlock = newIntegerBlock
-
-        return setRunResult(SUCCESS.id)
+        return SUCCESS.id
     }
 
     fun assembleBooleanBlock(booleanName: String, booleanValue: String) : Int {
-        val (newIntegerBlock, getError) = getIntegerBlock(booleanName, booleanValue)
-        if(getError != SUCCESS.id) setRunResult(getError)
-
-        valueVarBlock = booleanValue
-        newVarBlock = newIntegerBlock
-
-        return setRunResult(SUCCESS.id)
+        return SUCCESS.id
     }
 
 
@@ -145,9 +123,10 @@ class AssignmentBlock(
         if(!(integerBlock is IntegerArrayBlock) || !(anotherIntegerBlock is IntegerArrayBlock)) {
             return Pair(newIntegerArrayBlock, ASSIGNING_DIFFERENT_TYPES.id)
         }
+        else if(integerBlock.getValue().size != anotherIntegerBlock.getValue().size) return Pair(newIntegerArrayBlock, ASSIGNMENT_ARRAYS_OF_DIFFERENT_LENGTHS.id)
 
-        newIntegerArrayBlock.setName(anotherIntegerBlock.getName())
-        newIntegerArrayBlock.setValue(anotherIntegerBlock.getValue())
+        newIntegerArrayBlock.setName(integerBlock.getName())
+        newIntegerArrayBlock.setValue(anotherIntegerBlock.getValue().toMutableList())
 
         return Pair(newIntegerArrayBlock, SUCCESS.id)
     }
@@ -168,21 +147,21 @@ class AssignmentBlock(
         if(arrayElements.isNotEmpty()) {
             if(arrayElements.size > 1) {
                 val (resultingArray, getError) = getIntegerArrayBlockByElements(arrayName, arrayElements)
-                if(getError != SUCCESS.id) return setRunResult(getError)
+                if(getError != SUCCESS.id) return getError
                 newIntegerArrayBlock = resultingArray
             }
             else {
                 val (resultingArray, getError) = getIntegerArrayBlockByArray(arrayName, arrayElements[0])
-                if(getError != SUCCESS.id) return setRunResult(getError)
+                if(getError != SUCCESS.id) return getError
                 newIntegerArrayBlock = resultingArray
             }
         }
-        else return setRunResult(INVALID_ASSIGNMENT_ARRAY.id)
+        else return INVALID_ASSIGNMENT_ARRAY.id
 
         newVarBlock = newIntegerArrayBlock
         valueVarBlock = arrayValue
 
-        return setRunResult(SUCCESS.id)
+        return SUCCESS.id
     }
 
 
@@ -229,19 +208,16 @@ class AssignmentBlock(
         removeBlock()
 
         val (newIntegerArrayBlock, getError) = getIntegerArrayBlockByElement(arrayName, arrayIndex, arrayElementValue)
-        if(getError != SUCCESS.id) setRunResult(getError)
+        if(getError != SUCCESS.id) return getError
 
         newVarBlock = newIntegerArrayBlock.getCopy()
         index = arrayIndex
         valueVarBlock = arrayElementValue
 
-        return setRunResult(SUCCESS.id)
+        return SUCCESS.id
     }
 
     override fun removeBlock() {
-        runResult = RUNTIME_ERROR.id
-
-        newVarBlock = IntegerBlock("NONE", 0)
         valueVarBlock = String()
         index = String()
 
@@ -249,16 +225,26 @@ class AssignmentBlock(
     }
 
     override fun run(): Int {
-        if(runResult != SUCCESS.id) return runResult
+        context ?: return CONTEXT_IS_NULL.id
+        newVarBlock ?: return RUNTIME_ERROR.id
 
-        if(newVarBlock is IntegerBlock) assembleIntegerBlock(newVarBlock.getName(), valueVarBlock)
+        if(newVarBlock is IntegerBlock) {
+            val getError = assembleIntegerBlock(newVarBlock!!.getName(), valueVarBlock)
+            if(getError != SUCCESS.id) return getError
+        }
         else if(newVarBlock is IntegerArrayBlock) {
-            if(index.isEmpty()) assembleIntegerArrayBlock(newVarBlock.getName(), valueVarBlock)
-            else assembleElementIntegerArrayBlock(newVarBlock.getName(), index, valueVarBlock)
+            if(index.isEmpty()) {
+                val getEror = assembleIntegerArrayBlock(newVarBlock!!.getName(), valueVarBlock)
+                if(getEror != SUCCESS.id) return getEror
+            }
+            else {
+                val getError = assembleElementIntegerArrayBlock(newVarBlock!!.getName(), index, valueVarBlock)
+                if(getError != SUCCESS.id) return getError
+            }
         }
         else return ASSIGNING_DIFFERENT_TYPES.id
 
-        context.setVar(newVarBlock.getName(), newVarBlock)
+        context.setVar(newVarBlock!!.getName(), newVarBlock!!)
 
 
         return SUCCESS.id
