@@ -41,12 +41,12 @@ class ArrayInitializationBox(externalBoxes: MutableList<ProgramBox>) : ProgramBo
                 Box(modifier = Modifier.fillMaxSize()) {
                     Box(modifier = Modifier.align(Alignment.Center)) {
                         Column {
-                            Text(text = stringResource(id = R.string.array_input))
+                            Text(color = MaterialTheme.colorScheme.onSurface ,text = stringResource(id = R.string.array_input))
                             VariableTextField(onValueChange = { newArrayName ->
                                 arrayName = newArrayName
                             }, value = arrayName)
                             Spacer(modifier = Modifier.height(30.dp))
-                            Text(text = stringResource(id = R.string.array_length))
+                            Text(color = MaterialTheme.colorScheme.onSurface,text = stringResource(id = R.string.array_length))
                             VariableTextField(onValueChange = { newArraySize ->
                                 arraySize = newArraySize
                             }, value = arraySize)

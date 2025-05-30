@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
@@ -40,7 +41,7 @@ fun CustomDialog(
                 .fillMaxWidth()
                 .height(600.dp)
                 .padding(20.dp)
-                .background(color = Color.White, shape = RoundedCornerShape(20.dp))
+                .background(color = MaterialTheme.colorScheme.background, shape = RoundedCornerShape(20.dp))
         ) {
             content()
         }

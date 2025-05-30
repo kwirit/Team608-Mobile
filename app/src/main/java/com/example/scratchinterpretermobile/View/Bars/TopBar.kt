@@ -59,7 +59,7 @@ fun TopBar(viewModel: MainViewModel, modifier: Modifier = Modifier) {
                 modifier = Modifier.size(48.dp), onClick = {},
                 colors = ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                    contentColor = MaterialTheme.colorScheme.background
+                    contentColor = Color.White
                 ),
                 shape = RoundedCornerShape(16.dp),
                 contentPadding = PaddingValues(0.dp)
@@ -76,7 +76,7 @@ fun TopBar(viewModel: MainViewModel, modifier: Modifier = Modifier) {
                 },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                    contentColor = MaterialTheme.colorScheme.background
+                    contentColor = Color.White
                 ),
                 shape = RoundedCornerShape(16.dp),
                 contentPadding = PaddingValues(0.dp)
