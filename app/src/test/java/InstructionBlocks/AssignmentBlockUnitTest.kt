@@ -5,6 +5,7 @@ import com.example.scratchinterpretermobile.Model.Context
 import com.example.scratchinterpretermobile.Model.InitBlock
 import com.example.scratchinterpretermobile.Model.InstructionBlock
 import com.example.scratchinterpretermobile.Model.Interpreter
+import com.example.scratchinterpretermobile.Model.PrintBlock
 import com.example.scratchinterpretermobile.Model.UIContext
 import com.example.scratchinterpretermobile.Model.VarBlock
 import org.junit.Assert.assertEquals
@@ -144,6 +145,8 @@ class AssignmentBlockUnitTest {
 //            assignmentBlock.run()
         }
 
+        val printBlock = PrintBlock(UIContext)
+        printBlock.updateOutput("ar")
 
 //        assignmentBlock.assembleIntegerArrayBlock("ar", "0,0,2,3,0,5")
 //        assignmentBlock.run()
@@ -151,6 +154,7 @@ class AssignmentBlockUnitTest {
         val script = mutableListOf<InstructionBlock>()
         script.add(init)
         script.add(assignmentBlock)
+        script.add(printBlock)
 
         val interpreter = Interpreter(Context())
         interpreter.setScript(script)

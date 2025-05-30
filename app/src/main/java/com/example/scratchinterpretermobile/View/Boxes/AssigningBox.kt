@@ -61,17 +61,12 @@ class AssigningBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(external
                         if(field.isEmpty()) continue
                         value.assembleElementIntegerArrayBlock(selectedVariable.value!!.getName(),index.toString(),field)
                         value.run()
-//                        if(field.isNotEmpty()) {
-//                            value.assembleElementIntegerArrayBlock(selectedVariable.value!!.getName(),index.toString(),field)
-////                            code = value.run()
-//                            value.run()
-//                        }
                     }
-                    val arrayBlock = selectedVariable as? VarBlock<MutableList<Int>>
-                    if(arrayBlock != null) {
-                        val arrayValueString:String = arrayBlock.getValue().joinToString(separator = ",")
+                    val arrayBlock = selectedVariable.value
+                    if(arrayBlock is IntegerArrayBlock) {
+                        val integerArrayBlock = UIContext.getVar(arrayBlock.getName()) as IntegerArrayBlock
+                        val arrayValueString:String = integerArrayBlock.getValue().joinToString(",")
                         value.assembleIntegerArrayBlock(selectedVariable.value!!.getName(), arrayValueString)
-//                        value.run()
                     }
                 }
         },
