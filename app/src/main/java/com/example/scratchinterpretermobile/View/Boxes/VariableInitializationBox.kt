@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -21,6 +23,7 @@ import com.example.scratchinterpretermobile.Model.InitBlock
 import com.example.scratchinterpretermobile.Model.UIContext
 import com.example.scratchinterpretermobile.R
 import com.example.scratchinterpretermobile.View.BaseStructure.BaseBox
+import com.example.scratchinterpretermobile.View.Widgets.ListOfTypes
 import com.example.scratchinterpretermobile.View.Widgets.VariableTextField
 import com.example.scratchinterpretermobile.ui.theme.innerText
 
@@ -28,28 +31,45 @@ class VariableInitializationBox(externalBoxes: MutableList<ProgramBox>) :
     ProgramBox(externalBoxes) {
     override val value = InitBlock(UIContext);
     var text by mutableStateOf("")
+    var selectedType = mutableStateOf("Int")
 
     @Composable
     override fun render() {
         BaseBox(
             name = stringResource(R.string.var_init), showState,
             onConfirmButton = {
-                code = this.value.assembleIntegerBlock(text)
+                if(selectedType.value == "Int"){
+                    code = this.value.assembleIntegerBlock(text)
+                }
+                else if(selectedType.value == "String"){
+                    code = this.value.assembleIntegerBlock(text)
+                }
+                else if(selectedType.value == "Boolean"){
+                    code = this.value.assembleIntegerBlock(text)
+                }
                 value.run()
             },
             dialogContent = {
                 Box(modifier = Modifier.fillMaxSize()) {
-                    Text(
-                        text = stringResource(R.string.var_init),
-                        modifier = Modifier
-                            .align(Alignment.TopCenter)
-                            .padding(top = 100.dp)
-                    )
-                    Column(modifier = Modifier.align(alignment = Alignment.Center)) {
-                        Text(text = stringResource(R.string.input_var_name) +":")
-                        VariableTextField(onValueChange = { newText ->
-                            text = newText
-                        }, value = text)
+                    Column (Modifier.align(Alignment.Center).fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally){
+                        Text(
+                            text = stringResource(R.string.var_init),
+                            modifier = Modifier
+                                .padding(top = 120.dp)
+                        )
+
+                        Box(modifier = Modifier.padding(60.dp)){
+                            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                                Text(text = "Выберите тип:")
+                                ListOfTypes(selectedType)
+                            }
+                        }
+                        Column(modifier = Modifier.padding(30.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+                            Text(text = stringResource(R.string.input_var_name) +":")
+                            VariableTextField(onValueChange = { newText ->
+                                text = newText
+                            }, value = text)
+                        }
                     }
                 }
             }, onDelete = {

@@ -35,7 +35,6 @@ import com.example.scratchinterpretermobile.R
 import com.example.scratchinterpretermobile.View.BaseStructure.BaseBox
 import com.example.scratchinterpretermobile.View.Dialogs.CreateBoxesDialog
 import com.example.scratchinterpretermobile.View.Widgets.InnerCreationButton
-import com.example.scratchinterpretermobile.View.Widgets.ListOfIfOperators
 import com.example.scratchinterpretermobile.View.Widgets.VariableTextField
 import com.example.scratchinterpretermobile.View.Widgets.VerticalReorderList
 import com.example.scratchinterpretermobile.ui.theme.innerText

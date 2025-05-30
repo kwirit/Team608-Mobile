@@ -59,7 +59,9 @@ class ArrayInitializationBox(externalBoxes: MutableList<ProgramBox>) : ProgramBo
                 externalBoxes.removeAll { it.id == id }
             }) {
             if (code == 0) {
-                Text(text = arrayName + ": " + arraySize)
+                if(arrayName != ""){
+                    Text(text = arrayName + ": " + arraySize)
+                }
             } else {
                 Column {
                     Text(

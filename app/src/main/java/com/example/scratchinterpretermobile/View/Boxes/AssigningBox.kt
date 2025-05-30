@@ -12,14 +12,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.scratchinterpretermobile.Controller.Error.ErrorStore
 import com.example.scratchinterpretermobile.Model.AssignmentBlock
+import com.example.scratchinterpretermobile.Model.BooleanBlock
 import com.example.scratchinterpretermobile.Model.IntegerArrayBlock
 import com.example.scratchinterpretermobile.Model.IntegerBlock
+import com.example.scratchinterpretermobile.Model.StringBlock
 import com.example.scratchinterpretermobile.Model.UIContext
 import com.example.scratchinterpretermobile.Model.VarBlock
 import com.example.scratchinterpretermobile.R
 import com.example.scratchinterpretermobile.View.BaseStructure.BaseBox
 import com.example.scratchinterpretermobile.View.Widgets.ListOfVar
 import com.example.scratchinterpretermobile.View.Widgets.VariableTextField
+import com.example.scratchinterpretermobile.View.Widgets.ListOfTypes
 import com.example.scratchinterpretermobile.ui.theme.innerText
 
 class AssigningBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(externalBoxes) {
@@ -80,11 +83,29 @@ class AssigningBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(external
                 if (checkVariableState.value) renderArraySingleElementInputs()
                 else renderArrayAllElementsInputs()
             }
+            selectedVariable.value is StringBlock -> renderStringBlockInputs()
+            selectedVariable.value is BooleanBlock -> renderBooleanBlockInputs()
         }
     }
 
     private @Composable fun renderIntegerBlockInputs() {
         state.value = 0
+        Text(stringResource(R.string.value) + ":")
+        VariableTextField(
+            onValueChange = { arithmeticField = it },
+            value = arithmeticField
+        )
+    }
+    private @Composable fun renderStringBlockInputs() {
+        state.value = 3
+        Text(stringResource(R.string.value) + ":")
+        VariableTextField(
+            onValueChange = { arithmeticField = it },
+            value = arithmeticField
+        )
+    }
+    private @Composable fun renderBooleanBlockInputs() {
+        state.value = 4
         Text(stringResource(R.string.value) + ":")
         VariableTextField(
             onValueChange = { arithmeticField = it },
@@ -158,6 +179,8 @@ class AssigningBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(external
                     value.run()
                 }
             }
+            3 -> {}
+            4 -> {}
         }
     }
 
