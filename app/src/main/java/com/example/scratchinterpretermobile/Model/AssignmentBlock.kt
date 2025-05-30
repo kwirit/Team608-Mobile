@@ -10,6 +10,7 @@ import com.example.scratchinterpretermobile.Controller.Error.RUNTIME_ERROR
 import com.example.scratchinterpretermobile.Controller.Error.SUCCESS
 import com.example.scratchinterpretermobile.Controller.Error.VARIABLE_IS_NOT_INITIALIZED
 import com.example.scratchinterpretermobile.Controller.Utils.calculationArithmeticExpression
+import com.example.scratchinterpretermobile.Controller.Utils.calculationBooleanExpression
 import com.example.scratchinterpretermobile.Controller.Utils.validateNameVariable
 
 
@@ -62,11 +63,62 @@ class AssignmentBlock(
         return SUCCESS.id
     }
 
+
+
+    private fun getStringBlock(stringName:String, stringValue: String): Pair<StringBlock, Int> {
+        val newStringBlock = StringBlock(stringName, stringValue)
+
+        val name = stringName.trim()
+        val validateNameError = validateNameVariable(name)
+        if(validateNameError != SUCCESS.id) return Pair(newStringBlock, validateNameError)
+
+        val stringBlock = context.getVar(name) ?: return Pair(newStringBlock, VARIABLE_IS_NOT_INITIALIZED.id)
+
+        if(!(stringBlock is StringBlock)) return Pair(newStringBlock, ASSIGNING_DIFFERENT_TYPES.id)
+
+        newStringBlock.setName(name)
+        newStringBlock.setValue(stringValue)
+
+        return Pair(newStringBlock, SUCCESS.id)
+    }
+
     fun assembleStringBlock(stringName: String, stringValue: String) : Int {
+        val (newStringBlock, getError) = getStringBlock(stringName, stringValue)
+        if(getError != SUCCESS.id) return getError
+
+        valueVarBlock = stringValue
+        newVarBlock = newStringBlock
+
         return SUCCESS.id
     }
 
+    private fun getBooleanBlock(booleanName: String, booleanValue: String): Pair<BooleanBlock, Int> {
+        val newBooleanBlock = BooleanBlock(booleanName, false)
+
+        val name = booleanName.trim()
+        val validateNameError = validateNameVariable(name)
+        if(validateNameError != SUCCESS.id) return Pair(newBooleanBlock, validateNameError)
+
+        val stringBlock = context.getVar(name) ?: return Pair(newBooleanBlock, VARIABLE_IS_NOT_INITIALIZED.id)
+
+        if(!(stringBlock is StringBlock)) return Pair(newBooleanBlock, ASSIGNING_DIFFERENT_TYPES.id)
+
+        val (value, calculateValueError) = calculationBooleanExpression(booleanValue, context)
+        if(calculateValueError != SUCCESS.id) return Pair(newBooleanBlock, calculateValueError)
+
+        newBooleanBlock.setName(name)
+        newBooleanBlock.setValue(value)
+
+        return Pair(newBooleanBlock, SUCCESS.id)
+    }
+
     fun assembleBooleanBlock(booleanName: String, booleanValue: String) : Int {
+        val (newBooleanBlock, getError) = getBooleanBlock(booleanName, booleanValue)
+        if(getError != SUCCESS.id) return getError
+
+        valueVarBlock = booleanValue
+        newVarBlock = newBooleanBlock
+
         return SUCCESS.id
     }
 

@@ -1,6 +1,7 @@
 package com.example.scratchinterpretermobile.Model
 
 import com.example.scratchinterpretermobile.Controller.Error.CONTEXT_IS_NULL
+import com.example.scratchinterpretermobile.Controller.Error.INITIALIZATION_ERROR
 import com.example.scratchinterpretermobile.Controller.Error.INVALID_ARRAY_LENGTH
 import com.example.scratchinterpretermobile.Controller.Error.MULTIPLE_INITIALIZATION
 import com.example.scratchinterpretermobile.Controller.Error.REINITIALIZE_VARIABLE
@@ -64,6 +65,42 @@ class InitBlock(
         for(arrayName in arrayNames) {
             val newIntegerArrayBlock = IntegerArrayBlock(arrayName, MutableList<Int>(arrayLength) {0})
             newVarBlocks.add(newIntegerArrayBlock.getCopy())
+        }
+
+        return SUCCESS.id
+    }
+
+    fun assembleStringBlock(inputStringName:String, inputStringValue:String): Int {
+        context?: return CONTEXT_IS_NULL.id
+
+        removeBlock()
+
+        val stringNames = mutableListOf<String>()
+        val fillError = fillNames(stringNames, inputStringName)
+        if(fillError != SUCCESS.id) return fillError
+        else if(stringNames.size != 1) return INITIALIZATION_ERROR.id
+
+        for(stringName in stringNames) {
+            val newStringBlock = StringBlock(stringName, inputStringValue)
+            newVarBlocks.add(newStringBlock)
+        }
+
+        return SUCCESS.id
+    }
+
+    fun assembleBooleanBlock(inputBooleanName:String): Int {
+        context?: return CONTEXT_IS_NULL.id
+
+        removeBlock()
+
+        val booleanNames = mutableListOf<String>()
+        val fillError = fillNames(booleanNames, inputBooleanName)
+        if(fillError != SUCCESS.id) return fillError
+        else if(booleanNames.size != 1) return INITIALIZATION_ERROR.id
+
+        for(booleanName in booleanNames) {
+            val newStringBlock = BooleanBlock(booleanName, false)
+            newVarBlocks.add(newStringBlock)
         }
 
         return SUCCESS.id
