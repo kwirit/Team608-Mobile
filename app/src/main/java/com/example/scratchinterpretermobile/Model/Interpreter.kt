@@ -2,9 +2,11 @@ package com.example.scratchinterpretermobile.Model
 
 import com.example.scratchinterpretermobile.Controller.Error.SUCCESS
 
-class Interpreter() {
-    private var context = Context()
-    private var blocksToRun:MutableList<InstructionBlock> = mutableListOf()
+class Interpreter(
+    private var context:Context
+) {
+//    private var context = Context()
+    private var script:MutableList<InstructionBlock> = mutableListOf()
 
     fun getContext(): Context {
         return context
@@ -14,13 +16,13 @@ class Interpreter() {
         context = newContext
     }
 
-    fun setBlocksToRun(blocksToRun: MutableList<InstructionBlock>) {
-        this.blocksToRun = blocksToRun
+    fun setScript(script: MutableList<InstructionBlock>) {
+        this.script = script
     }
 
     fun run(): Int {
 
-        for (block in blocksToRun) {
+        for (block in script) {
             val contextOfBlock = block.context
             block.context = this.context
 

@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.sp
 import com.example.scratchinterpretermobile.Controller.Error.ErrorStore
 import com.example.scratchinterpretermobile.Controller.Utils.parseCardToInstructionBoxes
 import com.example.scratchinterpretermobile.Model.ConditionBlock
+import com.example.scratchinterpretermobile.Model.UIContext
 import com.example.scratchinterpretermobile.View.BaseStructure.BaseBox
 import com.example.scratchinterpretermobile.View.Dialogs.CreateBoxesDialog
 import com.example.scratchinterpretermobile.View.Widgets.InnerCreationButton
@@ -33,7 +34,7 @@ import com.example.scratchinterpretermobile.View.Widgets.VerticalReorderList
 class IfBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(externalBoxes) {
     val ifBoxes = mutableStateListOf<ProgramBox>()
     val elseBoxes = mutableStateListOf<ProgramBox>()
-    override val value = ConditionBlock();
+    override val value = ConditionBlock(UIContext);
     val showInnerBoxesState = mutableStateOf(false)
     var leftOperand by mutableStateOf("")
     var rightOperand by mutableStateOf("")
@@ -44,7 +45,9 @@ class IfBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(externalBoxes) 
     override fun render(){
         BaseBox(name = "Условие", showState,
             onConfirmButton = {
-                code = value.processInput(leftOperand, rightOperand,operator.value, parseCardToInstructionBoxes(ifBoxes),parseCardToInstructionBoxes(elseBoxes))
+                value.setTrueScript(parseCardToInstructionBoxes(ifBoxes))
+                value.setFalseScript(parseCardToInstructionBoxes(elseBoxes))
+                code = value.assembleBlock(leftOperand, operator.value, rightOperand)
         },
             dialogContent = {
                 Column(modifier = Modifier.fillMaxSize()) {
@@ -61,12 +64,12 @@ class IfBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(externalBoxes) 
                     }
 
                     if (currentIsIf.value) {
-                        value.setElseBlock(parseCardToInstructionBoxes(elseBoxes))
-                        value.addThenScopeInContext()
+                        value.setFalseScript(parseCardToInstructionBoxes(elseBoxes))
+                        value.addTrueScopeInContext()
                         IfScreen()
                     } else {
-                        value.setThenBlock(parseCardToInstructionBoxes(ifBoxes))
-                        value.addElseScopeInContext()
+                        value.setTrueScript(parseCardToInstructionBoxes(ifBoxes))
+                        value.addFalseScopeInContext()
                         ElseScreen()
                     }
                 }

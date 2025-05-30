@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -20,8 +19,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.scratchinterpretermobile.Controller.Error.ErrorStore
 import com.example.scratchinterpretermobile.Controller.Utils.parseCardToInstructionBoxes
-import com.example.scratchinterpretermobile.Model.ConditionBlock
 import com.example.scratchinterpretermobile.Model.LoopBlock
+import com.example.scratchinterpretermobile.Model.UIContext
 import com.example.scratchinterpretermobile.View.BaseStructure.BaseBox
 import com.example.scratchinterpretermobile.View.Dialogs.CreateBoxesDialog
 import com.example.scratchinterpretermobile.View.Widgets.InnerCreationButton
@@ -35,12 +34,13 @@ class WhileBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(externalBoxe
     var leftOperand by mutableStateOf("")
     var rightOperand by mutableStateOf("")
     var operator = mutableStateOf("Выбрать оператор")
-    override val value = LoopBlock();
+    override val value = LoopBlock(UIContext);
     @Composable
     override fun render(){
         BaseBox(name = "Цикл", showState,
             onConfirmButton = {
-                value.processInput(leftOperand,rightOperand,operator.value,parseCardToInstructionBoxes(boxes))
+                value.setScript(parseCardToInstructionBoxes(boxes))
+                value.assembleBlock(leftOperand, operator.value, rightOperand)
             },
             dialogContent = {
                 Column {

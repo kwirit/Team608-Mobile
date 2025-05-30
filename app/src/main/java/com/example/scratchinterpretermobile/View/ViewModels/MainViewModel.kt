@@ -1,5 +1,6 @@
 package com.example.scratchinterpretermobile.View.ViewModels
 
+import android.content.Context
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -25,6 +26,6 @@ class MainViewModel : ViewModel() {
 
     fun run() {
         val instructionList: MutableList<InstructionBlock> = parseCardToInstructionBoxes(boxes)
-        val interpreter: Interpreter = Interpreter()
+        val interpreter: Interpreter = Interpreter(com.example.scratchinterpretermobile.Model.Context())
     }
 }

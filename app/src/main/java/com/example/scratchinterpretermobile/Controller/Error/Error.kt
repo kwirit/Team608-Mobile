@@ -71,9 +71,9 @@ val INCORRECT_ARRAY_ELEMENT_NAME = Error(
 
 //200
 
-val REDECLARING_A_VARIABLE = Error (
+val REINITIALIZE_VARIABLE = Error (
     201,
-    "Initialization error",
+    "Reinitialize variable",
     "The variable is already declared in the context",
     "initialization"
 )
@@ -171,10 +171,10 @@ val INVALID_ARRAY_LENGTH = Error(
 )
 
 // 500
-val VARIABLE_DOES_NOT_EXIST = Error(
+val VARIABLE_IS_NOT_INITIALIZED = Error(
     500,
     "The variable is not initialized",
-    "The variable is not initialized in the context",
+    "The variable does not exist in the context",
     "assignment"
 )
 
@@ -254,7 +254,7 @@ object ErrorStore {
         104 to EMPTY_NAME,
         105 to INCORRECT_ARRAY_ELEMENT_NAME,
 
-        201 to REDECLARING_A_VARIABLE,
+        201 to REINITIALIZE_VARIABLE,
         202 to INITIALIZATION_ERROR,
         203 to ASSIGNING_DIFFERENT_TYPES,
 
@@ -271,7 +271,7 @@ object ErrorStore {
         412 to MULTIPLE_INITIALIZATION,
         413 to INVALID_ARRAY_LENGTH,
 
-        500 to VARIABLE_DOES_NOT_EXIST,
+        500 to VARIABLE_IS_NOT_INITIALIZED,
 //        501 to INVALID_ASSIGNMENT_INTEGER,
         502 to INVALID_ASSIGNMENT_ARRAY,
 //        503 to INVALID_ARRAY_ELEMENT_ASSIGNMENT

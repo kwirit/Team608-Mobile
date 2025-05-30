@@ -19,7 +19,7 @@ class PrintBlockUnitTest {
         scope["z"] = IntegerBlock("z", 1)
         UIContext.pushScope(scope)
 
-        var printBlock = PrintBlock();
+        var printBlock = PrintBlock(UIContext);
         printBlock.updateOutput("x + y, y + z, x + z, x + y + z")
 
         val result = printBlock.run()
@@ -38,7 +38,7 @@ class PrintBlockUnitTest {
         UIContext.pushScope(scope)
 
 
-        var printBlock = PrintBlock();
+        var printBlock = PrintBlock(UIContext);
         printBlock.updateOutput("x + y y + z, x + z, arr")
 
         val result = printBlock.run()
@@ -58,7 +58,7 @@ class PrintBlockUnitTest {
         UIContext.pushScope(scope)
 
 
-        var printBlock = PrintBlock();
+        var printBlock = PrintBlock(UIContext);
         printBlock.updateOutput("\"It`s my array: \", arr")
 
         val result = printBlock.run()
@@ -72,7 +72,7 @@ class PrintBlockUnitTest {
         val scope = hashMapOf<String, VarBlock<*>>()
         UIContext.pushScope(scope)
 
-        val printBlock = PrintBlock()
+        val printBlock = PrintBlock(UIContext)
         printBlock.updateOutput("\"Hello, world!\"")
 
         val result = printBlock.run()
@@ -86,7 +86,7 @@ class PrintBlockUnitTest {
         val scope = hashMapOf<String, VarBlock<*>>()
         UIContext.pushScope(scope)
 
-        val printBlock = PrintBlock()
+        val printBlock = PrintBlock(UIContext)
         printBlock.updateOutput("\"This is an unclosed string")
 
         val result = printBlock.run()
@@ -103,7 +103,7 @@ class PrintBlockUnitTest {
         scope["b"] = IntegerBlock("b", 3)
         UIContext.pushScope(scope)
 
-        val printBlock = PrintBlock()
+        val printBlock = PrintBlock(UIContext)
         printBlock.updateOutput("a * (b + 2) - a / b")
 
         val result = printBlock.run()
@@ -120,7 +120,7 @@ class PrintBlockUnitTest {
         scope["age"] = IntegerBlock("age", 25)
         UIContext.pushScope(scope)
 
-        val printBlock = PrintBlock()
+        val printBlock = PrintBlock(UIContext)
         printBlock.updateOutput("\"Name: \", name, \", Age: \", age")
 
         val result = printBlock.run()
@@ -138,7 +138,7 @@ class PrintBlockUnitTest {
         scope["z"] = IntegerBlock("z", 3)
         UIContext.pushScope(scope)
 
-        val printBlock = PrintBlock()
+        val printBlock = PrintBlock(UIContext)
         printBlock.updateOutput("x , y , z")
 
         val result = printBlock.run()
@@ -154,7 +154,7 @@ class PrintBlockUnitTest {
         scope["y"] = IntegerBlock("y", 3)
         UIContext.pushScope(scope)
 
-        val printBlock = PrintBlock()
+        val printBlock = PrintBlock(UIContext)
         printBlock.updateOutput("\"Result: \", (x + y)")
 
         val result = printBlock.run()
@@ -170,7 +170,7 @@ class PrintBlockUnitTest {
         scope["arr"] = IntegerArrayBlock("arr", mutableListOf(5, 3, 2))
         UIContext.pushScope(scope)
 
-        val printBlock = PrintBlock()
+        val printBlock = PrintBlock(UIContext)
         printBlock.updateOutput("arr[0] + arr[1], arr[2] * 2")
 
         val result = printBlock.run()
@@ -186,7 +186,7 @@ class PrintBlockUnitTest {
         scope["arr"] = IntegerArrayBlock("arr", mutableListOf(5, 3, 2))
         UIContext.pushScope(scope)
 
-        val printBlock = PrintBlock()
+        val printBlock = PrintBlock(UIContext)
         printBlock.updateOutput("arr[0] + arr[1], arr[2] * 2")
 
         val result = printBlock.run()

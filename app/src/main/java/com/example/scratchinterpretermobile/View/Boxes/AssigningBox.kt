@@ -25,13 +25,14 @@ import com.example.scratchinterpretermobile.Controller.Error.ErrorStore
 import com.example.scratchinterpretermobile.Model.AssignmentBlock
 import com.example.scratchinterpretermobile.Model.IntegerArrayBlock
 import com.example.scratchinterpretermobile.Model.IntegerBlock
+import com.example.scratchinterpretermobile.Model.UIContext
 import com.example.scratchinterpretermobile.Model.VarBlock
 import com.example.scratchinterpretermobile.View.BaseStructure.BaseBox
 import com.example.scratchinterpretermobile.View.Widgets.ListOfVar
 import com.example.scratchinterpretermobile.View.Widgets.VariableTextField
 
 class AssigningBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(externalBoxes) {
-    override val value = AssignmentBlock();
+    override val value = AssignmentBlock(UIContext);
     val checkVariableState = mutableStateOf(true)
     val checkArrayState = mutableStateOf(false)
     var arrayListField = mutableStateListOf<String>()

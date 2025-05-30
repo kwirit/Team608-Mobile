@@ -17,11 +17,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.scratchinterpretermobile.Controller.Error.ErrorStore
 import com.example.scratchinterpretermobile.Model.InitBlock
+import com.example.scratchinterpretermobile.Model.UIContext
 import com.example.scratchinterpretermobile.View.BaseStructure.BaseBox
 import com.example.scratchinterpretermobile.View.Widgets.VariableTextField
 
 class VariableInitializationBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(externalBoxes) {
-    override val value = InitBlock();
+    override val value = InitBlock(UIContext);
     var text by mutableStateOf("")
     val name = "Объявление переменной"
 
