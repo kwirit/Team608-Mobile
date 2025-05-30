@@ -132,6 +132,12 @@ fun validateString(input: String): Int {
     return INVALID_CHARACTERS_IN_STRING.id
 }
 
+fun validateBoolean(input: String): Int {
+    val element = input.trim()
+    if (element == "True" || element == "False") return SUCCESS.id
+    return INVALID_FORMAT.id
+}
+
 /**
  * Обрабатывает обращение к элементу массива и возвращает его значение и возможную ошибку.
  *

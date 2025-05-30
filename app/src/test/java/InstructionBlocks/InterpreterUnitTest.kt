@@ -90,4 +90,8 @@ class InterpreterUnitTest {
         interpreter.setBlocksToRun(blocksToRun)
         val error = interpreter.run()
     }
+    @Test
+    fun someVarInList() {
+
+    }
 }
