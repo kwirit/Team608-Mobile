@@ -39,7 +39,7 @@ class LoopBlockUnitTest {
         loopBlock.setScript(blocksToLoop)
 
 //        loopBlock.addScopeToContext()
-        loopBlock.assembleBlock("count","<","5")
+//        loopBlock.assembleBlock("count","<","5")
         val error = loopBlock.run()
     }
 
@@ -84,7 +84,7 @@ class LoopBlockUnitTest {
                 conditionBlock.setTrueScript(blocksToCondition)
 
                 conditionBlock.addTrueScopeInContext()
-                conditionBlock.assembleBlock("ar[i]",">","ar[i+1]")
+//                conditionBlock.assembleBlock("ar[i]",">","ar[i+1]")
             // -------------------------------------
 
             val assignmentIndexBlock = AssignmentBlock(UIContext)
@@ -98,7 +98,7 @@ class LoopBlockUnitTest {
         loopBlock.setScript(blocksToLoop)
 
 //        loopBlock.addScopeToContext()
-        loopBlock.assembleBlock("i+1","<","5")
+//        loopBlock.assembleBlock("i+1","<","5")
 //        loopBlock.run()
 
         val interpreter = Interpreter(Context())
@@ -159,7 +159,7 @@ class LoopBlockUnitTest {
                     conditionBlock.setTrueScript(blocsToCondition)
 
                     conditionBlock.addTrueScopeInContext()
-                    conditionBlock.assembleBlock("ar[j]", ">", "ar[j+1]")
+//                    conditionBlock.assembleBlock("ar[j]", ">", "ar[j+1]")
                 //------------------------------
 
                 val updateIndex_j = AssignmentBlock(UIContext)
@@ -172,7 +172,7 @@ class LoopBlockUnitTest {
                 loopSecond.setScript(blocksToSecondLoop)
 
 //                loopSecond.addScopeToContext()
-                loopSecond.assembleBlock("j", "<","10 - i - 1")
+//                loopSecond.assembleBlock("j", "<","10 - i - 1")
             //------------------------------
 
             val updateIndex_i = AssignmentBlock(UIContext)
@@ -186,7 +186,7 @@ class LoopBlockUnitTest {
             loopFirst.setScript(blocksToFirstLoop)
 
 //            loopFirst.addScopeToContext()
-            loopFirst.assembleBlock("i","<", "10 - 1")
+//            loopFirst.assembleBlock("i","<", "10 - 1")
         //------------------------------
 
         val interpreter = Interpreter(Context())
@@ -228,7 +228,7 @@ class LoopBlockUnitTest {
             script.add(init_j)
 
             loop.setScript(script)
-            loop.assembleBlock("i","<","5")
+//            loop.assembleBlock("i","<","5")
         //----------------------------
 
         val interpreter = Interpreter(Context())

@@ -171,13 +171,16 @@ class AssigningBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(external
                 }
             }
             2 -> {
-                for ((index, field) in arrayListField.withIndex()) {
-                    code = value.assembleElementIntegerArrayBlock(
-                        selectedVariable.value!!.getName(),
-                        index.toString(),
-                        field
-                    )
+                for((index,field) in arrayListField.withIndex()){
+                    if(field.isEmpty()) continue
+                    value.assembleElementIntegerArrayBlock(selectedVariable.value!!.getName(),index.toString(),field)
                     value.run()
+                }
+                val arrayBlock = selectedVariable.value
+                if(arrayBlock is IntegerArrayBlock) {
+                    val integerArrayBlock = UIContext.getVar(arrayBlock.getName()) as IntegerArrayBlock
+                    val arrayValueString:String = integerArrayBlock.getValue().joinToString(",")
+                    value.assembleIntegerArrayBlock(selectedVariable.value!!.getName(), arrayValueString)
                 }
             }
             3 -> { code = value.assembleStringBlock(selectedVariable.value!!.getName(),arithmeticField)

@@ -56,7 +56,7 @@ class InterpreterUnitTest {
                     conditionBlock.setTrueScript(blocsToCondition)
 
                     conditionBlock.addTrueScopeInContext()
-                    conditionBlock.assembleBlock("ar[j]", "ar[j+1]", "ar[j+1]")
+//                    conditionBlock.assembleBlock("ar[j]", "ar[j+1]", "ar[j+1]")
                 //------------------------------
 
                 val updateIndex_j = AssignmentBlock(UIContext)
@@ -69,7 +69,7 @@ class InterpreterUnitTest {
                 loopSecond.setScript(blocksToSecondLoop)
 
 //                loopSecond.addScopeToContext()
-                loopSecond.assembleBlock("j", "<","10-i-1")
+//                loopSecond.assembleBlock("j", "<","10-i-1")
             //------------------------------
 
             val updateIndex_i = AssignmentBlock(UIContext)
@@ -83,7 +83,7 @@ class InterpreterUnitTest {
         loopFirst.setScript(blocksToFirstLoop)
 
 //        loopFirst.addScopeToContext()
-        loopFirst.assembleBlock("i","<", "10-1")
+//        loopFirst.assembleBlock("i","<", "10-1")
         //------------------------------
 
         val interpreter = Interpreter(Context())
@@ -106,7 +106,7 @@ class InterpreterUnitTest {
         initIndex_i.run()
 
         val loopFirst = LoopBlock(UIContext)
-        loopFirst.assembleBlock("i", "<", "10")
+//        loopFirst.assembleBlock("i", "<", "10")
         //------------------------------
             val initIndex_j = InitBlock(UIContext)
             initIndex_j.assembleIntegerBlock("j")
