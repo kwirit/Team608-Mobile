@@ -30,6 +30,7 @@ class ArrayInitializationBox(externalBoxes: MutableList<ProgramBox>) : ProgramBo
         BaseBox(name = "Инициализация массива", showState,
             onConfirmButton = {
                 code = this.value.assembleIntegerArrayBlock(arrayName, arraySize)
+                value.run()
             },
             dialogContent = {
                 Box(modifier = Modifier.fillMaxSize()) {

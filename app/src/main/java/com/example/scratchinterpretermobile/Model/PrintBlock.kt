@@ -66,6 +66,8 @@ class PrintBlock(
             if (errorElement == SUCCESS.id) consoleOutput += outputElement
             else return errorElement
         }
+
+        outputList.add(consoleOutput)
         return SUCCESS.id
     }
 }
