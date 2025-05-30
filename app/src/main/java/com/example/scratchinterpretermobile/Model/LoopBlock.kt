@@ -30,6 +30,14 @@ class LoopBlock(
     }
 
     /**
+     * Добавление scope в context
+     * Обязательная функция при выходе из карточку
+     */
+    fun removeScopeToContext() {
+        context.popScope()
+    }
+
+    /**
      * Обрабатывает входные данные условия, проверяет оператор сравнения и выполняет сравнение.
      * Удаляет scope из context по
      * @param leftPartCondition Левая часть условия (например, строка или значение для сравнения).
@@ -57,11 +65,11 @@ class LoopBlock(
         var errorCompare = compare()
 
         if (errorCompare != SUCCESS.id) {
-            context.popScope()
+//            context.popScope()
             return errorCompare
         }
 
-        context.popScope()
+//        context.popScope()
         return SUCCESS.id
     }
 

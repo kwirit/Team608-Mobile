@@ -13,7 +13,7 @@ import com.example.scratchinterpretermobile.Model.UIContext
 
 @Composable
 fun ListOfVar(selectedVariable: MutableState<VarBlock<*>?>): MutableState<VarBlock<*>?> {
-    val variables = UIContext.GetListVarBlock()
+    val variables = UIContext.getListVarBlock()
     val expanded = remember { mutableStateOf(false) }
 
     TextButton(onClick = { expanded.value = true }) {
