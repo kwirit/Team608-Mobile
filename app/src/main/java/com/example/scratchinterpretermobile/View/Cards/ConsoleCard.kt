@@ -6,8 +6,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.res.stringResource
 import com.example.scratchinterpretermobile.R
 import com.example.scratchinterpretermobile.View.BaseStructure.BaseCard
-import com.example.scratchinterpretermobile.View.Boxes.ConsoleBox
-import com.example.scratchinterpretermobile.View.Boxes.ProgramBox
 
 @Composable
 fun ConsoleCard(onAdd: () -> Unit, showBoxesState: MutableState<Boolean> = mutableStateOf(false)) {

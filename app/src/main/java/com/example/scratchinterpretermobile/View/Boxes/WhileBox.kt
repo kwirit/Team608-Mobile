@@ -1,9 +1,7 @@
 package com.example.scratchinterpretermobile.View.Boxes
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -31,7 +29,6 @@ import com.example.scratchinterpretermobile.View.Dialogs.CreateBoxesDialog
 import com.example.scratchinterpretermobile.View.Widgets.InnerCreationButton
 import com.example.scratchinterpretermobile.View.Widgets.VariableTextField
 import com.example.scratchinterpretermobile.View.Widgets.VerticalReorderList
-import com.example.scratchinterpretermobile.ui.theme.innerText
 
 class WhileBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(externalBoxes) {
     val boxes = mutableStateListOf<ProgramBox>()
@@ -50,9 +47,18 @@ class WhileBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(externalBoxe
             dialogContent = {
                 value.addScopeToContext()
                 Box(modifier = Modifier.fillMaxSize()) {
-                    Column (horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.padding(top = 100.dp)){
-                        Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-                            Text(text = "Введите логическое выражение:")
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        modifier = Modifier.padding(top = 100.dp)
+                    ) {
+                        Column(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(
+                                text = "Введите логическое выражение:",
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
                             VariableTextField(onValueChange = { newText ->
                                 arithmeticField = newText
                             }, value = arithmeticField, modifier = Modifier)
@@ -76,23 +82,30 @@ class WhileBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(externalBoxe
                 value.removeBlock()
                 externalBoxes.removeAll { it.id == id }
             }) {
-            Column(Modifier
-                .fillMaxHeight()
-                .width(210.dp)) {
+            Column(
+                Modifier
+                    .fillMaxHeight()
+                    .width(210.dp)
+            ) {
                 if (code == 0) {
-                    Text(text = arithmeticField,color = MaterialTheme.colorScheme.onSurface)
+                    Text(text = arithmeticField, color = MaterialTheme.colorScheme.onSurface)
                 } else {
                     Text(
                         text = ErrorStore.get(code)!!.description,
                         lineHeight = 12.sp,
-                        fontSize = 8.sp,color = MaterialTheme.colorScheme.onSurface
+                        fontSize = 8.sp, color = MaterialTheme.colorScheme.onSurface
                     )
                     Text(
                         text = ErrorStore.get(code)!!.category,
                         lineHeight = 12.sp,
-                        fontSize = 8.sp,color = MaterialTheme.colorScheme.onSurface
+                        fontSize = 8.sp, color = MaterialTheme.colorScheme.onSurface
                     )
-                    Text(text = ErrorStore.get(code)!!.title, lineHeight = 12.sp, fontSize = 8.sp,color = MaterialTheme.colorScheme.onSurface)
+                    Text(
+                        text = ErrorStore.get(code)!!.title,
+                        lineHeight = 12.sp,
+                        fontSize = 8.sp,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
                 }
             }
         }

@@ -5,10 +5,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,7 +24,6 @@ import com.example.scratchinterpretermobile.R
 import com.example.scratchinterpretermobile.View.BaseStructure.BaseBox
 import com.example.scratchinterpretermobile.View.Widgets.ListOfTypes
 import com.example.scratchinterpretermobile.View.Widgets.VariableTextField
-import com.example.scratchinterpretermobile.ui.theme.innerText
 
 class VariableInitializationBox(externalBoxes: MutableList<ProgramBox>) :
     ProgramBox(externalBoxes) {
@@ -53,7 +49,9 @@ class VariableInitializationBox(externalBoxes: MutableList<ProgramBox>) :
             },
             dialogContent = {
                 Box(modifier = Modifier.fillMaxSize()) {
-                    Column (Modifier.align(Alignment.Center).fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center){
+                    Column (Modifier
+                        .align(Alignment.Center)
+                        .fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center){
                         Box(modifier = Modifier){
                             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                                 Text(text = "Выберите тип:",color = MaterialTheme.colorScheme.onSurface)

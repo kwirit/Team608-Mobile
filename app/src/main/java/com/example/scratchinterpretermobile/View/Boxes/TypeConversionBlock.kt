@@ -1,19 +1,18 @@
 package com.example.scratchinterpretermobile.View.Boxes
 
-import android.widget.Space
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.scratchinterpretermobile.Model.StringBlock
 import com.example.scratchinterpretermobile.Model.UIContext
 import com.example.scratchinterpretermobile.Model.СonvertationTypeBlock
 import com.example.scratchinterpretermobile.View.BaseStructure.BaseBox
@@ -29,35 +28,51 @@ class TypeConversionBlock(externalBoxes: MutableList<ProgramBox>) : ProgramBox(e
 
     @Composable
     override fun render() {
-    BaseBox(name = "Приведение типов", showState,
-        onConfirmButton = {
-            value.assembleBlock(selectedOperator2.value,input2.value,selectedOperator1.value,input1.value)
-    }, dialogContent = {
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
-            Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
-                Column {
-                    ListOfTypes(selectedOperator1)
-                    Text(text = "Введите первое выражение:")
-                    VariableTextField(onValueChange = {
-                            newText ->
-                        input1.value = newText
-                    },value = input1.value)
+        BaseBox(
+            name = "Приведение типов", showState,
+            onConfirmButton = {
+                value.assembleBlock(
+                    selectedOperator2.value,
+                    input2.value,
+                    selectedOperator1.value,
+                    input1.value
+                )
+            }, dialogContent = {
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        Column {
+                            ListOfTypes(selectedOperator1)
+                            Text(
+                                text = "Введите первое выражение:",
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
+                            VariableTextField(onValueChange = { newText ->
+                                input1.value = newText
+                            }, value = input1.value)
+                        }
+                        Spacer(modifier = Modifier.padding(top = 16.dp))
+                        Column {
+                            ListOfTypes(selectedOperator2)
+                            Text(
+                                text = "Введите второе выражение:",
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
+                            VariableTextField(
+                                onValueChange = { newText ->
+                                    input2.value = newText
+                                }, value = input2.value
+                            )
+                        }
+                    }
                 }
-                Spacer(modifier = Modifier.padding(top = 16.dp))
-                Column {ListOfTypes(selectedOperator2)
-                    Text(text = "Введите второе выражение:")
-                    VariableTextField(onValueChange = {
-                            newText ->
-                        input2.value = newText
-                    }, value = input2.value
-                    )  }
-            }
-        }
-    }, onDelete = {
-            value.removeBlock()
-            externalBoxes.removeAll { it.id == id }
-        }) {
+            }, onDelete = {
+                value.removeBlock()
+                externalBoxes.removeAll { it.id == id }
+            }) {
 
-    }
+        }
     }
 }

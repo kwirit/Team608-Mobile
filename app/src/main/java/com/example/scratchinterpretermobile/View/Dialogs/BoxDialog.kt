@@ -1,10 +1,8 @@
 package com.example.scratchinterpretermobile.View.Dialogs
 
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -22,10 +20,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.example.scratchinterpretermobile.R
-import com.example.scratchinterpretermobile.ui.theme.bodyFontFamily
-import com.example.scratchinterpretermobile.ui.theme.displayFontFamily
 
 
 @Composable
@@ -39,7 +34,15 @@ fun BoxDialog(
 ) {
     CustomDialog(showState, modifier = modifier) {
         Box(modifier = Modifier.fillMaxSize()) {
-            Text(color = MaterialTheme.colorScheme.onSurface,fontFamily = FontFamily(Font(R.font.akayakanadaka_regular)),modifier = Modifier.align(Alignment.TopEnd).padding(top = 20.dp, end = 30.dp),text = name, style = MaterialTheme.typography.labelLarge)
+            Text(
+                color = MaterialTheme.colorScheme.onSurface,
+                fontFamily = FontFamily(Font(R.font.akayakanadaka_regular)),
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .padding(top = 20.dp, end = 30.dp),
+                text = name,
+                style = MaterialTheme.typography.labelLarge
+            )
             Button(
                 modifier = Modifier
                     .align(Alignment.TopStart)
@@ -62,13 +65,14 @@ fun BoxDialog(
                 )
             }
             content()
-            Button(modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(20.dp), onClick = {
-                onConfirmDialog()
-                onCloseDialog()
-                showState.value = false
-            }) {
+            Button(
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(20.dp), onClick = {
+                    onConfirmDialog()
+                    onCloseDialog()
+                    showState.value = false
+                }) {
                 Text(text = "OK")
             }
         }

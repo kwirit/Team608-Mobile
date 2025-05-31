@@ -1,6 +1,5 @@
 package com.example.scratchinterpretermobile.View.Boxes
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -9,12 +8,8 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -27,7 +22,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.max
 import androidx.compose.ui.unit.sp
 import com.example.scratchinterpretermobile.Controller.Error.ErrorStore
 import com.example.scratchinterpretermobile.Controller.Utils.parseCardToInstructionBoxes
@@ -39,7 +33,6 @@ import com.example.scratchinterpretermobile.View.Dialogs.CreateBoxesDialog
 import com.example.scratchinterpretermobile.View.Widgets.InnerCreationButton
 import com.example.scratchinterpretermobile.View.Widgets.VariableTextField
 import com.example.scratchinterpretermobile.View.Widgets.VerticalReorderList
-import com.example.scratchinterpretermobile.ui.theme.innerText
 
 class IfBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(externalBoxes) {
     val ifBoxes = mutableStateListOf<ProgramBox>()
@@ -60,7 +53,12 @@ class IfBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(externalBoxes) 
             },
             dialogContent = {
                 Box(modifier = Modifier.fillMaxSize()) {
-                    Column (modifier = Modifier.fillMaxSize().padding(top = 100.dp), horizontalAlignment = Alignment.CenterHorizontally){
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(top = 100.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
                         if (currentIsIf.value) {
                             value.setFalseScript(parseCardToInstructionBoxes(elseBoxes))
                             value.addTrueScopeInContext()
@@ -71,7 +69,12 @@ class IfBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(externalBoxes) 
                             ElseScreen()
                         }
                     }
-                    InnerCreationButton(showInnerBoxesState, modifier = Modifier.align(Alignment.BottomEnd).padding(end = 100.dp, bottom = 23.dp))
+                    InnerCreationButton(
+                        showInnerBoxesState,
+                        modifier = Modifier
+                            .align(Alignment.BottomEnd)
+                            .padding(end = 100.dp, bottom = 23.dp)
+                    )
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -80,14 +83,19 @@ class IfBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(externalBoxes) 
                     ) {
                         Button(
                             onClick = { currentIsIf.value = true },
-                            modifier = Modifier.height(48.dp).width(60.dp),
+                            modifier = Modifier
+                                .height(48.dp)
+                                .width(60.dp),
                             contentPadding = PaddingValues(0.dp),
                         ) {
                             Text(text = "if")
                         }
                         Button(
                             onClick = { currentIsIf.value = false },
-                            modifier = Modifier.height(48.dp).width(65.dp).padding(start = 8.dp),
+                            modifier = Modifier
+                                .height(48.dp)
+                                .width(65.dp)
+                                .padding(start = 8.dp),
                             contentPadding = PaddingValues(0.dp)
                         ) {
                             Text(text = "else")
@@ -100,23 +108,31 @@ class IfBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(externalBoxes) 
                 externalBoxes.removeAll { it.id == id }
             }, dialogModifier = Modifier.height(800.dp)
         ) {
-            Column(Modifier
-                .fillMaxHeight()
-                .width(210.dp),horizontalAlignment = Alignment.CenterHorizontally) {
+            Column(
+                Modifier
+                    .fillMaxHeight()
+                    .width(210.dp), horizontalAlignment = Alignment.CenterHorizontally
+            ) {
                 if (code == 0) {
-                    Text(text = arithmeticField,color = MaterialTheme.colorScheme.onSurface)
+                    Text(text = arithmeticField, color = MaterialTheme.colorScheme.onSurface)
                 } else {
+
                     Text(
                         text = ErrorStore.get(code)!!.description,
                         lineHeight = 12.sp,
-                        fontSize = 8.sp,color = MaterialTheme.colorScheme.onSurface
+                        fontSize = 8.sp, color = MaterialTheme.colorScheme.onSurface
                     )
                     Text(
                         text = ErrorStore.get(code)!!.category,
                         lineHeight = 12.sp,
-                        fontSize = 8.sp,color = MaterialTheme.colorScheme.onSurface
+                        fontSize = 8.sp, color = MaterialTheme.colorScheme.onSurface
                     )
-                    Text(text = ErrorStore.get(code)!!.title, lineHeight = 12.sp, fontSize = 8.sp,color = MaterialTheme.colorScheme.onSurface)
+                    Text(
+                        text = ErrorStore.get(code)!!.title,
+                        lineHeight = 12.sp,
+                        fontSize = 8.sp,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
                 }
             }
         }
@@ -125,8 +141,11 @@ class IfBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(externalBoxes) 
 
     @Composable
     fun IfScreen() {
-        Column (horizontalAlignment = Alignment.CenterHorizontally) {
-            Text(text = "Введите логическое выражение:")
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Text(
+                text = "Введите логическое выражение:",
+                color = MaterialTheme.colorScheme.onSurface
+            )
             VariableTextField(onValueChange = { newText ->
                 arithmeticField = newText
             }, value = arithmeticField, modifier = Modifier)

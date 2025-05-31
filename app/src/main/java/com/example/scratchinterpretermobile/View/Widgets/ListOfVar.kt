@@ -9,8 +9,8 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.res.stringResource
-import com.example.scratchinterpretermobile.Model.VarBlock
 import com.example.scratchinterpretermobile.Model.UIContext
+import com.example.scratchinterpretermobile.Model.VarBlock
 import com.example.scratchinterpretermobile.R
 
 @Composable
