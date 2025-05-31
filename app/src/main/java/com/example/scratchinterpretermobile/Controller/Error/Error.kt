@@ -246,7 +246,26 @@ val NO_COMPARISON_OPERATOR_SELECTED = Error(
     "A comparison operator must be selected for this operation.",
     "comparison"
 )
+val TYPE_MISMATCH = Error(
+    901,
+    "Type mismatch",
+    "The types of the operands are not compatible for this operation.",
+    "type"
+)
 
+val TYPE_CONVERSION_MISMATCH = Error(
+    902,
+    "Type conversion mismatch",
+    "The variable type does not match the expected type for this operation and cannot be converted.",
+    "type"
+)
+
+val INVALID_BOOLEAN = Error(
+    1001,
+    "Invalid boolean value",
+    "A value was expected to be a valid boolean ('true' or 'false'), but it was not.",
+    "boolean"
+)
 
 object ErrorStore {
     private val errorMap = mapOf(
@@ -292,6 +311,11 @@ object ErrorStore {
         702 to INVALID_FORMAT,
 
         801 to NO_COMPARISON_OPERATOR_SELECTED,
+
+        901 to TYPE_MISMATCH,
+        902 to TYPE_CONVERSION_MISMATCH,
+
+        1001 to INVALID_BOOLEAN,
     )
 
     fun get(id: Int): Error? = errorMap[id]

@@ -9,9 +9,9 @@ import com.example.scratchinterpretermobile.Model.InstructionBlock
 import java.util.UUID
 
 abstract class ProgramBox(var externalBoxes: MutableList<ProgramBox>) {
-    val showState = mutableStateOf(true)
-    val id: String = UUID.randomUUID().toString()
-    var code by mutableIntStateOf(104)
+    val showState = mutableStateOf(false)
+    var id: String = UUID.randomUUID().toString()
+    var code by mutableIntStateOf(0)
     abstract val value: InstructionBlock
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -22,6 +22,7 @@ abstract class ProgramBox(var externalBoxes: MutableList<ProgramBox>) {
     override fun hashCode(): Int {
         return id.hashCode()
     }
+
     @Composable
     abstract fun render()
 }

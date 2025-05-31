@@ -3,7 +3,6 @@ package com.example.scratchinterpretermobile.View.BaseStructure
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -19,12 +18,18 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun BaseCard(name: String,onClick: () -> Unit = {},content:@Composable () -> Unit){
-    Card(Modifier.fillMaxWidth().height(90.dp).padding(5.dp).clickable(onClick = onClick),
+fun BaseCard(name: String, onClick: () -> Unit = {}, content: @Composable () -> Unit) {
+    Card(
+        Modifier
+            .fillMaxWidth()
+            .height(80.dp)
+            .padding(5.dp)
+            .clickable(onClick = onClick),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
     ) {
-        Box(Modifier.fillMaxSize(),contentAlignment = Alignment.Center){
-            Column {Text(text = name, textAlign = TextAlign.Center)
+        Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            Column {
+                Text(text = name, textAlign = TextAlign.Center)
             }
         }
     }

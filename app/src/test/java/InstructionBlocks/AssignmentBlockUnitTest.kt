@@ -80,7 +80,7 @@ class AssignmentBlockUnitTest {
             scriptCondition.add(assignment_i)
 
             conditionBlock.setTrueScript(scriptCondition)
-            conditionBlock.assembleBlock("0", "<", "1")
+//            conditionBlock.assembleBlock("0", "<", "1")
         //--------------------
 
         conditionBlock.removeBlock()
@@ -159,6 +159,42 @@ class AssignmentBlockUnitTest {
         val interpreter = Interpreter(Context())
         interpreter.setScript(script)
 
+        val error = interpreter.run()
+    }
+
+    @Test
+    fun assignmentArraysTest() {
+        val scope = UIContext.peekScope()
+
+        val initA = InitBlock(UIContext)
+        initA.assembleIntegerArrayBlock("a", "5")
+        initA.run()
+
+        val assignmentA = AssignmentBlock(UIContext)
+        assignmentA.assembleIntegerArrayBlock("a", "5,4,3,2,1")
+
+
+        val initB = InitBlock(UIContext)
+        initB.assembleIntegerArrayBlock("b", "7")
+        initB.run()
+
+        val assignmentB = AssignmentBlock(UIContext)
+        assignmentB.assembleIntegerArrayBlock("b", "a")
+
+        initB.assembleIntegerArrayBlock("b", "7")
+        initB.run()
+
+        assignmentB.assembleIntegerArrayBlock("b", "a")
+
+
+        val script = mutableListOf<InstructionBlock>()
+        script.add(initA)
+        script.add(assignmentA)
+        script.add(initB)
+        script.add(assignmentB)
+
+        val interpreter = Interpreter(Context())
+        interpreter.setScript(script)
         val error = interpreter.run()
     }
 }

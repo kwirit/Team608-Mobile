@@ -56,7 +56,7 @@ class InterpreterUnitTest {
                     conditionBlock.setTrueScript(blocsToCondition)
 
                     conditionBlock.addTrueScopeInContext()
-                    conditionBlock.assembleBlock("ar[j]", "ar[j+1]", "ar[j+1]")
+//                    conditionBlock.assembleBlock("ar[j]", "ar[j+1]", "ar[j+1]")
                 //------------------------------
 
                 val updateIndex_j = AssignmentBlock(UIContext)
@@ -69,7 +69,7 @@ class InterpreterUnitTest {
                 loopSecond.setScript(blocksToSecondLoop)
 
 //                loopSecond.addScopeToContext()
-                loopSecond.assembleBlock("j", "<","10-i-1")
+//                loopSecond.assembleBlock("j", "<","10-i-1")
             //------------------------------
 
             val updateIndex_i = AssignmentBlock(UIContext)
@@ -83,7 +83,7 @@ class InterpreterUnitTest {
         loopFirst.setScript(blocksToFirstLoop)
 
 //        loopFirst.addScopeToContext()
-        loopFirst.assembleBlock("i","<", "10-1")
+//        loopFirst.assembleBlock("i","<", "10-1")
         //------------------------------
 
         val interpreter = Interpreter(Context())
@@ -91,6 +91,37 @@ class InterpreterUnitTest {
         val blocksToRun = mutableListOf<InstructionBlock>()
         blocksToRun.add(initArrayBlock)
         blocksToRun.add(fillArray)
+        blocksToRun.add(initIndex_i)
+        blocksToRun.add(loopFirst)
+
+        interpreter.setScript(blocksToRun)
+        val error = interpreter.run()
+    }
+    @Test
+    fun someVarInList() {
+        val scope = UIContext.peekScope()
+
+        val initIndex_i = InitBlock(UIContext)
+        initIndex_i.assembleIntegerBlock("i")
+        initIndex_i.run()
+
+        val loopFirst = LoopBlock(UIContext)
+//        loopFirst.assembleBlock("i", "<", "10")
+        //------------------------------
+            val initIndex_j = InitBlock(UIContext)
+            initIndex_j.assembleIntegerBlock("j")
+            initIndex_j.run()
+
+            val assignIndex_j = AssignmentBlock(UIContext)
+            assignIndex_j.assembleIntegerBlock("j", "j+1")
+            val assignIndex_i = AssignmentBlock(UIContext)
+            assignIndex_i.assembleIntegerBlock("i", "i+1")
+        //------------------------------
+        val blocksToLoop = mutableListOf<InstructionBlock>(initIndex_j, assignIndex_j, assignIndex_i)
+
+        val interpreter = Interpreter(Context())
+
+        val blocksToRun = mutableListOf<InstructionBlock>()
         blocksToRun.add(initIndex_i)
         blocksToRun.add(loopFirst)
 

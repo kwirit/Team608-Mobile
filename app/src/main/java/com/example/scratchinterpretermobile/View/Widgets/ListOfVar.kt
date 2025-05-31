@@ -8,8 +8,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import com.example.scratchinterpretermobile.Model.VarBlock
+import androidx.compose.ui.res.stringResource
 import com.example.scratchinterpretermobile.Model.UIContext
+import com.example.scratchinterpretermobile.Model.VarBlock
+import com.example.scratchinterpretermobile.R
 
 @Composable
 fun ListOfVar(selectedVariable: MutableState<VarBlock<*>?>): MutableState<VarBlock<*>?> {
@@ -17,7 +19,7 @@ fun ListOfVar(selectedVariable: MutableState<VarBlock<*>?>): MutableState<VarBlo
     val expanded = remember { mutableStateOf(false) }
 
     TextButton(onClick = { expanded.value = true }) {
-        Text(text = selectedVariable.value?.getName() ?: "Выберите переменную")
+        Text(text = selectedVariable.value?.getName() ?: stringResource(R.string.select_var))
     }
 
     DropdownMenu(expanded = expanded.value, onDismissRequest = { expanded.value = false }) {
