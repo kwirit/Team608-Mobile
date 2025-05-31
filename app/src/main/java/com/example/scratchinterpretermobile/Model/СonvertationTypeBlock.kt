@@ -18,33 +18,7 @@ class СonvertationTypeBlock(
     var outputVariable = ""
     var outputVariableBlock: VarBlock<*>? = null
 
-    /**
-     * Обрабатывает входные данные условия, проверяет оператор сравнения и выполняет сравнение.
-     * Удаляет scope из context по
-     * @param booleanExpression boolean выражение.
-     * @return Код результата выполнения:
-     *   - [SUCCESS.id] — успешное выполнение.
-     *   - Код ошибки из метода [compare], если сравнение частей условия завершилось с ошибкой.
-     */
-    fun assembleBlock(outputType: String, outputVariable: String, inputType: String, inputVariable: String): Int {
-        this.inputType = inputType
-        this.outputType = outputType
-        this.inputVariable = inputVariable
-        this.outputVariable = outputVariable
-
-        val errorValidateOutputVariable = validateNameVariable(outputVariable)
-        if (errorValidateOutputVariable != 0) return errorValidateOutputVariable
-        val outputVariableBlock = context.getVar(outputVariable)
-        if (outputVariableBlock == null) {
-            return VARIABLE_NOT_FOUND.id
-        }
-
-        val errorValidateInputVariable = validateNameVariable(inputVariable)
-        if (errorValidateInputVariable != 0) return errorValidateInputVariable
-        val inputVariableBlock = context.getVar(outputVariable)
-        if (inputVariableBlock == null) {
-            return VARIABLE_NOT_FOUND.id
-        }
+    private fun checkTypeVarBlocks(): Int {
         when {
             outputVariableBlock is IntegerBlock && outputType == "Int" -> {}
             outputVariableBlock is StringBlock && outputType == "String" -> {}
@@ -61,12 +35,65 @@ class СonvertationTypeBlock(
         return SUCCESS.id
     }
 
+    /**
+     * Обрабатывает входные данные условия, проверяет оператор сравнения и выполняет сравнение.
+     * Удаляет scope из context по
+     * @param booleanExpression boolean выражение.
+     * @return Код результата выполнения:
+     *   - [SUCCESS.id] — успешное выполнение.
+     *   - Код ошибки из метода [compare], если сравнение частей условия завершилось с ошибкой.
+     */
+    fun assembleBlock(outputType: String, outputVariable: String, inputType: String, inputVariable: String): Int {
+        this.inputType = inputType
+        this.outputType = outputType
+        this.inputVariable = inputVariable.trim()
+        this.outputVariable = outputVariable.trim()
+
+        val errorValidateOutputVariable = validateNameVariable(outputVariable)
+        if (errorValidateOutputVariable != 0) return errorValidateOutputVariable
+        val outputVariableBlock = context.getVar(outputVariable)
+        if (outputVariableBlock == null) {
+            return VARIABLE_NOT_FOUND.id
+        }
+
+        val errorValidateInputVariable = validateNameVariable(inputVariable)
+        if (errorValidateInputVariable != 0) return errorValidateInputVariable
+        val inputVariableBlock = context.getVar(outputVariable)
+        if (inputVariableBlock == null) {
+            return VARIABLE_NOT_FOUND.id
+        }
+
+        this.inputVariableBlock = inputVariableBlock.getCopy()
+        this.outputVariableBlock = outputVariableBlock.getCopy()
+
+        val error = checkTypeVarBlocks()
+        if(error != SUCCESS.id) return error
+
+        return SUCCESS.id
+    }
+
     override fun removeBlock() {
         return
     }
 
 
     override fun run(): Int {
+        outputVariableBlock ?: return VARIABLE_NOT_FOUND.id
+        inputVariableBlock ?: return  VARIABLE_NOT_FOUND.id
+
+        val outputVariableBlock = context.getVar(outputVariable)
+        if (outputVariableBlock == null) {
+            return VARIABLE_NOT_FOUND.id
+        }
+
+        val inputVariableBlock = context.getVar(outputVariable)
+        if (inputVariableBlock == null) {
+            return VARIABLE_NOT_FOUND.id
+        }
+
+        val error = checkTypeVarBlocks()
+        if(error != SUCCESS.id) return error
+
         when (outputType) {
             "Int" -> {
                 when (inputType) {

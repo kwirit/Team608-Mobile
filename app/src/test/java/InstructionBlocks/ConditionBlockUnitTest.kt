@@ -1,4 +1,3 @@
-package InstructionBlocks
 
 import com.example.scratchinterpretermobile.Model.AssignmentBlock
 import com.example.scratchinterpretermobile.Model.ConditionBlock
