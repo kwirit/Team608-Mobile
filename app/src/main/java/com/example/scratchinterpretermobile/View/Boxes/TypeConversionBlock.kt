@@ -12,9 +12,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.scratchinterpretermobile.Model.UIContext
 import com.example.scratchinterpretermobile.Model.СonvertationTypeBlock
+import com.example.scratchinterpretermobile.R
 import com.example.scratchinterpretermobile.View.BaseStructure.BaseBox
 import com.example.scratchinterpretermobile.View.Widgets.ListOfTypes
 import com.example.scratchinterpretermobile.View.Widgets.VariableTextField
@@ -29,7 +31,7 @@ class TypeConversionBlock(externalBoxes: MutableList<ProgramBox>) : ProgramBox(e
     @Composable
     override fun render() {
         BaseBox(
-            name = "Приведение типов", showState,
+            name = stringResource(R.string.type_conversation), showState,
             onConfirmButton = {
                 value.assembleBlock(
                     selectedOperator2.value,
@@ -46,7 +48,7 @@ class TypeConversionBlock(externalBoxes: MutableList<ProgramBox>) : ProgramBox(e
                         Column {
                             ListOfTypes(selectedOperator1)
                             Text(
-                                text = "Введите первое выражение:",
+                                text = stringResource(R.string.in_fi_ex),
                                 color = MaterialTheme.colorScheme.onSurface
                             )
                             VariableTextField(onValueChange = { newText ->
@@ -57,7 +59,7 @@ class TypeConversionBlock(externalBoxes: MutableList<ProgramBox>) : ProgramBox(e
                         Column {
                             ListOfTypes(selectedOperator2)
                             Text(
-                                text = "Введите второе выражение:",
+                                text = stringResource(R.string.in_se_ex),
                                 color = MaterialTheme.colorScheme.onSurface
                             )
                             VariableTextField(

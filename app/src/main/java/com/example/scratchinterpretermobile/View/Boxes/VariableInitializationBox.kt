@@ -54,7 +54,7 @@ class VariableInitializationBox(externalBoxes: MutableList<ProgramBox>) :
                         .fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center){
                         Box(modifier = Modifier){
                             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                                Text(text = "Выберите тип:",color = MaterialTheme.colorScheme.onSurface)
+                                Text(text = stringResource(R.string.select_type)+ ":",color = MaterialTheme.colorScheme.onSurface)
                                 ListOfTypes(selectedType)
                             }
                         }

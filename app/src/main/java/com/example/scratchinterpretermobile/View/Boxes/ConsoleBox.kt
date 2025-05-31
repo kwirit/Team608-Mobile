@@ -38,7 +38,7 @@ class ConsoleBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(externalBo
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
                 ) {
-                    Text(text = "Введите выражение:", color = MaterialTheme.colorScheme.onSurface)
+                    Text(text = stringResource(R.string.input_expression)+":", color = MaterialTheme.colorScheme.onSurface)
                     VariableTextField(onValueChange = { newText ->
                         arithmeticField = newText;
                     }, value = arithmeticField)

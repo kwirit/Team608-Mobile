@@ -56,7 +56,7 @@ class WhileBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(externalBoxe
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             Text(
-                                text = "Введите логическое выражение:",
+                                text = stringResource(R.string.input_logical_expression)+":",
                                 color = MaterialTheme.colorScheme.onSurface
                             )
                             VariableTextField(onValueChange = { newText ->

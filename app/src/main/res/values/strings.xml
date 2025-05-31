@@ -19,4 +19,11 @@
     <string name="main">Главная</string>
     <string name="log">Консоль</string>
     <string name="settings">Настройки</string>
+    <string name="input_expression">Введите выражение</string>
+    <string name="input_logical_expression">Введите логическое выражение</string>
+    <string name="type_conversation">Приведение типов</string>
+    <string name="in_fi_ex">Введите первое выражение</string>
+    <string name="in_se_ex">Введите второе выражение</string>
+    <string name="select_type">Выберите тип</string>
+    <string name="theme_switch">Перекоючение темы</string>
 </resources>

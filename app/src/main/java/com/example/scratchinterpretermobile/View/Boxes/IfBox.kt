@@ -143,7 +143,7 @@ class IfBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(externalBoxes) 
     fun IfScreen() {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Text(
-                text = "Введите логическое выражение:",
+                text = stringResource(R.string.input_logical_expression)+":",
                 color = MaterialTheme.colorScheme.onSurface
             )
             VariableTextField(onValueChange = { newText ->
