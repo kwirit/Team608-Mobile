@@ -64,21 +64,6 @@ fun TopBar(viewModel: MainViewModel, modifier: Modifier = Modifier) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Button(
-                modifier = Modifier.size(48.dp), onClick = {},
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                    contentColor = Color.White
-                ),
-                shape = RoundedCornerShape(16.dp),
-                contentPadding = PaddingValues(0.dp)
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.baseline_bug_report_24),
-                    contentDescription = null,
-                    modifier = Modifier.size(40.dp)
-                )
-            }
-            Button(
                 modifier = Modifier.size(48.dp), onClick = {
                     viewModel.run()
                 },

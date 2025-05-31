@@ -61,9 +61,9 @@ fun BottomBar(viewModel: MainViewModel, modifier: Modifier = Modifier) {
                 contentPadding = PaddingValues(0.dp)
             ) {
                 Icon(
-                    painter = painterResource(R.drawable.home),
+                    painter = painterResource(R.drawable.home_24px),
                     contentDescription = null,
-                    modifier = Modifier.size(50.dp)
+                    modifier = Modifier.size(40.dp)
                 )
             }
             Button(
@@ -78,7 +78,7 @@ fun BottomBar(viewModel: MainViewModel, modifier: Modifier = Modifier) {
                 contentPadding = PaddingValues(0.dp)
             ) {
                 Icon(
-                    painter = painterResource(R.drawable.console),
+                    painter = painterResource(R.drawable.terminal_24px),
                     contentDescription = null,
                     modifier = Modifier.size(40.dp)
                 )
@@ -97,7 +97,7 @@ fun BottomBar(viewModel: MainViewModel, modifier: Modifier = Modifier) {
                 Icon(
                     painter = painterResource(R.drawable.settings_icon),
                     contentDescription = null,
-                    modifier = Modifier.size(50.dp)
+                    modifier = Modifier.size(30.dp)
                 )
             }
         }

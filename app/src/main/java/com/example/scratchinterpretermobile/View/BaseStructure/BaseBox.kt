@@ -31,6 +31,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -93,8 +94,8 @@ fun BaseBox(
                     )
                 }
             }
-            Column(modifier = Modifier.padding(10.dp)) {
-                Text(fontFamily = displayFontFamily,text = name,color = MaterialTheme.colorScheme.onSurface, fontSize = 13.sp)
+            Column(modifier = Modifier.padding(top = 10.dp, start = 15.dp)) {
+                Text(fontFamily = FontFamily(Font(R.font.akayakanadaka_regular)),text = name, fontSize = 13.sp)
                 Box(modifier = Modifier.fillMaxHeight()) {
                     boxContent()
                 }
