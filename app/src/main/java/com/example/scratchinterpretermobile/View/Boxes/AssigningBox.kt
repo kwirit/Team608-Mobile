@@ -193,7 +193,7 @@ class AssigningBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(external
 
     @Composable
     private fun ArrayAssignment() {
-        Row(modifier = Modifier.padding(start = 40.dp)) {
+        Row(modifier = Modifier.padding(start = 40.dp, top = 50.dp)) {
             Column(modifier = Modifier.width(80.dp)) {
                 Text(stringResource(R.string.single_element))
                 Checkbox(

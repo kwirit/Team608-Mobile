@@ -125,12 +125,12 @@ fun SettingsScreen(darkTheme: Boolean,onThemeChange: () -> Unit) {
 @Composable
 fun LogScreen(viewModel: MainViewModel) {
     if(outputList.isEmpty()){
-        Text(text = "This is log...")
+        Text(text = "This is log...", color = MaterialTheme.colorScheme.onSurface)
     }
     else {
         LazyColumn {
             items(outputList) { item ->
-                Text(text = item)
+                Text(text = item, color = MaterialTheme.colorScheme.onSurface)
             }
         }
     }
