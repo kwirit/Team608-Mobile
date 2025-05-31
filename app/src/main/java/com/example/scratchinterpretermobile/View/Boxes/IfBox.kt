@@ -111,7 +111,7 @@ class IfBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(externalBoxes) 
             Column(
                 Modifier
                     .fillMaxHeight()
-                    .width(210.dp), horizontalAlignment = Alignment.CenterHorizontally
+                    .width(210.dp),
             ) {
                 if (code == 0) {
                     Text(text = arithmeticField, color = MaterialTheme.colorScheme.onSurface)
