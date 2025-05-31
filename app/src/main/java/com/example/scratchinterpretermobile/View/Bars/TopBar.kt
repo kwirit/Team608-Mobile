@@ -22,6 +22,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import com.example.scratchinterpretermobile.R
 import com.example.scratchinterpretermobile.View.ViewModels.MainViewModel
@@ -31,15 +34,15 @@ fun TopBar(viewModel: MainViewModel, modifier: Modifier = Modifier) {
     var title = remember { mutableStateOf("") }
     when (viewModel.screenState.value) {
         0 -> {
-            title.value = "Main"
+            title.value = stringResource(R.string.main)
         }
 
         1 -> {
-            title.value = "Log"
+            title.value = stringResource(R.string.log)
         }
 
         2 -> {
-            title.value = "Settings"
+            title.value = stringResource(R.string.settings)
         }
     }
     Box(
@@ -51,7 +54,8 @@ fun TopBar(viewModel: MainViewModel, modifier: Modifier = Modifier) {
             text = title.value,
             style = MaterialTheme.typography.headlineLarge,
             modifier = Modifier.padding(top = 10.dp, start = 25.dp),
-            color = Color.White
+            color = Color.White,
+            fontFamily = FontFamily(Font(R.font.balsans))
         )
         Row(
             modifier = Modifier
