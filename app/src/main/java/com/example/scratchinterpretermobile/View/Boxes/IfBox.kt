@@ -3,6 +3,7 @@ package com.example.scratchinterpretermobile.View.Boxes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -70,6 +71,7 @@ class IfBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(externalBoxes) 
                             ElseScreen()
                         }
                     }
+                    InnerCreationButton(showInnerBoxesState, modifier = Modifier.align(Alignment.BottomEnd).padding(end = 100.dp, bottom = 23.dp))
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -78,17 +80,18 @@ class IfBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(externalBoxes) 
                     ) {
                         Button(
                             onClick = { currentIsIf.value = true },
-                            modifier = Modifier.padding(end = 8.dp)
+                            modifier = Modifier.height(48.dp).width(60.dp),
+                            contentPadding = PaddingValues(0.dp),
                         ) {
                             Text(text = "if")
                         }
                         Button(
                             onClick = { currentIsIf.value = false },
-                            modifier = Modifier.padding(end = 8.dp)
+                            modifier = Modifier.height(48.dp).width(65.dp).padding(start = 8.dp),
+                            contentPadding = PaddingValues(0.dp)
                         ) {
                             Text(text = "else")
                         }
-                        InnerCreationButton(showInnerBoxesState)
                     }
                 }
             },

@@ -50,15 +50,6 @@ class WhileBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(externalBoxe
             dialogContent = {
                 value.addScopeToContext()
                 Box(modifier = Modifier.fillMaxSize()) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .align(Alignment.BottomEnd)
-                            .padding(end = 100.dp, bottom = 25.dp),
-                        horizontalArrangement = Arrangement.End
-                    ) {
-                        InnerCreationButton(showInnerBoxesState, modifier = Modifier.fillMaxWidth())
-                    }
                     Column (horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.padding(top = 100.dp)){
                         Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
                             VariableTextField(onValueChange = { newText ->
@@ -69,6 +60,14 @@ class WhileBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(externalBoxe
                         if (showInnerBoxesState.value) {
                             CreateBoxesDialog(showInnerBoxesState, boxes)
                         }
+                    }
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .align(Alignment.BottomEnd)
+                            .padding(end = 100.dp, bottom = 20.dp),
+                    ) {
+                        InnerCreationButton(showInnerBoxesState, modifier = Modifier.fillMaxWidth())
                     }
                 }
             }, onCloseDialog = {
