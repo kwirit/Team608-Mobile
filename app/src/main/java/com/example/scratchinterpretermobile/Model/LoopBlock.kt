@@ -46,14 +46,6 @@ class LoopBlock(
         context.pushScope(scope)
     }
 
-    /**
-     * Добавление scope в context
-     * Обязательная функция при выходе из карточку
-     */
-    fun removeScopeToContext() {
-        context.popScope()
-    }
-
     fun setScript(script:MutableList<InstructionBlock>) {
         this.script = script
     }
