@@ -51,7 +51,8 @@ class WhileBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(externalBoxe
                 value.addScopeToContext()
                 Box(modifier = Modifier.fillMaxSize()) {
                     Column (horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.padding(top = 100.dp)){
-                        Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                        Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+                            Text(text = "Введите логическое выражение:")
                             VariableTextField(onValueChange = { newText ->
                                 arithmeticField = newText
                             }, value = arithmeticField, modifier = Modifier)

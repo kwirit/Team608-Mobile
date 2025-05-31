@@ -102,7 +102,7 @@ class IfBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(externalBoxes) 
         ) {
             Column(Modifier
                 .fillMaxHeight()
-                .width(210.dp)) {
+                .width(210.dp),horizontalAlignment = Alignment.CenterHorizontally) {
                 if (code == 0) {
                     Text(text = arithmeticField,color = MaterialTheme.colorScheme.onSurface)
                 } else {
@@ -125,7 +125,8 @@ class IfBox(externalBoxes: MutableList<ProgramBox>) : ProgramBox(externalBoxes) 
 
     @Composable
     fun IfScreen() {
-        Column () {
+        Column (horizontalAlignment = Alignment.CenterHorizontally) {
+            Text(text = "Введите логическое выражение:")
             VariableTextField(onValueChange = { newText ->
                 arithmeticField = newText
             }, value = arithmeticField, modifier = Modifier)
